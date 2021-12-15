@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
               GestureDetector(
-                onTap: () => print("Đổi mật khấu"),
+                onTap: () => Navigator.pushNamed( context, '/changepass'),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

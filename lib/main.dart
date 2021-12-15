@@ -4,7 +4,7 @@ import 'package:hust_chat/Screens/Profile/my_news_feed.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 // import 'package:hust_chat/Screens/home_screen.dart';
-import 'package:hust_chat/Screens/message_screen.dart';
+import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/my_timeline.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:hust_chat/Screens/signup_screen.dart';

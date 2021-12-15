@@ -108,7 +108,7 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
                                 Container(
                                   child: BoxWidget(
                                     onTap: () {
-                                      Navigator.pushNamed(context, '/newsfeed');
+                                      Navigator.pushNamed(context, '/mynewsfeed');
                                     },
                                     text1: "Bài viết của tôi",
                                     text2: "Xem dòng thời gian của tôi",

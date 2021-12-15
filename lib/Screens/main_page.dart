@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/message_screen.dart';
+import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
