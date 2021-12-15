@@ -40,10 +40,10 @@ class PostContainer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15.0,
                     ),
-                    expandText: 'Show more',
-                    collapseText: 'Show less',
+                    expandText: 'Xem thêm',
+                    collapseText: 'Rút gọn',
                     maxLines: 3,
-                    linkColor: Colors.red,
+                    linkColor: Colors.black54,
                   ),
                 ),
                 post.imageUrl != null
@@ -57,8 +57,11 @@ class PostContainer extends StatelessWidget {
             child:
               post.imageUrl != null ?
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: CachedNetworkImage(imageUrl: post.imageUrl),
+                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: CachedNetworkImage(imageUrl: post.imageUrl),
+                )
               )
                   : const SizedBox.shrink(),
           ),
@@ -281,7 +284,11 @@ _openPost(Post post, BuildContext context) {
         transitionDuration: Duration(seconds: 1),
         reverseTransitionDuration: Duration(seconds: 1),
         pageBuilder: (context, animation, secondaryAnimation) {
-          return PostView(animation: animation, post: post, currentUser: currentUser,);
+          final curvedAnimation = CurvedAnimation(parent: animation, curve: Interval(0, 0.5));
+          return FadeTransition(
+            opacity: curvedAnimation,
+            child: PostView(animation: animation, post: post, currentUser: currentUser,)
+          );
         },
       )
   );

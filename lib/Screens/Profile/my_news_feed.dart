@@ -9,8 +9,7 @@ import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 class MyNewsFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text("Bài đăng của tôi"),
           backgroundColor: pinkColor,
@@ -31,7 +30,6 @@ class MyNewsFeed extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }

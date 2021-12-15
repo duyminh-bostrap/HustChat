@@ -64,17 +64,9 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
               },
             ),
           ),
-          Positioned(
-              top: 150,
-              child: Container(
-                // width: 150,
-                // height: 150,
-                // color: Colors.red,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/IMG_9119.JPG'),
-                  radius: 75,
-                ),
-              )),
+          // Positioned(
+          //     top: 150,
+          //     )),
           Positioned(
             top: 310,
             child: Column(
@@ -86,6 +78,35 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
                   children: [
                     SizedBox(
                       width: 10,
+// =======
+//                 // color: pinkColor,
+//                 child: Stack(alignment: Alignment.center, children: [
+//                   Positioned(
+//                     top: 0,
+//                     child: Container(
+//                       height: 220,
+//                       width: MediaQuery.of(context).size.width,
+//                       // color: Colors.red,
+//                       // width: 200,
+//                       child: Image.asset(
+//                         'assets/IMG_8114.JPG',
+//                         fit: BoxFit.cover,
+//                       ),
+//                     ),
+//                   ),
+//                   Positioned(
+//                     top: 40,
+//                     left: 15,
+//                     child: IconButton(
+//                       icon: Icon(
+//                         Icons.chevron_left,
+//                         color: whiteColor,
+//                         size: 28,
+//                       ),
+//                       onPressed: () {
+//                         Navigator.pop(context);
+//                       },
+// >>>>>>> 7f86f18 (UI update)
                     ),
                     showName()
                   ],
@@ -158,7 +179,6 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
           //               var response = await networkHandler.postAuth(
           //                   "/posts/create", data, token);
           //               Map output = json.decode(response.body);
-
           //               if (response.statusCode < 300) {
           //                 inputController.text = "";
           //                 print(output);

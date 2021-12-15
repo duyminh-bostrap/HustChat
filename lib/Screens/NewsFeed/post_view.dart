@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hust_chat/Screens/Widget/hero_tag.dart';
+import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/models.dart';
@@ -59,8 +61,8 @@ class PostView extends StatelessWidget {
                   color: Colors.transparent,
                 ),
                 Container(
-                  width: size.width,
-                  height: size.width*4.5/3,
+                  // width: size.width,
+                  // height: size.width*4.5/3,
                   color: Color.fromRGBO(0, 0, 0, 0.05),
                   child: GestureDetector(
                     onTap: () => openImage(post, context),
@@ -68,7 +70,10 @@ class PostView extends StatelessWidget {
                     post.imageUrl != null ?
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 0.0),
-                      child: CachedNetworkImage(imageUrl: post.imageUrl),
+                      child: HeroWidget(
+                        tag: HeroTag.image(post.imageUrl),
+                        child: CachedNetworkImage(imageUrl: post.imageUrl),
+                      ),
                     )
                         : const SizedBox.shrink(),
                   ),
@@ -114,52 +119,72 @@ class PostView extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                  height: 40,
+                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(post.user.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                      SizedBox(width: 15,),
+                      SizedBox(width: 10,),
                       Text(post.timeAgo, style: TextStyle(fontSize: 15),),
                     ]
                   )
                 ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                      child: ExpandableText(
-                        post.caption,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 16.0,
+                Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: ExpandableText(
+                          post.caption,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                          expandText: 'Xem thêm',
+                          collapseText: 'Rút gọn',
+                          maxLines: 3,
+                          linkColor: Colors.black54,
                         ),
-                        expandText: 'Show more',
-                        collapseText: 'Show less',
-                        maxLines: 3,
-                        linkColor: Colors.red,
                       ),
                     ),
-                  ],
+                Container(
+                    padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(post.likes.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                          SizedBox(width: 10,),
+                          Text('lượt thích', style: TextStyle(fontSize: 15),),
+                        ]
+                    )
                 ),
-                // CommentBox(
-                //   userImage: post.user.imageUrl,
-                //   // child: commentChild(filedata),
-                //   labelText: 'Viết bình luận...',
-                //   errorText: 'Bình luận không phù hợp',
-                //   // formKey: formKey,
-                //   // commentController: commentController,
-                //   backgroundColor: greenColor,
-                //   textColor: Colors.black87,
-                //   sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.black87),
-                //   sendButtonMethod: (){
-                //     print('abc');
-                //   },
-                // ),
+
+
               ],
             ),
           ),
+          // SliverList(
+          //   delegate: SliverChildBuilderDelegate(
+          //         (context, index) {
+          //       final Post post = posts[index];
+          //       return PostContainer(post: post);
+          //     },
+          //     childCount: posts.length,
+          //   ),
+          // ),
+          // CommentBox(
+          //   userImage: post.user.imageUrl,
+          //   // child: commentChild(filedata),
+          //   labelText: 'Viết bình luận...',
+          //   errorText: 'Bình luận không phù hợp',
+          //   // formKey: formKey,
+          //   // commentController: commentController,
+          //   backgroundColor: greenColor,
+          //   textColor: Colors.black87,
+          //   sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.black87),
+          //   sendButtonMethod: (){
+          //     print('abc');
+          //   },
+          // ),
         ]
       ),
     );
@@ -255,7 +280,7 @@ _showMore(User currentUser, Post post, context) {
           )
       )
           : Container(
-          margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
+          margin: EdgeInsets.fromLTRB(10.0, size.height*0.365, 10.0, size.height*0.04),
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
           decoration: BoxDecoration(
             color: Colors.white,
