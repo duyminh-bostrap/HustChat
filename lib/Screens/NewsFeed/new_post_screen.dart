@@ -23,7 +23,7 @@ class CreatePost extends StatelessWidget {
 
       final imageTemporary = File(image.path);
       this.image = imageTemporary;
-    } on PlatformException catch (e){
+    } on PlatformException catch (e) {
       print("Failed to pick image: $e");
     }
   }
@@ -35,60 +35,70 @@ class CreatePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     TextEditingController status = TextEditingController();
     Size size = MediaQuery.of(context).size;
 
-    return  Scaffold(
-        body:  Column(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
           children: [
             Container(
               color: pinkColor,
               child: Column(
                 children: [
                   Container(
-                    height: size.height*0.06,
+                    height: size.height * 0.06,
                     color: pinkColor,
                   ),
                   Container(
-                    height: size.height*0.063,
+                    height: size.height * 0.063,
                     color: pinkColor,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: size.width*0.15,
+                          width: size.width * 0.15,
                           child: IconButton(
-                            icon: Icon(Icons.chevron_left, size: 32,),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => MainPage(2))
+                            icon: Icon(
+                              Icons.chevron_left,
+                              size: 32,
                             ),
+                            onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(2))),
                           ),
                         ),
-                        SizedBox(width: size.width*0.15,),
                         SizedBox(
-                          width: size.width*0.4,
+                          width: size.width * 0.15,
+                        ),
+                        SizedBox(
+                          width: size.width * 0.4,
                           child: Center(
                             child: Text(
                               'Tạo bài viết',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),
                         SizedBox(
-                          width: size.width*0.3,
+                          width: size.width * 0.3,
                           child: Padding(
                               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                              child:RaisedButton(
+                              child: RaisedButton(
                                 onPressed: () => AddNewPost(status, context),
                                 color: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25))),
                                 child: Text(
                                   'Đăng',
-                                  style: TextStyle(fontSize: 17, color: Colors.black, fontWeight: FontWeight.w400),
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
                                 ),
-                              )
-                          ),
+                              )),
                         )
                       ],
                     ),
@@ -105,8 +115,9 @@ class CreatePost extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(context, '/mytimeline');
                     },
-                    child:
-                    ProfileAvatar(imageUrl: currentUser.imageUrl,),
+                    child: ProfileAvatar(
+                      imageUrl: currentUser.imageUrl,
+                    ),
                   ),
                   SizedBox(
                     width: 15,
@@ -135,7 +146,8 @@ class CreatePost extends StatelessWidget {
                                     'Công khai',
                                     style: TextStyle(
                                       color: Colors.black87,
-                                      fontSize: 14,),
+                                      fontSize: 14,
+                                    ),
                                     // fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
@@ -148,8 +160,7 @@ class CreatePost extends StatelessWidget {
                                   )
                                 ],
                               ),
-                            ]
-                        ),
+                            ]),
                       )
                     ],
                   ),
@@ -158,14 +169,16 @@ class CreatePost extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child:
-              TextFormField(
+              child: TextFormField(
                 controller: status,
                 cursorColor: Colors.black45,
                 maxLines: 10,
                 decoration: InputDecoration(
                     hintText: 'Bạn đang nghĩ gì?',
-                    hintStyle: TextStyle(fontSize: 17, color: Colors.black87, fontWeight: FontWeight.w300),
+                    hintStyle: TextStyle(
+                        fontSize: 17,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w300),
                     border: InputBorder.none),
               ),
             ),
@@ -176,113 +189,124 @@ class CreatePost extends StatelessWidget {
                   color: Colors.black12,
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
-                child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () => pickImage(ImageSource.gallery),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(width: 20,),
-                            Container(
-                              width: 20,
-                              height: 50,
-                              child: Icon(
-                                  Icons.collections,
-                                  size: 30,
-                                  color: Color.fromRGBO(74, 198, 104, 1.0)),
-                            ),
-                            SizedBox(width: 25,),
-                            Text(
-                              'Chọn ảnh từ thư viện',
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
+                child: Column(children: [
+                  GestureDetector(
+                    onTap: () => pickImage(ImageSource.gallery),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 20,
                         ),
-                      ),
-                      Divider(height: 10, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
-                      GestureDetector(
-                        onTap: () => pickImage(ImageSource.camera),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 20,
-                              height: 50,
-                              child: Icon(Icons.photo_camera, size: 30,color: blueColor),
-                            ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Text(
-                              'Chụp ảnh',
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
+                        Container(
+                          width: 20,
+                          height: 50,
+                          child: Icon(Icons.collections,
+                              size: 30,
+                              color: Color.fromRGBO(74, 198, 104, 1.0)),
                         ),
-                      ),
-                      Divider(height: 10, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
-                      GestureDetector(
-                        onTap: () => pickImage(ImageSource.gallery),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 20,
-                              height: 50,
-                              child: Icon(Icons.videocam, size: 30,color: Colors.redAccent),
-                            ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Text(
-                              'Chọn video từ thư viện',
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
+                        SizedBox(
+                          width: 25,
                         ),
-                      ),
-                    ]
-                )
-            ),
+                        Text(
+                          'Chọn ảnh từ thư viện',
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    height: 10,
+                    color: Colors.black54,
+                    thickness: 1.2,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () => pickImage(ImageSource.camera),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                          width: 20,
+                          height: 50,
+                          child: Icon(Icons.photo_camera,
+                              size: 30, color: blueColor),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Text(
+                          'Chụp ảnh',
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    height: 10,
+                    color: Colors.black54,
+                    thickness: 1.2,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () => pickImage(ImageSource.gallery),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                          width: 20,
+                          height: 50,
+                          child: Icon(Icons.videocam,
+                              size: 30, color: Colors.redAccent),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Text(
+                          'Chọn video từ thư viện',
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                ])),
           ],
-        )
-    );
+        ));
   }
 }
 
-
-AddNewPost(TextEditingController status,context) async{
+AddNewPost(TextEditingController status, context) async {
   final storage = new FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   String? userId = await storage.read(key: "id");
   String? token = await storage.read(key: "token");
-  if (userId != null && token != null){
+  if (userId != null && token != null) {
     Map<String, String> data = {
       "id": userId,
       "described": status.text,
     };
-    var response = await networkHandler.postAuth(
-        "/posts/create", data, token);
+    var response = await networkHandler.postAuth("/posts/create", data, token);
     Map output = json.decode(response.body);
     if (response.statusCode < 300) {
       print(output);
       Navigator.pop(context);
     }
-  } 
+  }
 }

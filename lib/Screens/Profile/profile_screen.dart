@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../../get_info.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -11,16 +14,17 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final storage = new FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Container(
-        color: Color.fromRGBO(0, 0, 0, 0.05),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: Container(
+      color: Color.fromRGBO(0, 0, 0, 0.05),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Container(
             margin: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
@@ -61,30 +65,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.pushNamed(context, '/mytimeline');
                       },
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                          'Hoài Thu',
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Xem trang cá nhân',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,),
-                            // fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                        ]
-                      ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            showName(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Xem trang cá nhân',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                              ),
+                              // fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ]),
                     )
                   ],
                 ),
@@ -92,99 +90,110 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            padding: EdgeInsets.fromLTRB(1.0, 10.0, 10.0, 10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            child: Column(
-              children: [
-              GestureDetector(
-                onTap: () => Navigator.pushNamed( context, '/changepass'),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: size.width * 0.12,
-                      height: size.height * 0.05,
-                      child: Icon(MdiIcons.keyVariant, size: 30,color: Colors.black87),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Đổi mật khẩu',
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+              margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+              padding: EdgeInsets.fromLTRB(1.0, 10.0, 10.0, 10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(15.0)),
               ),
-              Divider(height: 10, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
-              GestureDetector(
-                onTap: () => print("Người bị chặn"),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: size.width * 0.12,
-                      height: size.height * 0.05,
-                      // color: Colors.green,
-                      child: Icon(Icons.block, size: 30,color: Colors.black87),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Người bị chặn',
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+              child: Column(children: [
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/changepass'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: size.width * 0.12,
+                        height: size.height * 0.05,
+                        child: Icon(MdiIcons.keyVariant,
+                            size: 30, color: Colors.black87),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'Đổi mật khẩu',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Divider(height: 10, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/'),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: size.width * 0.12,
-                      height: size.height * 0.05,
-                      // color: Colors.green,
-                      child: Icon(Icons.logout, size: 30,color: Colors.black87),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Đăng xuất',
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+                Divider(
+                  height: 10,
+                  color: Colors.black54,
+                  thickness: 1.2,
+                  indent: 20,
+                  endIndent: 20,
                 ),
-              ),
-              ]
-            )
-          ),
+                GestureDetector(
+                  onTap: () => print("Người bị chặn"),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: size.width * 0.12,
+                        height: size.height * 0.05,
+                        // color: Colors.green,
+                        child:
+                            Icon(Icons.block, size: 30, color: Colors.black87),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'Người bị chặn',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                ),
+                Divider(
+                    height: 10,
+                    color: Colors.black54,
+                    thickness: 1.2,
+                    indent: 20,
+                    endIndent: 20),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: size.width * 0.12,
+                        height: size.height * 0.05,
+                        // color: Colors.green,
+                        child:
+                            Icon(Icons.logout, size: 30, color: Colors.black87),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'Đăng xuất',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                ),
+              ])),
           SizedBox(
             height: size.width * 0.60,
           ),
@@ -205,7 +214,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      )
-    );
+    ));
   }
 }
