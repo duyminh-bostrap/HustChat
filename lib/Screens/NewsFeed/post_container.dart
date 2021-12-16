@@ -101,7 +101,7 @@ class _PostHeader extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => _showProfile(post, context),
-                child: showName(color: Colors.black87, size: 15)
+                child: showName(color: Colors.black87, size: 16, fontWeight: FontWeight.w600,)
                 // Text(
                 //   post.user.name,
                 //   style: const TextStyle(

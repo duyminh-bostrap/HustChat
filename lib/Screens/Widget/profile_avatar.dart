@@ -34,10 +34,10 @@ class ProfileAvatar extends StatelessWidget {
         //     ),
         // )
         CircleAvatar(
-          radius: 22.0,
-          backgroundColor: online,
+          radius: 25.0,
+          backgroundColor: Colors.white,
           child: CircleAvatar(
-            radius: hasBorder ? 17.0 : 22.0,
+            radius: hasBorder ? 23.0 : 25.0,
             backgroundColor: Colors.grey[200],
             backgroundImage: CachedNetworkImageProvider(imageUrl),
           ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Friends/friends_request_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -23,7 +24,7 @@ class _MainPageState extends State<MainPage> {
   int current_index;
   final List<Widget> screens = [
     MessageScreen(),// Trang tin nhắn
-    Scaffold(),// Trang bạn bè
+    FriendRequestContainer(),// Trang bạn bè
     NewsFeed(),// Trang chủ
     ProfileScreen(),// Trang cá nhân
   ];

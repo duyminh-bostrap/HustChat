@@ -13,7 +13,7 @@ class MyNewsFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: showName(color: Colors.black87, size: 20),
+          title: showName(color: Colors.black87, size: 20, fontWeight: FontWeight.w600,),
           backgroundColor: pinkColor,
         ),
         body: CustomScrollView(

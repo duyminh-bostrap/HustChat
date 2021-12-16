@@ -51,12 +51,13 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
         ),
       ),
       Positioned(
-        top: 5,
-        left: 5,
+        top: 40,
+        left: 15,
         child: IconButton(
           icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
+            Icons.chevron_left,
+            color: Colors.black87,
+            size: 35,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -107,7 +108,7 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
 //                       },
 // >>>>>>> 7f86f18 (UI update)
                 ),
-                showName(color: Colors.black87, size: 20)
+                showName(color: Colors.black87, size: 20, fontWeight: FontWeight.w600,)
               ],
             ),
             SizedBox(

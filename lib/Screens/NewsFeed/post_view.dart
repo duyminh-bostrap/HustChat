@@ -6,6 +6,7 @@ import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
+import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -40,7 +41,7 @@ class PostView extends StatelessWidget {
           children: [
             ProfileAvatar(imageUrl: post.user.imageUrl),
             SizedBox(width: 15,),
-            Text(post.user.name, style: TextStyle(fontSize: 16, color: Colors.black87),),
+            showName(color: Colors.black87, size: 16, fontWeight: FontWeight.w600,),
           ],
         ),
         actions: [
@@ -124,7 +125,7 @@ class PostView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(post.user.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                      showName(color: Colors.black87, size: 16, fontWeight: FontWeight.w500,),
                       SizedBox(width: 10,),
                       Text(post.timeAgo, style: TextStyle(fontSize: 15),),
                     ]

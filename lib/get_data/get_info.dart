@@ -26,11 +26,13 @@ showUsername() async {
 class showName extends StatelessWidget {
   final Color color;
   final double size;
+  final FontWeight fontWeight;
 
   const showName({
     Key? key,
     required this.color,
     required this.size,
+    required this.fontWeight,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class showName extends StatelessWidget {
               style: TextStyle(
                   color: color,
                   fontSize: size,
-                  fontWeight: FontWeight.w600),
+                  fontWeight: fontWeight),
             );
           }
           return Container();

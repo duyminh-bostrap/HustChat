@@ -15,6 +15,7 @@ getPostInfo() async {
     await storage.write(key: "described", value: output["data"]["described"]);
     // await storage.write(key: "postTimeAgo", value: output["data"]["described"]);
     var described = await storage.read(key: "described");
+    print(output["data"]["described"]);
     if (described != null) {
       return described;
     }
@@ -37,21 +38,24 @@ class ShowPostInfo extends StatelessWidget {
           // return CircularProgressIndicator();
           // }
           if (snapshot.hasData) {
-            return ExpandableText(
+            return
+              // ExpandableText(
+              //   snapshot.data,
+              //   style: TextStyle(
+              //     fontSize: 15.0,
+              //   ),
+              //   expandText: 'Xem thêm',
+              //   collapseText: 'Rút gọn',
+              //   maxLines: 3,
+              //   linkColor: Colors.black54,
+              // );
+              Text(
                 snapshot.data,
                 style: TextStyle(
-                  fontSize: 15.0,
-                ),
-                expandText: 'Xem thêm',
-                collapseText: 'Rút gọn',
-                maxLines: 3,
-                linkColor: Colors.black54,
+                  color: Colors.black87,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
               );
-              // TextStyle(
-              //     color: Colors.black87,
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.w600),
-              // );
           }
           return Container();
         });
