@@ -45,13 +45,18 @@ class FriendRequest extends StatelessWidget {
             )
                 : const SizedBox.shrink(),
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: Container(
-                color: Colors.black26,
-                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: Row(
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
                   children: [
                     GestureDetector(
                       onTap: () => _showProfile(post, context),
@@ -105,7 +110,8 @@ class FriendRequest extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              ],
+            ),
           ),
         ],
       ),
