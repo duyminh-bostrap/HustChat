@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../get_info.dart';
+import '../../get_data/get_info.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

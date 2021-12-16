@@ -20,7 +20,8 @@ class NewsFeed extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                   (context, index) {
                 final Post post = posts[index];
-                return PostContainer(post: post);
+                final User user = currentUser;
+                return PostContainer(post: post, user: user, isPersonalPost: false,);
               },
               childCount: posts.length,
             ),

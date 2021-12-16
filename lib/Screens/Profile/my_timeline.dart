@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
-import 'package:hust_chat/get_info.dart';
+import 'package:hust_chat/get_data/get_info.dart';
 import '../../network_handler.dart';
 import '../Widget/boxwidget.dart';
 import '../Widget/color.dart';

@@ -12,10 +12,14 @@ import 'package:expandable_text/expandable_text.dart';
 
 class PostContainer extends StatelessWidget {
   final Post post;
+  final User user;
+  final bool isPersonalPost;
 
   const PostContainer({
     Key? key,
     required this.post,
+    required this.user,
+    required this.isPersonalPost,
   }) : super(key: key);
 
   @override
@@ -31,7 +35,7 @@ class PostContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PostHeader(post: post, currentUser: currentUser),
+                _PostHeader(post: post, user: currentUser, isPersonalPost: isPersonalPost, ),
                 const SizedBox(height: 4.0),
                 GestureDetector(
                   onTap: () => _openPost(post, context),
@@ -77,13 +81,15 @@ class PostContainer extends StatelessWidget {
 
 class _PostHeader extends StatelessWidget {
   final Post post;
-  final User currentUser;
+  final User user;
+  final bool isPersonalPost;
   // bool _liked;
 
   const _PostHeader({
     Key? key,
     required this.post,
-    required this.currentUser,
+    required this.user,
+    required this.isPersonalPost,
   }) : super(key: key);
 
   @override
@@ -92,7 +98,7 @@ class _PostHeader extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => _showProfile(post, context),
-          child:ProfileAvatar(imageUrl: post.user.imageUrl),
+          child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : post.user.imageUrl),
         ),
         const SizedBox(width: 10.0),
         Expanded(
@@ -131,7 +137,7 @@ class _PostHeader extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.more_horiz),
-          onPressed: () => _showMore(currentUser, post, context),
+          onPressed: () => _showMore(user, post, context),
         ),
       ],
     );
