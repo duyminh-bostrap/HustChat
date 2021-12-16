@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/background.dart';
 import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
-import 'package:hust_chat/get_data/get_info.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/network_handler.dart';
 
 import 'Widget/rounded_password_field.dart';

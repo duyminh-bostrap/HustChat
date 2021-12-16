@@ -67,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            showName(),
+                            showName(color: Colors.black87, size: 20),
                             SizedBox(
                               height: 5,
                             ),

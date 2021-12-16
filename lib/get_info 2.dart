@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../network_handler.dart';
+import 'network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
-// void getInfo() async {
-//   String? token = await storage.read(key: "token");
-//   if (token != null) {
-//     var response =
-//         await networkHandler.getWithAuth("/users/login", token);
-//     Map output = json.decode(response.body);
-//     print(output["data"]["username"]);
-//   }
-// }
+void getInfo() async {
+  String? token = await storage.read(key: "token");
+  if (token != null) {
+    var response =
+        await networkHandler.getWithAuth("/users/change-password", token);
+    Map output = json.decode(response.body);
+    print(output["data"]["username"]);
+  }
+}
 
 showUsername() async {
   var username = await storage.read(key: "username");
@@ -24,13 +24,8 @@ showUsername() async {
 }
 
 class showName extends StatelessWidget {
-  final Color color;
-  final double size;
-
   const showName({
     Key? key,
-    required this.color,
-    required this.size,
   }) : super(key: key);
 
   @override
@@ -45,8 +40,8 @@ class showName extends StatelessWidget {
             return Text(
               snapshot.data,
               style: TextStyle(
-                  color: color,
-                  fontSize: size,
+                  color: Colors.black87,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600),
             );
           }

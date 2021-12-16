@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/data/data.dart';
+import 'package:hust_chat/get_data/get_info.dart';
+import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -39,16 +42,7 @@ class PostContainer extends StatelessWidget {
                 const SizedBox(height: 4.0),
                 GestureDetector(
                   onTap: () => _openPost(post, context),
-                  child: ExpandableText(
-                    post.caption,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                    expandText: 'Xem thêm',
-                    collapseText: 'Rút gọn',
-                    maxLines: 3,
-                    linkColor: Colors.black54,
-                  ),
+                  child: ShowPostInfo()
                 ),
                 post.imageUrl != null
                     ? const SizedBox.shrink()
@@ -107,13 +101,14 @@ class _PostHeader extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => _showProfile(post, context),
-                child: Text(
-                  post.user.name,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: showName(color: Colors.black87, size: 15)
+                // Text(
+                //   post.user.name,
+                //   style: const TextStyle(
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w600,
+                //   ),
+                // ),
               ),
               SizedBox(height: 5.0),
               Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget//color.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
@@ -12,7 +13,7 @@ class MyNewsFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: showName(),
+          title: showName(color: Colors.black87, size: 20),
           backgroundColor: pinkColor,
         ),
         body: CustomScrollView(

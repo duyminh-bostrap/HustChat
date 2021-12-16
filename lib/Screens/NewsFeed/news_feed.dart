@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';

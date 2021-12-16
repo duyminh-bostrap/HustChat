@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import '../network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,28 +24,36 @@ getPostInfo() async {
   }
 }
 class ShowPostInfo extends StatelessWidget {
-const ShowPostInfo({
-Key? key,
-}) : super(key: key);
+  const ShowPostInfo({
+  Key? key,
+  }) : super(key: key);
 
-@override
-Widget build(BuildContext context) {
-  return FutureBuilder(
-      future: getPostInfo(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //                       if (snapshot.connectionState == ConnectionState.waiting) {
-        // return CircularProgressIndicator();
-        // }
-        if (snapshot.hasData) {
-          return Text(
-            snapshot.data,
-            style: TextStyle(
-                color: Colors.black87,
-                fontSize: 20,
-                fontWeight: FontWeight.w600),
-          );
-        }
-        return Container();
-      });
-}
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getPostInfo(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //                       if (snapshot.connectionState == ConnectionState.waiting) {
+          // return CircularProgressIndicator();
+          // }
+          if (snapshot.hasData) {
+            return ExpandableText(
+                snapshot.data,
+                style: TextStyle(
+                  fontSize: 15.0,
+                ),
+                expandText: 'Xem thêm',
+                collapseText: 'Rút gọn',
+                maxLines: 3,
+                linkColor: Colors.black54,
+              );
+              // TextStyle(
+              //     color: Colors.black87,
+              //     fontSize: 20,
+              //     fontWeight: FontWeight.w600),
+              // );
+          }
+          return Container();
+        });
+  }
 }
