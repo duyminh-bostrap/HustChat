@@ -78,7 +78,7 @@ class PostContainer extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: _PostStats(post: post),
+            child: PostStats(post: post),
           ),
         ],
       ),
@@ -152,13 +152,23 @@ class _PostHeader extends StatelessWidget {
   }
 }
 
-class _PostStats extends StatelessWidget {
+class PostStats extends StatefulWidget {
   final Post post;
 
-  _PostStats({
+  PostStats({
     Key? key,
     required this.post,
   }) : super(key: key);
+  @override
+  _PostStatsState createState() => _PostStatsState(post: post);
+}
+class _PostStatsState extends State<PostStats> {
+  final Post post;
+
+  _PostStatsState({
+    Key? key,
+    required this.post,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -219,13 +229,28 @@ class _PostStats extends StatelessWidget {
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => _like(post),
+                onTap: () {
+                  setState(() {
+                    print("like");
+                    post.isLiked? false : true;
+                    // if (!post.isLiked) {
+                    //   post.likeList.remove(currentUser);
+                    // } else {
+                    //   post.likeList.add(currentUser);
+                    // };
+                  });
+                },
                 child: Container(
                   height: 25.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      post.isLiked?
                       Icon(
+                        Icons.favorite,
+                        color: pinkColor,
+                        size: 20.0,
+                      ): Icon(
                         Icons.favorite_border,
                         color: Colors.grey[600],
                         size: 20.0,
@@ -308,8 +333,14 @@ _openPost(Post post, BuildContext context) {
   );
 }
 
-_like(Post post) {
-  print("like");
+_like(Post post, User currentUser) {
+    print("like");
+    post.isLiked? false : true;
+    if (!post.isLiked) {
+      post.likeList.remove(currentUser);
+    } else {
+      post.likeList.add(currentUser);
+    }
 }
 
 _share(Post post) {

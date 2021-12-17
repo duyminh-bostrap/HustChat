@@ -7,8 +7,8 @@ class Post {
   final String timeAgo;
   final String imageUrl;
   final List<Comment> commentList;
-  final List<Like> likeList;
-  final List<Share> shareList;
+  final List<User> likeList;
+  final List<User> shareList;
   final bool isLiked;
 
   Post({

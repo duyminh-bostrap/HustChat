@@ -1,12 +1,12 @@
+import 'user_model.dart';
+
 class Comment {
-  final String username;
-  final String urlImage;
+  final User user;
   final String date;
   final String description;
 
   Comment({
-    required this.username,
-    required this.urlImage,
+    required this.user,
     required this.date,
     required this.description,
   });

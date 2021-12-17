@@ -14,7 +14,7 @@ List<Post> posts = [
     commentList: Comments.allComments,
     likeList: Likes.allLikes,
     shareList: Shares.allShares,
-    isLiked: true,
+    isLiked: false,
   ),
   Post(
     user: onlineUsers[5],
@@ -63,7 +63,7 @@ List<Post> posts = [
     commentList: Comments.allComments,
     likeList: Likes.allLikes,
     shareList: Shares.allShares,
-    isLiked: true,
+    isLiked: false,
   ),
   Post(
     user: onlineUsers[9],

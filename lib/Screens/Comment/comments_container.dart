@@ -38,12 +38,12 @@ Widget build(BuildContext context) =>
             CircleAvatar(
               radius: 16,
               backgroundColor: Colors.black12,
-              backgroundImage: NetworkImage(comment.urlImage),
+              backgroundImage: NetworkImage(comment.user.imageUrl),
             ),
             SizedBox(width: 10),
             Expanded(
               child: Text(
-                comment.username,
+                comment.user.name,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
             ),
