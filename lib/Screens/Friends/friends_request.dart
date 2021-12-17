@@ -1,17 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
-import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/main_page.dart';
-import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
-import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:expandable_text/expandable_text.dart';
 
 class FriendRequest extends StatelessWidget {
   final Post post;
@@ -93,8 +84,7 @@ class FriendRequest extends StatelessWidget {
 
                 FloatingActionButton(
                   mini: true,
-                  child: Icon(Icons.done, color: Color.fromRGBO(
-                      98, 182, 52, 1.0), size: 27.0, ),
+                  child: Icon(Icons.done, color: Color.fromRGBO(78, 212, 63, 1.0), size: 28.0, ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('accept'),
                 ),

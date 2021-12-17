@@ -79,7 +79,7 @@ class SuggestRequest extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Đã gửi lời mời kết bạn',
+                            'Có thể bạn biết người này',
                             style: TextStyle(
                               color: Colors.grey[100],
                               fontSize: 12.0,
@@ -95,8 +95,7 @@ class SuggestRequest extends StatelessWidget {
                   mini: true,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 3),
-                    child: Icon(Icons.person_add_alt_1, color: Color.fromRGBO(
-                        98, 182, 52, 1.0), size: 26.0, ),
+                    child: Icon(Icons.person_add_alt_1, color: Color.fromRGBO(78, 212, 63, 1.0), size: 26.0, ),
                   ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('accept'),

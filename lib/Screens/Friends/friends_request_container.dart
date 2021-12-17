@@ -7,6 +7,7 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/data/data.dart';
+import 'package:hust_chat/data/posts_data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 
@@ -50,7 +51,7 @@ class _FriendRequestContainer extends State<FriendRequestContainer>{
                           alignment: Alignment.center,
                           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                           decoration: BoxDecoration(
-                            color: isSuggest? pinkColor: greenColor,
+                            color: isSuggest? pinkColor: Color.fromRGBO(204, 248, 171, 1.0),
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
                           child: Text(
@@ -70,7 +71,7 @@ class _FriendRequestContainer extends State<FriendRequestContainer>{
                           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color:  !isSuggest? pinkColor : greenColor,
+                            color:  !isSuggest? pinkColor : Color.fromRGBO(204, 248, 171, 1.0),
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
                           child: Text(
@@ -114,22 +115,11 @@ class _FriendRequestContainer extends State<FriendRequestContainer>{
               },
               childCount: posts.length,
             ),
-          // )
-          // : SliverToBoxAdapter(
-          //   child:
-          //     Center(
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(10.0),
-          //         child: Text(
-          //         'Không có lời mời kết bạn nào',
-          //         style: TextStyle(
-          //           color: Colors.black87,
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.w500,
-          //         ),
-          //     ),
-          //       )),
-          )
+          ),
+          SliverToBoxAdapter(
+            child:
+            SizedBox(height: 20,)
+          ),
         ],
       ),
     );

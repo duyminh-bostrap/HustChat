@@ -6,17 +6,20 @@ class Post {
   final String caption;
   final String timeAgo;
   final String imageUrl;
-  int likes;
-  int comments;
-  int shares;
+  final List<Comment> commentList;
+  final List<Like> likeList;
+  final List<Share> shareList;
+  final bool isLiked;
 
   Post({
     required this.user,
     required this.caption,
     required this.timeAgo,
     required this.imageUrl,
-    required this.likes,
-    required this.comments,
-    required this.shares,
+    required this.commentList,
+    required this.likeList,
+    required this.shareList,
+    required this.isLiked,
+
   });
 }

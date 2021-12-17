@@ -6,6 +6,8 @@ import 'package:hust_chat/models/models.dart';
 class ProfileAvatar extends StatelessWidget {
   final String imageUrl;
   final String username;
+  final double minSize;
+  final double maxSize;
   final bool isActive;
   final bool hasBorder;
 
@@ -15,6 +17,8 @@ class ProfileAvatar extends StatelessWidget {
     this.isActive = false,
     this.hasBorder = false,
     this.username = "",
+    this.minSize = 23,
+    this.maxSize = 25,
   }) : super(key: key);
 
   @override
@@ -34,10 +38,10 @@ class ProfileAvatar extends StatelessWidget {
         //     ),
         // )
         CircleAvatar(
-          radius: 25.0,
+          radius: maxSize,
           backgroundColor: Colors.white,
           child: CircleAvatar(
-            radius: hasBorder ? 23.0 : 25.0,
+            radius: hasBorder ? minSize : maxSize,
             backgroundColor: Colors.grey[200],
             backgroundImage: CachedNetworkImageProvider(imageUrl),
           ),

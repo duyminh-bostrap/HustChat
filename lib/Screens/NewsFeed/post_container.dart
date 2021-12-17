@@ -39,10 +39,23 @@ class PostContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _PostHeader(post: post, user: currentUser, isPersonalPost: isPersonalPost, ),
-                const SizedBox(height: 4.0),
+                const SizedBox(height: 5.0),
                 GestureDetector(
                   onTap: () => _openPost(post, context),
-                  child: ShowPostInfo()
+                  child:
+                  ExpandableText(
+                    post.caption,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w400
+                    ),
+                    expandText: 'Xem thêm',
+                    collapseText: 'Rút gọn',
+                    maxLines: 3,
+                    linkColor: Colors.black54,
+                  ),
+                  // ShowPostInfo()
                 ),
                 post.imageUrl != null
                     ? const SizedBox.shrink()
@@ -172,7 +185,7 @@ class _PostStats extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => _openPost(post, context),
                   child: Text(
-                    '${post.likes}',
+                    '${post.likeList.length}',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
@@ -182,7 +195,7 @@ class _PostStats extends StatelessWidget {
               GestureDetector(
                 onTap: () => _openPost(post, context),
                 child: Text(
-                  '${post.comments} Comments',
+                  '${post.commentList.length} bình luận',
                   style: TextStyle(
                     color: Colors.grey[600],
                   ),
@@ -192,7 +205,7 @@ class _PostStats extends StatelessWidget {
               GestureDetector(
                   onTap: () => _openPost(post, context),
                 child: Text(
-                  '${post.shares} Shares',
+                  '${post.shareList.length} chia sẻ',
                   style: TextStyle(
                     color: Colors.grey[600],
                   ),

@@ -1,17 +1,21 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/Friends/friends_request_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
+import 'package:hust_chat/data/current_user.dart';
+import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainPage extends StatefulWidget {
   int current_index;
+  User user = currentUser;
   MainPage(
       this.current_index,
       {Key? key}) : super(key: key);
@@ -22,8 +26,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int current_index;
+  User user = currentUser;
+
   final List<Widget> screens = [
-    MessageScreen(),// Trang tin nhắn
+    // MessageScreen(), //Trang tin nhắn
+    FriendsProfile(user: currentUser,),
     FriendRequestContainer(),// Trang bạn bè
     NewsFeed(),// Trang chủ
     ProfileScreen(),// Trang cá nhân
@@ -88,12 +95,12 @@ class _MainPageState extends State<MainPage> {
         unselectedFontSize: 13,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(MdiIcons.facebookMessenger,size: 32),
+              icon: Icon(MdiIcons.facebookMessenger,size: 30),
               label: 'Tin nhắn',
               backgroundColor: greenColor,
           ),
           BottomNavigationBarItem(
-              icon: Icon(MdiIcons.accountGroupOutline, size: 32),
+              icon: Icon(Icons.groups, size: 34),
               label: 'Bạn bè',
               backgroundColor: pinkColor
           ),
@@ -112,7 +119,7 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: greenColor
           ),
           BottomNavigationBarItem(
-              icon: Icon(MdiIcons.accountCircleOutline, size: 32),
+              icon: Icon(Icons.account_circle, size: 32),
               label: 'Cá nhân',
               backgroundColor: pinkColor
           )

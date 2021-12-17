@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hust_chat/Screens/Comment/comments_container.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
@@ -39,9 +40,9 @@ class PostView extends StatelessWidget {
           ),
         title: Row(
           children: [
-            ProfileAvatar(imageUrl: post.user.imageUrl),
+            ProfileAvatar(imageUrl: post.user.imageUrl, minSize: 20, maxSize: 22,),
             SizedBox(width: 15,),
-            showName(color: Colors.black87, size: 16, fontWeight: FontWeight.w600,),
+            showName(color: Colors.black87, size: 17, fontWeight: FontWeight.w500,),
           ],
         ),
         actions: [
@@ -138,7 +139,7 @@ class PostView extends StatelessWidget {
                         child: ExpandableText(
                           post.caption,
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 15.0,
                           ),
                           expandText: 'Xem thêm',
                           collapseText: 'Rút gọn',
@@ -152,7 +153,7 @@ class PostView extends StatelessWidget {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(post.likes.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                          Text(post.likeList.length.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                           SizedBox(width: 10,),
                           Text('lượt thích', style: TextStyle(fontSize: 15),),
                         ]
@@ -163,29 +164,18 @@ class PostView extends StatelessWidget {
               ],
             ),
           ),
-          // SliverList(
-          //   delegate: SliverChildBuilderDelegate(
-          //         (context, index) {
-          //       final Post post = posts[index];
-          //       return PostContainer(post: post);
-          //     },
-          //     childCount: posts.length,
-          //   ),
-          // ),
-          // CommentBox(
-          //   userImage: post.user.imageUrl,
-          //   // child: commentChild(filedata),
-          //   labelText: 'Viết bình luận...',
-          //   errorText: 'Bình luận không phù hợp',
-          //   // formKey: formKey,
-          //   // commentController: commentController,
-          //   backgroundColor: greenColor,
-          //   textColor: Colors.black87,
-          //   sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.black87),
-          //   sendButtonMethod: (){
-          //     print('abc');
-          //   },
-          // ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                final Comment comment = post.commentList[index];
+                return CommentsWidget(comment: comment);
+              },
+              childCount: post.commentList.length,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 40,),
+          ),
         ]
       ),
     );
