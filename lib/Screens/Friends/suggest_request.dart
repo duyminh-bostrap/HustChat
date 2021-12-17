@@ -13,12 +13,12 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
-class FriendRequest extends StatelessWidget {
+class SuggestRequest extends StatelessWidget {
   final Post post;
   final User user;
   final bool isPersonalPost;
 
-  const FriendRequest({
+  const SuggestRequest({
     Key? key,
     required this.post,
     required this.user,
