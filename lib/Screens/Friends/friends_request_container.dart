@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_request.dart';
@@ -10,12 +11,16 @@ import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 
 
-class FriendRequestContainer extends StatelessWidget {
-  bool isSuggest = false;
+class FriendRequestContainer extends StatefulWidget {
+  FriendRequestContainer(
+      {Key? key}) : super(key: key);
 
-  setState(){
-    print(isSuggest);
-  }
+  @override
+  _FriendRequestContainer createState() => _FriendRequestContainer();
+}
+
+class _FriendRequestContainer extends State<FriendRequestContainer>{
+  bool isSuggest = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class FriendRequestContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {isSuggest = true; print(isSuggest);},
+                        onTap: () async => setState(() => isSuggest = false),
                         child: Container(
                           width: (size.width-40)*0.5,
                           alignment: Alignment.center,
@@ -59,7 +64,7 @@ class FriendRequestContainer extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {isSuggest = false; print(isSuggest);},
+                        onTap: () async => setState(() => isSuggest = true),
                         child: Container(
                           width: (size.width-40)*0.5,
                           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -84,31 +89,46 @@ class FriendRequestContainer extends StatelessWidget {
               ]
             ),
           ),
-          posts.length != 0?
+          // posts.length != 0?
           SliverList(
             delegate: SliverChildBuilderDelegate(
                   (context, index) {
                 final Post post = posts[index];
                 final User user = currentUser;
-                return isSuggest? FriendRequest(post: post, user: user, isPersonalPost: false,) :  SuggestRequest(post: post, user: user, isPersonalPost: false,);
+                return isSuggest?
+                     posts.length != 0?
+                      SuggestRequest(post: post, user: user, isPersonalPost: false,)
+                     :  Center(
+                         child: Padding(
+                           padding: const EdgeInsets.all(10.0),
+                           child: Text(
+                             'Không có lời mời kết bạn nào',
+                             style: TextStyle(
+                               color: Colors.black87,
+                               fontSize: 18,
+                               fontWeight: FontWeight.w500,
+                             ),
+                           ),
+                         ))
+                    :  FriendRequest(post: post, user: user, isPersonalPost: false,);
               },
               childCount: posts.length,
             ),
-          )
-          : SliverToBoxAdapter(
-            child:
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                  'Không có lời mời kết bạn nào',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-              ),
-                )),
+          // )
+          // : SliverToBoxAdapter(
+          //   child:
+          //     Center(
+          //       child: Padding(
+          //         padding: const EdgeInsets.all(10.0),
+          //         child: Text(
+          //         'Không có lời mời kết bạn nào',
+          //         style: TextStyle(
+          //           color: Colors.black87,
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.w500,
+          //         ),
+          //     ),
+          //       )),
           )
         ],
       ),

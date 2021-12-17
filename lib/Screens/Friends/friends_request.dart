@@ -94,14 +94,14 @@ class FriendRequest extends StatelessWidget {
                 FloatingActionButton(
                   mini: true,
                   child: Icon(Icons.done, color: Color.fromRGBO(
-                      98, 182, 52, 1.0), size: 30.0, ),
+                      98, 182, 52, 1.0), size: 27.0, ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('accept'),
                 ),
                 SizedBox(width: 3.0),
                 FloatingActionButton(
                   mini: true,
-                  child: Icon(Icons.close, color: Colors.red, size: 30.0),
+                  child: Icon(Icons.close, color: Colors.red, size: 26.0),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('unaccept'),
                 ),
