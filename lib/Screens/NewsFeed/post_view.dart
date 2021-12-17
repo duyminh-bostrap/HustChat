@@ -12,7 +12,7 @@ import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
-class PostView extends StatelessWidget {
+class PostView extends StatefulWidget {
   final Post post;
   final User currentUser;
   final Animation animation;
@@ -25,8 +25,24 @@ class PostView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _PostView createState() => _PostView(post: post,currentUser: currentUser, animation: animation);
+}
+class _PostView extends State<PostView> {
+  final Post post;
+  final User currentUser;
+  final Animation animation;
+
+  _PostView({
+    required this.post,
+    required this.currentUser,
+    required this.animation,
+    Key? key,
+  });
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isLiked = false;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
@@ -89,13 +105,20 @@ class PostView extends StatelessWidget {
                       Expanded(
                         child: Row(
                           children: [
-                            InkWell(
-                                onTap: () => _whoLike(post, context),
-                                child: Icon(
+                            GestureDetector(
+                                onTap: () {
+                                  print("aaa");
+                                },
+                                child: isLiked ?
+                                  Icon(
+                                  Icons.favorite,
+                                  color: pinkColor,
+                                  size: 25.0,
+                                ):Icon(
                                   Icons.favorite_border,
                                   color: Colors.grey[600],
                                   size: 25.0,
-                                )
+                                ),
                             ),
                             const SizedBox(width: 10.0),
                             InkWell(

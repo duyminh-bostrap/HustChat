@@ -19,6 +19,7 @@ class CommentsWidget extends StatefulWidget {
 
 class _CommentsWidget extends State<CommentsWidget> {
   final Comment comment;
+  bool isLiked = false;
 
   _CommentsWidget({
     Key? key,
@@ -49,7 +50,14 @@ Widget build(BuildContext context) =>
             ),
             Padding(
               padding: const EdgeInsets.only(right: 5.0),
-              child: Icon(Icons.favorite_border, size: 16),
+              child: GestureDetector(
+                onTap: () async => setState(() {
+                  print('1');
+                  isLiked? false: true;
+                }),
+                  child: isLiked? Icon(Icons.favorite, size: 16)
+                        : Icon(Icons.favorite_border, size: 16),
+              ),
             ),
           ],
         ),
