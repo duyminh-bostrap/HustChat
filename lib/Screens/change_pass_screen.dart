@@ -8,7 +8,6 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-
 class ChangePassScreen extends StatefulWidget {
   const ChangePassScreen({Key? key}) : super(key: key);
 
@@ -63,11 +62,9 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   ),
                   rounded_button(
                       onPressed: () async {
-                        String? userId = await storage.read(key: "id");
                         String? token = await storage.read(key: "token");
-                        if (userId != null && token != null) {
+                        if (token != null) {
                           Map<String, String> data = {
-                            "id": userId,
                             "currentPassword": passwordController.text,
                             "newPassword": passwordController2.text
                           };

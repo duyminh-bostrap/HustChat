@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:hust_chat/models/searchUsers_model.dart';
+
 Posts postsFromJson(String str) => Posts.fromJson(json.decode(str));
 
 String postsToJson(Posts data) => json.encode(data.toJson());
@@ -108,22 +110,3 @@ class Author {
     };
 }
 
-class Avatar {
-    Avatar({
-        required this.id,
-        required this.fileName,
-    });
-
-    String id;
-    String fileName;
-
-    factory Avatar.fromJson(Map<String, dynamic> json) => Avatar(
-        id: json["_id"],
-        fileName: json["fileName"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "fileName": fileName,
-    };
-}

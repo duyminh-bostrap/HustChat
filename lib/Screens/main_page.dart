@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/Friends/friends_request_container.dart';
@@ -8,17 +10,17 @@ import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:hust_chat/data/current_user.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/models.dart';
+import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainPage extends StatefulWidget {
   int current_index;
   User user = currentUser;
-  MainPage(
-      this.current_index,
-      {Key? key}) : super(key: key);
+  MainPage(this.current_index, {Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState(current_index: current_index);
@@ -30,10 +32,12 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> screens = [
     // MessageScreen(), //Trang tin nhắn
-    FriendsProfile(user: currentUser,),
-    FriendRequestContainer(),// Trang bạn bè
-    NewsFeed(),// Trang chủ
-    ProfileScreen(),// Trang cá nhân
+    FriendsProfile(
+      user: currentUser,
+    ),
+    FriendRequestContainer(), // Trang bạn bè
+    NewsFeed(), // Trang chủ
+    ProfileScreen(), // Trang cá nhân
   ];
   _MainPageState({
     Key? key,
@@ -41,50 +45,53 @@ class _MainPageState extends State<MainPage> {
   });
   @override
   Widget build(BuildContext context) {
+    TextEditingController searchController = TextEditingController();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: greenColor,
-        title: Padding(
-          padding: EdgeInsets.fromLTRB(0, 10 , 0, 10),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(50.0, 0.0, 10.0, 0.0),
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 255, 255, 0.65),
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: TextFormField(
-                      cursorColor: Colors.black54,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Tìm kiếm bạn bè",
-                        hintStyle: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16.0
+          backgroundColor: greenColor,
+          title: Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(50.0, 0.0, 10.0, 0.0),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.65),
+                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: TextFormField(
+                        controller: searchController,
+                        cursorColor: Colors.black54,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Tìm kiếm bạn bè",
+                          hintStyle:
+                              TextStyle(color: Colors.black54, fontSize: 16.0),
+                          // focusColor: Colors.red,
+                          // icon: Icon(Icons.search, color: Colors.black54),
                         ),
-                        // focusColor: Colors.red,
-                        // icon: Icon(Icons.search, color: Colors.black54),
-                      ),
-                    )
-                ),
-                Expanded(
-                  flex: 0,
-                  child: IconButton(
-                    icon: Icon(Icons.search, color: Colors.black54),
-                    iconSize: 30.0,
-                    onPressed: () => print('Search'),
-                  ),
-                )
-              ],
+                      )),
+                  Expanded(
+                    flex: 0,
+                    child: IconButton(
+                        icon: Icon(Icons.search, color: Colors.black54),
+                        iconSize: 30.0,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShowUserSearchInfo(
+                                      textcontroller: searchController)));
+                        }),
+                  )
+                ],
+              ),
             ),
-          ),
-        )
-      ),
+          )),
       body: IndexedStack(index: this.current_index, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: current_index,
@@ -95,15 +102,14 @@ class _MainPageState extends State<MainPage> {
         unselectedFontSize: 13,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(MdiIcons.facebookMessenger,size: 30),
-              label: 'Tin nhắn',
-              backgroundColor: greenColor,
+            icon: Icon(MdiIcons.facebookMessenger, size: 30),
+            label: 'Tin nhắn',
+            backgroundColor: greenColor,
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.groups, size: 34),
               label: 'Bạn bè',
-              backgroundColor: pinkColor
-          ),
+              backgroundColor: pinkColor),
           BottomNavigationBarItem(
               icon: RotationTransition(
                 turns: AlwaysStoppedAnimation(330 / 360),
@@ -116,15 +122,29 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
               label: 'Bảng tin',
-              backgroundColor: greenColor
-          ),
+              backgroundColor: greenColor),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle, size: 32),
               label: 'Cá nhân',
-              backgroundColor: pinkColor
-          )
+              backgroundColor: pinkColor)
         ],
       ),
     );
+  }
+}
+
+ShowFriendRequested(TextEditingController searchController) async {
+  NetworkHandler networkHandler = NetworkHandler();
+  final storage = new FlutterSecureStorage();
+  String? token = await storage.read(key: "token");
+  if (token != null) {
+    Map<String, String> data = {
+      "keyword": searchController.text,
+    };
+    print(data);
+    var response = await networkHandler.postAuth("/users/search", data, token);
+    Map output = json.decode(response.body);
+    print(response.statusCode);
+    print(output["data"]);
   }
 }
