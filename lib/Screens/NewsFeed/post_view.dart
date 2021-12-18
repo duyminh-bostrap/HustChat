@@ -177,7 +177,7 @@ class _PostView extends State<PostView> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(post.likeList.length.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                          SizedBox(width: 10,),
+                          SizedBox(width: 8,),
                           Text('lượt thích', style: TextStyle(fontSize: 15),),
                         ]
                     )
