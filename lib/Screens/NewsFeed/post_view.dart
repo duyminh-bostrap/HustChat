@@ -7,13 +7,17 @@ import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
+import 'package:hust_chat/data/posts_data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
+String link =
+    "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=uDg0Jhmowo8AX-EoNMg&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8fIEil90ej5dlYMlzA-x03ESLqV3A6vlz1YNaAVz1WGQ&oe=61C1846F";
+
 class PostView extends StatefulWidget {
-  final Post post;
+  final PostData post;
   final User currentUser;
   final Animation animation;
 
@@ -28,7 +32,7 @@ class PostView extends StatefulWidget {
   _PostView createState() => _PostView(post: post,currentUser: currentUser, animation: animation);
 }
 class _PostView extends State<PostView> {
-  final Post post;
+  final PostData post;
   final User currentUser;
   final Animation animation;
 
@@ -56,7 +60,7 @@ class _PostView extends State<PostView> {
           ),
         title: Row(
           children: [
-            ProfileAvatar(imageUrl: post.user.imageUrl, minSize: 20, maxSize: 22,),
+            ProfileAvatar(imageUrl: post.images[0], minSize: 20, maxSize: 22,),
             SizedBox(width: 15,),
             showName(color: Colors.black87, size: 17, fontWeight: FontWeight.w500,),
           ],
@@ -85,12 +89,21 @@ class _PostView extends State<PostView> {
                   child: GestureDetector(
                     onTap: () => openImage(post, context),
                     child:
-                    post.imageUrl != null ?
+                    // post.images[0] != null ?
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 0.0),
+                    //   child: HeroWidget(
+                    //     tag: HeroTag.image(post.images[0]),
+                    //     child: CachedNetworkImage(imageUrl: post.images[0]),
+                    //   ),
+                    // )
+                    //     : const SizedBox.shrink(),
+                    link != null ?
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 0.0),
                       child: HeroWidget(
-                        tag: HeroTag.image(post.imageUrl),
-                        child: CachedNetworkImage(imageUrl: post.imageUrl),
+                        tag: HeroTag.image(link),
+                        child: CachedNetworkImage(imageUrl: link),
                       ),
                     )
                         : const SizedBox.shrink(),
@@ -151,7 +164,7 @@ class _PostView extends State<PostView> {
                     children: [
                       showName(color: Colors.black87, size: 16, fontWeight: FontWeight.w500,),
                       SizedBox(width: 10,),
-                      Text(post.timeAgo, style: TextStyle(fontSize: 15),),
+                      Text(post.createdAt.toString(), style: TextStyle(fontSize: 15),),
                     ]
                   )
                 ),
@@ -160,7 +173,7 @@ class _PostView extends State<PostView> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: ExpandableText(
-                          post.caption,
+                          post.described,
                           style: TextStyle(
                             fontSize: 15.0,
                           ),
@@ -176,7 +189,7 @@ class _PostView extends State<PostView> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(post.likeList.length.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                          Text(post.like.length.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                           SizedBox(width: 8,),
                           Text('lượt thích', style: TextStyle(fontSize: 15),),
                         ]
@@ -190,10 +203,11 @@ class _PostView extends State<PostView> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                final Comment comment = post.commentList[index];
+                final Post postcmt = posts[0];
+                final Comment comment = postcmt.commentList[index];
                 return CommentsWidget(comment: comment);
               },
-              childCount: post.commentList.length,
+              childCount: post.countComments,
             ),
           ),
           SliverToBoxAdapter(
@@ -205,21 +219,21 @@ class _PostView extends State<PostView> {
   }
 }
 
-_whoLike(Post post, BuildContext context) {
+_whoLike(PostData post, BuildContext context) {
 }
 
-_whoComment(Post post, BuildContext context) {
+_whoComment(PostData post, BuildContext context) {
 }
 
-_whoShare(Post post, BuildContext context) {
+_whoShare(PostData post, BuildContext context) {
 }
 
-openImage(Post post, BuildContext context) {
+openImage(PostData post, BuildContext context) {
   print("open image");
 }
 
 
-_showMore(User currentUser, Post post, context) {
+_showMore(User currentUser, PostData post, context) {
 
   showModalBottomSheet(
     isScrollControlled: false,
@@ -227,7 +241,7 @@ _showMore(User currentUser, Post post, context) {
     context: context,
     builder: (BuildContext bcx) {
       Size size = MediaQuery.of(context).size;
-      return post.user.name == 'Duy Minh'?
+      return post.author == 'Duy Minh'?
       Container(
           margin: EdgeInsets.fromLTRB(10.0, size.height*0.365, 10.0, size.height*0.04),
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),

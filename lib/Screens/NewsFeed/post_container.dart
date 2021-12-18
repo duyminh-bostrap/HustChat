@@ -5,28 +5,31 @@ import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
-import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:hust_chat/models/post_model_2.dart';
+import 'package:hust_chat/models/user_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
+String link =
+"https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=uDg0Jhmowo8AX-EoNMg&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8fIEil90ej5dlYMlzA-x03ESLqV3A6vlz1YNaAVz1WGQ&oe=61C1846F";
+
 class PostContainer extends StatelessWidget {
-  final Post post;
-  final User user;
+  final PostData post;
   final bool isPersonalPost;
 
   const PostContainer({
     Key? key,
     required this.post,
-    required this.user,
     required this.isPersonalPost,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    post.images.add(link);
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -44,7 +47,7 @@ class PostContainer extends StatelessWidget {
                   onTap: () => _openPost(post, context),
                   child:
                   ExpandableText(
-                    post.caption,
+                    post.described,
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 15.0,
@@ -57,7 +60,7 @@ class PostContainer extends StatelessWidget {
                   ),
                   // ShowPostInfo()
                 ),
-                post.imageUrl != null
+                post.images[0] != null
                     ? const SizedBox.shrink()
                     : const SizedBox(height: 6.0),
               ],
@@ -66,12 +69,12 @@ class PostContainer extends StatelessWidget {
           GestureDetector(
             onTap: () => _openPost(post, context),
             child:
-              post.imageUrl != null ?
+              post.images[0] != null ?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: post.imageUrl),
+                  child: CachedNetworkImage(imageUrl: post.images[0]),
                 )
               )
                   : const SizedBox.shrink(),
@@ -87,7 +90,7 @@ class PostContainer extends StatelessWidget {
 }
 
 class _PostHeader extends StatelessWidget {
-  final Post post;
+  final PostData post;
   final User user;
   final bool isPersonalPost;
   // bool _liked;
@@ -105,7 +108,7 @@ class _PostHeader extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => _showProfile(post, context),
-          child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : post.user.imageUrl),
+          child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : user.imageUrl),
         ),
         const SizedBox(width: 10.0),
         Expanded(
@@ -127,7 +130,7 @@ class _PostHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${post.timeAgo} • ',
+                    '${post.createdAt} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -153,7 +156,7 @@ class _PostHeader extends StatelessWidget {
 }
 
 class PostStats extends StatefulWidget {
-  final Post post;
+  final PostData post;
 
   PostStats({
     Key? key,
@@ -162,8 +165,9 @@ class PostStats extends StatefulWidget {
   @override
   _PostStatsState createState() => _PostStatsState(post: post);
 }
+
 class _PostStatsState extends State<PostStats> {
-  final Post post;
+  final PostData post;
 
   _PostStatsState({
     Key? key,
@@ -195,7 +199,7 @@ class _PostStatsState extends State<PostStats> {
                 child: GestureDetector(
                   onTap: () => _openPost(post, context),
                   child: Text(
-                    '${post.likeList.length}',
+                    '${post.like.length}',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
@@ -205,21 +209,11 @@ class _PostStatsState extends State<PostStats> {
               GestureDetector(
                 onTap: () => _openPost(post, context),
                 child: Text(
-                  '${post.commentList.length} bình luận',
+                  '${post.countComments} bình luận',
                   style: TextStyle(
                     color: Colors.grey[600],
                   ),
                 ),
-              ),
-              const SizedBox(width: 8.0),
-              GestureDetector(
-                  onTap: () => _openPost(post, context),
-                child: Text(
-                  '${post.shareList.length} chia sẻ',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
-                )
               ),
             ],
           ),
@@ -232,7 +226,7 @@ class _PostStatsState extends State<PostStats> {
                 onTap: () {
                   setState(() {
                     print("like");
-                    post.isLiked? false : true;
+                    post.isLike? false : true;
                     // if (!post.isLiked) {
                     //   post.likeList.remove(currentUser);
                     // } else {
@@ -245,7 +239,7 @@ class _PostStatsState extends State<PostStats> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      post.isLiked?
+                      post.isLike?
                       Icon(
                         Icons.favorite,
                         color: pinkColor,
@@ -309,14 +303,14 @@ class _PostStatsState extends State<PostStats> {
   }
 }
 
-_showProfile(Post post, BuildContext context) {
+_showProfile(PostData post, BuildContext context) {
   print("profile");
   Navigator.of(context).push(
     MaterialPageRoute(builder: (context) => MainPage(3)),
   );
 }
 
-_openPost(Post post, BuildContext context) {
+_openPost(PostData post, BuildContext context) {
   print("open Post");
   Navigator.of(context).push(
       PageRouteBuilder(
@@ -333,21 +327,21 @@ _openPost(Post post, BuildContext context) {
   );
 }
 
-_like(Post post, User currentUser) {
+_like(PostData post, User currentUser) {
     print("like");
-    post.isLiked? false : true;
-    if (!post.isLiked) {
-      post.likeList.remove(currentUser);
+    post.isLike? false : true;
+    if (!post.isLike) {
+      post.like.remove(currentUser);
     } else {
-      post.likeList.add(currentUser);
+      post.like.add(currentUser);
     }
 }
 
-_share(Post post) {
+_share(PostData post) {
   print("share");
 }
 
-_showMore(User currentUser, Post post, context) {
+_showMore(User currentUser, PostData post, context) {
 
     showModalBottomSheet(
       isScrollControlled: false,
@@ -355,7 +349,7 @@ _showMore(User currentUser, Post post, context) {
       context: context,
       builder: (BuildContext bcx) {
         Size size = MediaQuery.of(context).size;
-        return post.user.name == 'Duy Minh'?
+        return post.author == 'Duy Minh'?
         Container(
             margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),

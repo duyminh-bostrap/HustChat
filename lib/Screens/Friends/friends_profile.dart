@@ -377,7 +377,7 @@ _showMoreOption(cx) {
 
   }
 
-_openPost(Post post, BuildContext context) {
+_openPost(PostData post, BuildContext context) {
   print("open Post");
   Navigator.of(context).push(
       PageRouteBuilder(
