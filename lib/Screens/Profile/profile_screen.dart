@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hust_chat/get_data/get_post.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../get_data/get_info.dart';
@@ -67,7 +68,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            showName(color: Colors.black87, size: 20, fontWeight: FontWeight.w600,),
+                            showName(
+                              color: Colors.black87,
+                              size: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
                             SizedBox(
                               height: 5,
                             ),
@@ -132,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   endIndent: 20,
                 ),
                 GestureDetector(
-                  onTap: () => print("Người bị chặn"),
+                  onTap: () => Navigator.pushNamed(context, '/post'),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

@@ -9,6 +9,7 @@ import 'package:hust_chat/Screens/Profile/my_timeline.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:hust_chat/Screens/signup_screen.dart';
 import 'package:hust_chat/data/data.dart';
+import 'package:hust_chat/get_data/get_post.dart';
 import 'Screens/blocklist_screen.dart';
 import 'Screens/login_screen.dart';
 import 'Screens/welcome_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),
         '/mynewsfeed': (context) => MyNewsFeed(),
+        '/post': (context) => ShowPostInfo()
       },
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
