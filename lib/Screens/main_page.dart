@@ -133,7 +133,7 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-ShowFriendRequested(TextEditingController searchController) async {
+SearchFriend(TextEditingController searchController) async {
   NetworkHandler networkHandler = NetworkHandler();
   final storage = new FlutterSecureStorage();
   String? token = await storage.read(key: "token");

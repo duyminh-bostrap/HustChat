@@ -63,9 +63,7 @@ class CreatePost extends StatelessWidget {
                               Icons.chevron_left,
                               size: 32,
                             ),
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => MainPage(2))),
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ),
                         SizedBox(

@@ -41,6 +41,21 @@ class ShowUserSearchInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: pinkColor,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, color: Colors.black, size: 32),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Tìm kiếm',
+          style: TextStyle(
+            fontSize: 17,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
       body: FutureBuilder<List<UserData>>(
         future: UsersApi.getUsersData(textcontroller),
         builder: (context, snapshot) {
@@ -55,7 +70,17 @@ class ShowUserSearchInfo extends StatelessWidget {
               if (snapshot.hasError) {
                 return Center(child: Text('Some error occurred!'));
               } else {
-                return buildUsers(users!);
+                return users != null ?
+                  buildUsers(users)
+                  : Text(
+                    'Không có kết quả phù hợp',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    )
+                  );
+                ;
               }
           }
         },
@@ -63,7 +88,8 @@ class ShowUserSearchInfo extends StatelessWidget {
     );
   }
 
-  Widget buildUsers(List<UserData> users) => ListView.builder(
+  Widget buildUsers(List<UserData> users) {
+    var listView = ListView.builder(
         physics: BouncingScrollPhysics(),
         itemCount: users.length,
         itemBuilder: (context, index) {
@@ -75,4 +101,6 @@ class ShowUserSearchInfo extends StatelessWidget {
           );
         },
       );
+    return listView;
+  }
 }
