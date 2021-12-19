@@ -2,6 +2,8 @@
 //
 //     final searchUser = searchUserFromJson(jsonString);
 
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 SearchUser searchUserFromJson(String str) =>

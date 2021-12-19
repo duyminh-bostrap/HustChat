@@ -48,6 +48,18 @@ class NetworkHandler {
     // print(response)
   }
 
+  Future<http.Response> postAuthWithoutBody(String url, String token) async {
+    url = formater(url);
+    var response = await http.post(Uri.parse(url),
+        headers: {"Content-type": "application/json", "authorization": token});
+
+    // int code = response.statusCode;
+    // if (response.statusCode == 200 || response.statusCode == 201) {
+    // int code = response.statusCode;
+    return response;
+    // print(response)
+  }
+
   String formater(String url) {
     return baseurl + url;
   }

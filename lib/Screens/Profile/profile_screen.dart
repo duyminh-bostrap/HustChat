@@ -171,7 +171,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     indent: 20,
                     endIndent: 20),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/'),
+                  onTap: () async {
+                    Navigator.pushNamed(context, '/');
+                    await storage.deleteAll();
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
