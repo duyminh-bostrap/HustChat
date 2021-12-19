@@ -70,16 +70,14 @@ class ShowUserSearchInfo extends StatelessWidget {
               if (snapshot.hasError) {
                 return Center(child: Text('Some error occurred!'));
               } else {
-                return users != null ?
-                  buildUsers(users)
-                  : Text(
-                    'Không có kết quả phù hợp',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    )
-                  );
+                return users != null
+                    ? buildUsers(users)
+                    : Text('Không có kết quả phù hợp',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ));
                 ;
               }
           }
@@ -90,17 +88,32 @@ class ShowUserSearchInfo extends StatelessWidget {
 
   Widget buildUsers(List<UserData> users) {
     var listView = ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final user = users[index];
+      physics: BouncingScrollPhysics(),
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        final user = users[index];
 
-          return ListTile(
+        return GestureDetector(
+          onTap: () async {
+            String? token = await storage.read(key: "token");
+
+            if (token != null) {
+              Map<String, String> data = {
+                "user_id": user.id,
+              };
+              var response = await networkHandler.postAuth(
+                  "/friends/set-request-friend", data, token);
+              debugPrint(response.body);
+            }
+            ;
+          },
+          child: ListTile(
             title: Text(user.username),
             subtitle: Text(user.phonenumber),
-          );
-        },
-      );
+          ),
+        );
+      },
+    );
     return listView;
   }
 }

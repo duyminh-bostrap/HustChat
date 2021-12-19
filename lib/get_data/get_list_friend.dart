@@ -25,6 +25,21 @@ class FriendsApi {
     }
     return [];
   }
+  static Future<List<UserData>> getListFriends() async {
+    String? token = await storage.read(key: "token");
+    // print(token);
+    if (token != null) {
+      var response = await networkHandler.postAuthWithoutBody(
+          "/friends/list", token);
+      // debugPrint(response.body);
+      final users = friendRequestsFromJson(response.body);
+      // debugPrint(response.body);
+      final List<UserData> user = users.data.friends;
+      // debugPrint(response.body);
+      return user;
+    }
+    return [];
+  }
 }
 
 class ShowListFriendsRequested extends StatelessWidget {
@@ -64,7 +79,57 @@ class ShowListFriendsRequested extends StatelessWidget {
 
           return ListTile(
             title: Text(user.username),
-            subtitle: Text(user.gender),
+            subtitle: Row(
+              children: [
+                // chấp nhận lời mời kết bạn
+                GestureDetector(
+                  onTap: () async {
+                    String? token = await storage.read(key: "token");
+
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": user.id,
+                        "is_accept": "1"
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-accept", data, token);
+                      debugPrint(response.body);
+                    }
+                    ;
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    color: pinkColor,
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                ),
+                GestureDetector(
+                  //xóa lời mời kết bạn
+                  onTap: () async {
+                    String? token = await storage.read(key: "token");
+
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": user.id,
+                        "is_accept": "2"
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-accept", data, token);
+                      debugPrint(response.body);
+                    }
+                    ;
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    color: greenColor,
+                  ),
+                )
+              ],
+            ),
           );
         },
       );
