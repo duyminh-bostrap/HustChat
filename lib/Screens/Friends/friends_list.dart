@@ -1,28 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
-import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/main_page.dart';
-import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
-import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:expandable_text/expandable_text.dart';
 
-class SuggestRequest extends StatelessWidget {
-  final Post post;
-  final User user;
-  final bool isPersonalPost;
+String link = 'https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&cb=c578a115-7e291d1f&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=pM4MixqT8AcAX-taJAh&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan2-3.fna&oh=d6547146bd71ff7d889c319978570933&oe=61BB95AF';
 
-  const SuggestRequest({
+class FriendsList extends StatelessWidget {
+  final UserData userData;
+  final bool isRequest;
+
+  const FriendsList({
     Key? key,
-    required this.post,
-    required this.user,
-    required this.isPersonalPost,
+    required this.userData,
+    required this.isRequest,
   }) : super(key: key);
 
   @override
@@ -33,14 +24,14 @@ class SuggestRequest extends StatelessWidget {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () => _showProfile(post, context),
+            onTap: () => {}, //_showProfile(post, context),
             child:
-            post.imageUrl != null ?
+            link != null ?
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: post.imageUrl),
+                  child: CachedNetworkImage(imageUrl: link),
                 )
             )
                 : const SizedBox.shrink(),
@@ -56,8 +47,8 @@ class SuggestRequest extends StatelessWidget {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => _showProfile(post, context),
-                  child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : post.user.imageUrl, hasBorder: true,),
+                  onTap: () => {}, //_showProfile(post, context),
+                  child:ProfileAvatar( imageUrl: link, hasBorder: true,),
                 ),
                 const SizedBox(width: 15.0),
                 Expanded(
@@ -65,15 +56,17 @@ class SuggestRequest extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                          onTap: () => _showProfile(post, context),
-                          child: showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
-                        // Text(
-                        //   post.user.name,
-                        //   style: const TextStyle(
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
+                          onTap: () => {}, //_showProfile(post, context),
+                          child:
+                          // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
+                        Text(
+                          userData.username,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                       SizedBox(height: 5.0),
                       Row(
@@ -95,7 +88,10 @@ class SuggestRequest extends StatelessWidget {
                   mini: true,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 3),
-                    child: Icon(Icons.person_add_alt_1, color: Color.fromRGBO(78, 212, 63, 1.0), size: 26.0, ),
+                    child:
+                      isRequest?
+                      Icon(Icons.done, color: Color.fromRGBO(78, 212, 63, 1.0), size: 28.0, )
+                      : Icon(Icons.person_add_alt_1, color: Color.fromRGBO(78, 212, 63, 1.0), size: 26.0, ),
                   ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('accept'),

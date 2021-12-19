@@ -4,7 +4,7 @@ import 'package:hust_chat/models/models.dart';
 import 'comments.dart';
 import 'current_user.dart';
 
-List<Post> posts = [
+List<Post> postimgs = [
   Post(
     user: currentUser,
     caption: 'Hi',

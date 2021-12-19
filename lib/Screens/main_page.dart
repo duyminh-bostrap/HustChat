@@ -4,7 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
-import 'package:hust_chat/Screens/Friends/friends_request_container.dart';
+import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
+import 'package:hust_chat/Screens/Search/user_search_info.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -20,7 +21,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class MainPage extends StatefulWidget {
   int current_index;
   User user = currentUser;
-  MainPage(this.current_index, {Key? key}) : super(key: key);
+  MainPage(
+      this.current_index,
+      {Key? key}
+      ) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState(current_index: current_index);
@@ -32,10 +36,8 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> screens = [
     // MessageScreen(), //Trang tin nhắn
-    FriendsProfile(
-      user: currentUser,
-    ),
-    FriendRequestContainer(), // Trang bạn bè
+    FriendsProfile(user: currentUser,),
+    FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(), // Trang cá nhân
   ];

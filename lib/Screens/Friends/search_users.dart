@@ -4,16 +4,14 @@ import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
-class FriendRequest extends StatelessWidget {
-  final Post post;
-  final User user;
-  final bool isPersonalPost;
+String link = 'https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&cb=c578a115-7e291d1f&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=pM4MixqT8AcAX-taJAh&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan2-3.fna&oh=d6547146bd71ff7d889c319978570933&oe=61BB95AF';
 
-  const FriendRequest({
+class SearchUsers extends StatelessWidget {
+  final UserData userData;
+
+  const SearchUsers({
     Key? key,
-    required this.post,
-    required this.user,
-    required this.isPersonalPost,
+    required this.userData,
   }) : super(key: key);
 
   @override
@@ -24,14 +22,14 @@ class FriendRequest extends StatelessWidget {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () => _showProfile(post, context),
+            onTap: () => {}, //_showProfile(post, context),
             child:
-            post.imageUrl != null ?
+            link != null ?
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: post.imageUrl),
+                  child: CachedNetworkImage(imageUrl: link),
                 )
             )
                 : const SizedBox.shrink(),
@@ -47,8 +45,8 @@ class FriendRequest extends StatelessWidget {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => _showProfile(post, context),
-                  child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : post.user.imageUrl, hasBorder: true,),
+                  onTap: () => {}, //_showProfile(post, context),
+                  child:ProfileAvatar( imageUrl: link, hasBorder: true,),
                 ),
                 const SizedBox(width: 15.0),
                 Expanded(
@@ -56,21 +54,23 @@ class FriendRequest extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                          onTap: () => _showProfile(post, context),
-                          child: showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
-                        // Text(
-                        //   post.user.name,
-                        //   style: const TextStyle(
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
+                        onTap: () => {}, //_showProfile(post, context),
+                        child:
+                        // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
+                        Text(
+                          userData.username,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                       SizedBox(height: 5.0),
                       Row(
                         children: [
                           Text(
-                            'Đã gửi lời mời kết bạn',
+                            'Có thể bạn biết người này',
                             style: TextStyle(
                               color: Colors.grey[100],
                               fontSize: 12.0,
@@ -84,7 +84,10 @@ class FriendRequest extends StatelessWidget {
 
                 FloatingActionButton(
                   mini: true,
-                  child: Icon(Icons.done, color: Color.fromRGBO(78, 212, 63, 1.0), size: 28.0, ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 3),
+                    child: Icon(Icons.person_add_alt_1, color: Color.fromRGBO(78, 212, 63, 1.0), size: 26.0, ),
+                  ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () => print('accept'),
                 ),

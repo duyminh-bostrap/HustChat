@@ -203,7 +203,7 @@ class _PostView extends State<PostView> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                final Post postcmt = posts[0];
+                final Post postcmt = postimgs[0];
                 final Comment comment = postcmt.commentList[index];
                 return CommentsWidget(comment: comment);
               },
