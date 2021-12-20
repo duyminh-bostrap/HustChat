@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/mainpage': (context) => MainPage(0),
-        '/mytimeline': (context) =>  FriendsProfile(user: currentUser,),
         '/message': (context) => MessageScreen(),
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),

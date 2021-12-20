@@ -39,7 +39,7 @@ class _MainPageState extends State<MainPage> {
     FriendsProfile(user: currentUser,),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
-    ProfileScreen(), // Trang cá nhân
+    ProfileScreen(isProfile: false), // Trang cá nhân
   ];
   _MainPageState({
     Key? key,
