@@ -4,7 +4,8 @@ import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
-String link = 'https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&cb=c578a115-7e291d1f&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=pM4MixqT8AcAX-taJAh&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan2-3.fna&oh=d6547146bd71ff7d889c319978570933&oe=61BB95AF';
+String link =
+    'https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&cb=c578a115-7e291d1f&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=pM4MixqT8AcAX-taJAh&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan2-3.fna&oh=d6547146bd71ff7d889c319978570933&oe=61BB95AF';
 
 class SearchUsers extends StatelessWidget {
   final UserData userData;
@@ -23,15 +24,13 @@ class SearchUsers extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => {}, //_showProfile(post, context),
-            child:
-            link != null ?
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: link),
-                )
-            )
+            child: link != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: CachedNetworkImage(imageUrl: link),
+                    ))
                 : const SizedBox.shrink(),
           ),
           Container(
@@ -46,7 +45,10 @@ class SearchUsers extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => {}, //_showProfile(post, context),
-                  child:ProfileAvatar( imageUrl: link, hasBorder: true,),
+                  child: ProfileAvatar(
+                    imageUrl: link,
+                    hasBorder: true,
+                  ),
                 ),
                 const SizedBox(width: 15.0),
                 Expanded(
@@ -56,8 +58,8 @@ class SearchUsers extends StatelessWidget {
                       GestureDetector(
                         onTap: () => {}, //_showProfile(post, context),
                         child:
-                        // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
-                        Text(
+                            // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
+                            Text(
                           userData.username,
                           style: const TextStyle(
                             color: Colors.white,
@@ -81,15 +83,30 @@ class SearchUsers extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 FloatingActionButton(
                   mini: true,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 3),
-                    child: Icon(Icons.person_add_alt_1, color: Color.fromRGBO(78, 212, 63, 1.0), size: 26.0, ),
+                    child: Icon(
+                      Icons.person_add_alt_1,
+                      color: Color.fromRGBO(78, 212, 63, 1.0),
+                      size: 26.0,
+                    ),
                   ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () => print('accept'),
+                  onPressed: () async {
+                    String? token = await storage.read(key: "token");
+
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": userData.id,
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-request-friend", data, token);
+                      debugPrint(response.body);
+                    }
+                    ;
+                  },
                 ),
                 SizedBox(width: 3.0),
                 FloatingActionButton(
@@ -106,7 +123,6 @@ class SearchUsers extends StatelessWidget {
     );
   }
 }
-
 
 _showProfile(Post post, BuildContext context) {
   print("profile");

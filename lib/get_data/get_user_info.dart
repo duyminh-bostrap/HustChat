@@ -30,6 +30,7 @@ class UsersApi {
     }
     return [];
   }
+
   static Future<List<UserData>> getUsers() async {
     String? token = await storage.read(key: "token");
     // print(token);
@@ -39,10 +40,10 @@ class UsersApi {
       };
       print(data);
       var response =
-      await networkHandler.postAuth("/users/search", data, token);
-      debugPrint(response.body);
+          await networkHandler.postAuth("/users/search", data, token);
+      // debugPrint(response.body);
       final users = searchUserFromJson(response.body);
-      debugPrint(response.body);
+      // debugPrint(response.body);
       final List<UserData> user = users.data;
       // debugPrint(response.body);
       return user;
@@ -50,5 +51,3 @@ class UsersApi {
     return [];
   }
 }
-
-
