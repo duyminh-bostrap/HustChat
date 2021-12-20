@@ -66,14 +66,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   alignment: Alignment.bottomCenter,
                                   overflow: Overflow.visible,
                                   children: <Widget>[
+                                    Positioned(
+                                      top: 5.0,
+                                      left: 0.0,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.chevron_left,
+                                          size: 35,
+                                          color: Colors.black87,
+                                        ),
+                                        onPressed: () {Navigator.pop(context); print('asd');},
+                                      )
+                                    ),
                                     Container(
                                       width: size.width,
                                       height: 200.0,
-                                      child: GestureDetector(
-                                        onTap: () => {},  //_openPost(post, context),
-                                        child: CachedNetworkImage(imageUrl: 'https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/s960x960/260082159_1310567392723464_5260172184812387673_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=e3f864&_nc_ohc=SUKdopftlokAX9d9jul&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8FiAhqkd8GIfA8Iq2as5BXnkyaYsLSAACAdERvu_6V1A&oe=61C0BC9A'),
-
-                                      ),
+                                      child: CachedNetworkImage(imageUrl: 'https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/s960x960/260082159_1310567392723464_5260172184812387673_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=e3f864&_nc_ohc=SUKdopftlokAX9d9jul&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8FiAhqkd8GIfA8Iq2as5BXnkyaYsLSAACAdERvu_6V1A&oe=61C0BC9A'),
                                     ),
                                     Positioned(
                                       top: 150.0,
@@ -86,11 +94,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     Positioned(
-                                      top: 240,
-                                      left: size.width*0.55,
+                                      top: 231,
+                                      left: size.width*0.57,
                                       child: Container(
+                                          width: 46,
+                                          height: 46,
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                54, 54, 54, 1.0),
                                             borderRadius: BorderRadius.all(Radius.circular(size.width*0.225)),
                                           ),
                                           child: Icon(Icons.photo_camera, color: Colors.white, size: 28,)

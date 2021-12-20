@@ -52,6 +52,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: greenColor,
+          automaticallyImplyLeading: false,
           title: Padding(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Container(
