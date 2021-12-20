@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:hust_chat/get_data/get_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
@@ -131,13 +132,18 @@ class CreatePost extends StatelessWidget {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                currentUser.name,
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
+                              showName(
+                                color: Colors.black87,
+                                size: 16,
+                                fontWeight: FontWeight.w600,
                               ),
+                              // Text(
+                              //   currentUser.name,
+                              //   style: TextStyle(
+                              //       color: Colors.black87,
+                              //       fontSize: 16,
+                              //       fontWeight: FontWeight.w600),
+                              // ),
                               Row(
                                 children: [
                                   Text(
