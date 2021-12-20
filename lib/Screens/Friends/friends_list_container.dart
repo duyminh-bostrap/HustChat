@@ -107,7 +107,7 @@ class _FriendListContainer extends State<FriendListContainer>{
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                                 (context, index) {
-                              final UserData userData = friends[index];
+                              final UserData userData = friends[friends.length-index-1];
                               return isRequest?
                                 FriendsList(userData: userData, isRequest: true,)
                               : FriendsList(userData: userData, isRequest: false,);
@@ -214,3 +214,4 @@ class _FriendListContainer extends State<FriendListContainer>{
 
 _showProfile(post, BuildContext context) {
 }
+

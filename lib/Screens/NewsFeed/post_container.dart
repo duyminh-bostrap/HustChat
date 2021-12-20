@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
@@ -10,11 +11,14 @@ import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/models/post_model_2.dart';
 import 'package:hust_chat/models/user_model.dart';
+import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
 String link =
 "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=uDg0Jhmowo8AX-EoNMg&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8fIEil90ej5dlYMlzA-x03ESLqV3A6vlz1YNaAVz1WGQ&oe=61C1846F";
+NetworkHandler networkHandler = NetworkHandler();
+final storage = new FlutterSecureStorage();
 
 class PostContainer extends StatelessWidget {
   final PostData post;
@@ -349,7 +353,7 @@ _showMore(User currentUser, PostData post, context) {
       context: context,
       builder: (BuildContext bcx) {
         Size size = MediaQuery.of(context).size;
-        return post.author == 'Duy Minh'?
+        return post.author.id == storage.read(key: "id")?
         Container(
             margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -360,7 +364,7 @@ _showMore(User currentUser, PostData post, context) {
             child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () => print("Chỉnh sửa bài viết"),
+                    onTap: () => print(post.author.id.toString() + "___" + storage.read(key: "id").toString()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -425,7 +429,7 @@ _showMore(User currentUser, PostData post, context) {
           child: Column(
               children: [
                 GestureDetector(
-                  onTap: () => print("Báo cáo bài viết"),
+                  onTap: () => print(post.author.id.toString() + "___" + storage.read(key: "data/id").toString()),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

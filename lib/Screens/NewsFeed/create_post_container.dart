@@ -27,7 +27,7 @@ class CreatePostContainer extends StatelessWidget {
               const SizedBox(width: 10.0),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _createPost(currentUser, context),
+                  onTap: () => createPost(currentUser, context),
                   child: Text(
                     'Hôm nay bạn thế nào?',
                     style: TextStyle(fontSize: 16, color: Colors.black54 ),
@@ -52,7 +52,7 @@ class CreatePostContainer extends StatelessWidget {
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),
                         extendedIconLabelSpacing: 20.0,
                         extendedPadding: EdgeInsets.fromLTRB(30.0, 0.0, 40.0, 0.0),
-                        onPressed: () => _createPost(currentUser, context),
+                        onPressed: () => createPost(currentUser, context),
                       ),
                     ),
                   ),
@@ -68,7 +68,7 @@ class CreatePostContainer extends StatelessWidget {
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),
                         extendedIconLabelSpacing: 20.0,
                         extendedPadding: EdgeInsets.fromLTRB(30.0, 0.0, 40.0, 0.0),
-                        onPressed: () => _createPost(currentUser, context),
+                        onPressed: () => createPost(currentUser, context),
                       ),
                     ),
                   ),
@@ -83,7 +83,7 @@ class CreatePostContainer extends StatelessWidget {
   }
 }
 
-_createPost(User currentUser, context) {
+createPost(User currentUser, context) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,

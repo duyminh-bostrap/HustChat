@@ -35,13 +35,34 @@ class NewsFeed extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: CreatePostContainer(currentUser: currentUser),
                     ),
+                    posts!.length != 0?
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                             (context, index) {
-                          final PostData post = posts![index];
+                          final PostData post = posts[posts.length-index-1];
                           return PostContainer(post: post, isPersonalPost: false,);
                         },
-                        childCount: posts!.length,
+                        childCount: posts.length,
+                      ),
+                    )
+                    : SliverToBoxAdapter(
+                      child:
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: Text(
+                          'Bạn và bạn bè chưa có bài viết nào',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     ),
                   ],

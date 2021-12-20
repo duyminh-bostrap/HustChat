@@ -59,87 +59,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CustomScrollView(
                       slivers: [
                         SliverToBoxAdapter(
-                          child: Column(
+                          child: Stack(
                             children: [
-                              Stack(
-                                alignment: Alignment.topLeft,
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: size.width,
-                                    child: Positioned(
-                                        top: 5.0,
-                                        left: 0.0,
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.chevron_left,
-                                            size: 35,
-                                            color: Colors.black87,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              isProfile = false;
-                                            });
-                                          },
-                                        )
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Container(
-                                child: Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  overflow: Overflow.visible,
-                                  children: <Widget>[
-                                    Positioned(
-                                      top: 5.0,
-                                      left: 0.0,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.chevron_left,
-                                          size: 35,
-                                          color: Colors.black87,
-                                        ),
-                                        onPressed: () {print('asd');},
-                                      )
-                                    ),
-                                    Container(
-                                      width: size.width,
-                                      height: 200.0,
-                                      child: CachedNetworkImage(imageUrl: 'https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/s960x960/260082159_1310567392723464_5260172184812387673_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=e3f864&_nc_ohc=SUKdopftlokAX9d9jul&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8FiAhqkd8GIfA8Iq2as5BXnkyaYsLSAACAdERvu_6V1A&oe=61C0BC9A'),
-                                    ),
-                                    Positioned(
-                                      top: 150.0,
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: GestureDetector(
-                                            onTap: () => print("avatar"),  //_openPost(post, context),
-                                            child: ProfileAvatar(imageUrl: link, minSize: 62, maxSize: 65, hasBorder: true,)
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 231,
-                                      left: size.width*0.57,
-                                      child: Container(
-                                          width: 46,
-                                          height: 46,
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: Color.fromRGBO(
-                                                54, 54, 54, 1.0),
-                                            borderRadius: BorderRadius.all(Radius.circular(size.width*0.225)),
-                                          ),
-                                          child: Icon(Icons.photo_camera, color: Colors.white, size: 28,)
-                                      ),
-                                    ),
-                                  ],
+                                width: size.width,
+                                height: 200,
+                                child: GestureDetector(
+                                  onTap: () {print('coverimage');}, //_showProfile(post, context),
+                                  child: link != null
+                                      ? CachedNetworkImage(imageUrl: link)
+                                      : const SizedBox.shrink(),
                                 ),
                               ),
-
+                              Container(
+                                width: size.width,
+                                height: 260,
+                                alignment: Alignment.bottomCenter,
+                                child: GestureDetector(
+                                  onTap: () {print('avatar');}, //_showProfile(post, context),
+                                  child: ProfileAvatar(
+                                    imageUrl: link,
+                                    hasBorder: true,
+                                    minSize: 63,
+                                    maxSize: 65,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(225, 210, 0, 0), //top: 210, left: size.width*0.55
+                                child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(
+                                          54, 54, 54, 1.0),
+                                      borderRadius: BorderRadius.all(Radius.circular(size.width*0.225)),
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(Icons.photo_camera, color: Colors.white, size: 25,),
+                                      onPressed: () {print('Đổi avatar');},
+                                    )
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
                               Container(
                                 alignment: Alignment.bottomCenter,
-                                height: 130.0,
+                                height: 40.0,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
@@ -172,26 +142,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Column(
                                       children: <Widget>[
                                         IconButton(
-                                          icon: Icon(
-                                              Icons.person, size: 28, color: Colors.blueAccent),
+                                          icon: Icon(Icons.add_photo_alternate, size: 28, color: blueColor),
                                           onPressed: () {
-                                            print("collections");
+                                            createPost(currentUser, context);
                                           },
                                         ),
-                                        Text('Bạn bè', style: TextStyle(
-                                            color: Colors.blueAccent
-                                        ),)
+                                        Text('Thêm ảnh', style: TextStyle(color: blueColor),)
                                       ],
                                     ),
                                     Column(
                                       children: <Widget>[
                                         IconButton(
-                                          icon: Icon(MdiIcons.facebookMessenger, color: Colors.black),
+                                          icon: Icon(Icons.edit, color: Colors.black),
                                           onPressed: () {
                                             print("collections");
                                           },
                                         ),
-                                        Text('Nhắn tin', style: TextStyle(
+                                        Text('Chỉnh sửa', style: TextStyle(
                                             color: Colors.black
                                         ),)
                                       ],
@@ -211,6 +178,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     )
                                   ],
                                 ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                //   children: <Widget>[
+                                //     Column(
+                                //       children: <Widget>[
+                                //         IconButton(
+                                //           icon: Icon(Icons.person, size: 28, color: Colors.black),
+                                //           onPressed: () {
+                                //             print("collections");
+                                //           },
+                                //         ),
+                                //         Text('Bạn bè', style: TextStyle(color: Colors.black),)
+                                //       ],
+                                //     ),
+                                //     Column(
+                                //       children: <Widget>[
+                                //         IconButton(
+                                //           icon: Icon(MdiIcons.facebookMessenger, color: Colors.black),
+                                //           onPressed: () {
+                                //             print("collections");
+                                //           },
+                                //         ),
+                                //         Text('Nhắn tin', style: TextStyle(
+                                //             color: Colors.black
+                                //         ),)
+                                //       ],
+                                //     ),
+                                //     Column(
+                                //       children: <Widget>[
+                                //         IconButton(
+                                //           icon: Icon(Icons.more_vert, color: Colors.black),
+                                //           onPressed: () {
+                                //             _showMoreOption(context);
+                                //           },
+                                //         ),
+                                //         Text('Thêm', style: TextStyle(
+                                //             color: Colors.black
+                                //         ),)
+                                //       ],
+                                //     )
+                                //   ],
+                                // ),
                               ),
                               SizedBox(height: 20.0,),
                               Container(
@@ -233,13 +242,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                     SizedBox(height: 10.0,),
                                     Row(children: <Widget>[
-                                      Icon(Icons.location_on),
+                                      Icon(Icons.male), //female
                                       SizedBox(width: 5.0,),
-                                      Text('Đến từ', style: TextStyle(
+                                      Text('Giới tính', style: TextStyle(
                                           fontSize: 16.0
                                       ),),
                                       SizedBox(width: 5.0,),
-                                      Text('Hà Nội', style: TextStyle(
+                                      Text('Nam', style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600
                                       ),)
@@ -366,13 +375,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
+                        posts!.length != 0?
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                                 (context, index) {
-                              final PostData post = posts![index];
+                              final PostData post = posts[posts.length-index-1];
                               return PostContainer(post: post, isPersonalPost: false,);
                             },
-                            childCount: posts!.length,
+                            childCount: posts.length,
+                          ),
+                        )
+                        : SliverToBoxAdapter(
+                          child:
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Text(
+                              'Bạn chưa có bài viết nào',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -380,6 +410,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
             }
           },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        floatingActionButton:
+        IconButton(
+          icon: Icon(Icons.chevron_left,size: 35,color: Colors.black87,),
+          onPressed: () {setState(() { isProfile = false;});},
         ),
       )
       : SingleChildScrollView(
@@ -409,10 +445,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // color: Colors.red,
                     height: 60,
                     width: 60,
+                    alignment: Alignment.center,
                     // color: Colors.red,
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/IMG_9119.JPG'),
-                      // radius: 40,
+                    child: ProfileAvatar(
+                      imageUrl: link,
+                      maxSize: 40,
                     ),
                   ),
                 ),
@@ -444,10 +481,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5,
                             ),
                             Text(
-                              'Xem trang cá nhân',
+                              'Xem trang cá nhân của bạn',
                               style: TextStyle(
                                 color: Colors.black87,
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                               // fontWeight: FontWeight.bold),
                             ),

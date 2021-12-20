@@ -35,8 +35,8 @@ class _MainPageState extends State<MainPage> {
   User user = currentUser;
 
   final List<Widget> screens = [
-    // MessageScreen(), //Trang tin nhắn
-    FriendsProfile(user: currentUser,),
+    MessageScreen(), //Trang tin nhắn
+    // FriendsProfile(user: currentUser,),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(isProfile: false), // Trang cá nhân
