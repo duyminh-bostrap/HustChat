@@ -6,8 +6,8 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link =
-"http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+
 class FriendsList extends StatelessWidget {
   final UserData userData;
   final bool isRequest;
@@ -75,7 +75,7 @@ class FriendsList extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Có thể bạn biết người này',
+                            userData.phonenumber,
                             style: TextStyle(
                               color: Colors.grey[100],
                               fontSize: 12.0,
@@ -86,80 +86,83 @@ class FriendsList extends StatelessWidget {
                     ],
                   ),
                 ),
-                isRequest?
-                FloatingActionButton(
-                  mini: true,
-                  child: Icon(
+                isRequest
+                    ? FloatingActionButton(
+                        mini: true,
+                        child: Icon(
                           Icons.done,
                           color: Color.fromRGBO(78, 212, 63, 1.0),
                           size: 28.0,
                         ),
-                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () async {
-                    String? token = await storage.read(key: "token");
+                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                        onPressed: () async {
+                          String? token = await storage.read(key: "token");
 
-                    if (token != null) {
-                      Map<String, String> data = {
-                        "user_id": userData.id,
-                        "is_accept": "1"
-                      };
-                      var response = await networkHandler.postAuth(
-                          "/friends/set-accept", data, token);
-                      debugPrint(response.body);
-                    };
-                  },
-                )
-                : FloatingActionButton(
-                  mini: true,
-                  child: Icon(
-                    MdiIcons.facebookMessenger,
-                    color: blueColor,
-                    size: 26.0,
-                  ),
-                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () async {print("message");},
-                ),
-
+                          if (token != null) {
+                            Map<String, String> data = {
+                              "user_id": userData.id,
+                              "is_accept": "1"
+                            };
+                            var response = await networkHandler.postAuth(
+                                "/friends/set-accept", data, token);
+                            debugPrint(response.body);
+                          }
+                          ;
+                        },
+                      )
+                    : FloatingActionButton(
+                        mini: true,
+                        child: Icon(
+                          MdiIcons.facebookMessenger,
+                          color: blueColor,
+                          size: 26.0,
+                        ),
+                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                        onPressed: () async {
+                          print("message");
+                        },
+                      ),
                 SizedBox(width: 3.0),
-                isRequest?
-                FloatingActionButton(
-                  mini: true,
-                  child: Icon(Icons.close, color: Colors.red, size: 26.0),
-                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () async {
-                    String? token = await storage.read(key: "token");
+                isRequest
+                    ? FloatingActionButton(
+                        mini: true,
+                        child: Icon(Icons.close, color: Colors.red, size: 26.0),
+                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                        onPressed: () async {
+                          String? token = await storage.read(key: "token");
 
-                    if (token != null) {
-                      Map<String, String> data = {
-                        "user_id": userData.id,
-                        "is_accept": "2"
-                      };
-                      var response = await networkHandler.postAuth(
-                          "/friends/set-accept", data, token);
-                      debugPrint(response.body);
-                    }
-                    ;
-                  },
-                )
-                :  FloatingActionButton(
-                  mini: true,
-                  child: Icon(MdiIcons.blockHelper, color: pinkColor, size: 26.0),
-                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () async {
-                    String? token = await storage.read(key: "token");
+                          if (token != null) {
+                            Map<String, String> data = {
+                              "user_id": userData.id,
+                              "is_accept": "2"
+                            };
+                            var response = await networkHandler.postAuth(
+                                "/friends/set-accept", data, token);
+                            debugPrint(response.body);
+                          }
+                          ;
+                        },
+                      )
+                    : FloatingActionButton(
+                        mini: true,
+                        child: Icon(MdiIcons.blockHelper,
+                            color: pinkColor, size: 26.0),
+                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                        onPressed: () async {
+                          String? token = await storage.read(key: "token");
 
-                    if (token != null) {
-                      Map<String, String> data = {
-                        "user_id": userData.id,
-                        "is_accept": "2"
-                      };
-                      var response = await networkHandler.postAuth(
-                          "/friends/set-accept", data, token);
-                      debugPrint(response.body);
-                    }
-                    ;
-                  },
-                ),
+                          if (token != null) {
+                            Map<String, String> data = {
+                              "user_id": userData.id,
+                              "is_accept": "2"
+                            };
+                            var response = await networkHandler.postAuth(
+                                "/friends/set-accept", data, token);
+                            debugPrint(response.body);
+                          }
+                          ;
+                        },
+                      ),
               ],
             ),
           ),
