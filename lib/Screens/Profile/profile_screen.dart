@@ -20,9 +20,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-    child: Container(
-      color: Color.fromRGBO(0, 0, 0, 0.05),
-      child: Column(
+      child: Container(
+        color: Color.fromRGBO(0, 0, 0, 0.05),
+        child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

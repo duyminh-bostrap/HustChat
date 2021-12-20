@@ -23,8 +23,11 @@ class PostsApi {
   }
   static Future<List<PostData>> getMyPosts() async {
     String? token = await storage.read(key: "token");
-    if (token != null) {
-      var response = await networkHandler.getWithAuth("/posts/show:id", token);
+    String? userID = await storage.read(key: "id");
+    if (token != null && userID != null) {
+      print(userID);
+      String url = "/posts/list?userId=" + userID;
+      var response = await networkHandler.getWithAuth(url, token);
       final posts = postsFromJson(response.body);
       final List<PostData> post = posts.data;
 

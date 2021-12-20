@@ -47,7 +47,7 @@ class PostContainer extends StatelessWidget {
                   onTap: () => _openPost(post, context),
                   child:
                   ExpandableText(
-                    post.described,
+                    post.described.runtimeType == String?  post.described: '',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 15.0,
