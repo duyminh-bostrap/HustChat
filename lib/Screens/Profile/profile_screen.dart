@@ -61,6 +61,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SliverToBoxAdapter(
                           child: Column(
                             children: [
+                              Stack(
+                                alignment: Alignment.topLeft,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: size.width,
+                                    child: Positioned(
+                                        top: 5.0,
+                                        left: 0.0,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.chevron_left,
+                                            size: 35,
+                                            color: Colors.black87,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              isProfile = false;
+                                            });
+                                          },
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Container(
                                 child: Stack(
                                   alignment: Alignment.bottomCenter,
@@ -75,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           size: 35,
                                           color: Colors.black87,
                                         ),
-                                        onPressed: () {Navigator.pop(context); print('asd');},
+                                        onPressed: () {print('asd');},
                                       )
                                     ),
                                     Container(
