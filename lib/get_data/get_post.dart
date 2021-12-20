@@ -21,6 +21,17 @@ class PostsApi {
     }
     return [];
   }
+  static Future<List<PostData>> getMyPosts() async {
+    String? token = await storage.read(key: "token");
+    if (token != null) {
+      var response = await networkHandler.getWithAuth("/posts/show:id", token);
+      final posts = postsFromJson(response.body);
+      final List<PostData> post = posts.data;
+
+      return post;
+    }
+    return [];
+  }
 }
 
 class ShowPostInfo extends StatelessWidget {

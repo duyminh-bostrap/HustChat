@@ -18,7 +18,7 @@ class MyNewsFeed extends StatelessWidget {
           backgroundColor: pinkColor,
         ),
         body: FutureBuilder<List<PostData>>(
-          future: PostsApi.getPosts(),
+          future: PostsApi.getMyPosts(),
           builder: (context, snapshot) {
             final posts = snapshot.data;
             switch (snapshot.connectionState) {
