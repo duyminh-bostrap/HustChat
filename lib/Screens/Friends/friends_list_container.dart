@@ -27,7 +27,7 @@ class _FriendListContainer extends State<FriendListContainer>{
       body:
             // danh sách kết bạn và gợi ý kết bạn
           FutureBuilder<List<UserData>>(
-            future: FriendsApi.getListFriendsRequested(),
+            future: isRequest? FriendsApi.getListFriendsRequested(): FriendsApi.getListFriends(),
             builder: (context, snapshot) {
               final friends = snapshot.data;
               switch (snapshot.connectionState) {
@@ -136,10 +136,10 @@ class _FriendListContainer extends State<FriendListContainer>{
                               ),
                             ),
                         ),
-                        SliverToBoxAdapter(
-                            child:
-                            FriendSuggestContainer(),
-                        ),
+                        // SliverToBoxAdapter(
+                        //     child:
+                        //     FriendSuggestContainer(),
+                        // ),
                         SliverToBoxAdapter(
                             child:
                             SizedBox(height: 20,)

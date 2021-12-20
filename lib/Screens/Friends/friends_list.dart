@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 String link =
-    'https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&cb=c578a115-7e291d1f&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=pM4MixqT8AcAX-taJAh&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan2-3.fna&oh=d6547146bd71ff7d889c319978570933&oe=61BB95AF';
-
+"http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 class FriendsList extends StatelessWidget {
   final UserData userData;
   final bool isRequest;
@@ -85,22 +86,14 @@ class FriendsList extends StatelessWidget {
                     ],
                   ),
                 ),
+                isRequest?
                 FloatingActionButton(
                   mini: true,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 3),
-                    child: isRequest
-                        ? Icon(
-                            Icons.done,
-                            color: Color.fromRGBO(78, 212, 63, 1.0),
-                            size: 28.0,
-                          )
-                        : Icon(
-                            Icons.person_add_alt_1,
-                            color: Color.fromRGBO(78, 212, 63, 1.0),
-                            size: 26.0,
-                          ),
-                  ),
+                  child: Icon(
+                          Icons.done,
+                          color: Color.fromRGBO(78, 212, 63, 1.0),
+                          size: 28.0,
+                        ),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () async {
                     String? token = await storage.read(key: "token");
@@ -113,14 +106,44 @@ class FriendsList extends StatelessWidget {
                       var response = await networkHandler.postAuth(
                           "/friends/set-accept", data, token);
                       debugPrint(response.body);
-                    }
-                    ;
+                    };
                   },
+                )
+                : FloatingActionButton(
+                  mini: true,
+                  child: Icon(
+                    MdiIcons.facebookMessenger,
+                    color: blueColor,
+                    size: 26.0,
+                  ),
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                  onPressed: () async {print("message");},
                 ),
+
                 SizedBox(width: 3.0),
+                isRequest?
                 FloatingActionButton(
                   mini: true,
                   child: Icon(Icons.close, color: Colors.red, size: 26.0),
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                  onPressed: () async {
+                    String? token = await storage.read(key: "token");
+
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": userData.id,
+                        "is_accept": "2"
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-accept", data, token);
+                      debugPrint(response.body);
+                    }
+                    ;
+                  },
+                )
+                :  FloatingActionButton(
+                  mini: true,
+                  child: Icon(MdiIcons.blockHelper, color: pinkColor, size: 26.0),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                   onPressed: () async {
                     String? token = await storage.read(key: "token");

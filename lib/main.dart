@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Profile/my_news_feed.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
@@ -8,6 +9,7 @@ import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/my_timeline.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:hust_chat/Screens/signup_screen.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_list_friend.dart';
 import 'package:hust_chat/get_data/get_post.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/mainpage': (context) => MainPage(0),
-        '/mytimeline': (context) => MyTimeLineScreen(),
+        '/mytimeline': (context) =>  FriendsProfile(user: currentUser,),
         '/message': (context) => MessageScreen(),
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),
