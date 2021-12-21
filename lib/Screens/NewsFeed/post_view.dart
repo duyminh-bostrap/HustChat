@@ -33,6 +33,9 @@ class PostView extends StatefulWidget {
 class _PostView extends State<PostView> {
   final PostData post;
   final Animation animation;
+  bool viewAll = false;
+  bool isLove= false;
+  TextEditingController writeComment = TextEditingController();
 
   _PostView({
     required this.post,
@@ -42,7 +45,6 @@ class _PostView extends State<PostView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool isLiked = false;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -116,10 +118,10 @@ class _PostView extends State<PostView> {
                         onTap: () async {
                           print("tap");
                           setState(() {
-                            isLiked = isLiked? false:true;
+                            post.isLike = post.isLike? false:true;
                           });
                         },
-                        child: isLiked ?
+                        child: post.isLike ?
                         Icon(
                           Icons.favorite,
                           color: pinkColor,
@@ -135,7 +137,7 @@ class _PostView extends State<PostView> {
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: InkWell(
-                              onTap: () => _whoComment(post, context),
+                              onTap: () => {}, // _seeComment(post, context),
                               child: Icon(
                                 MdiIcons.commentOutline,
                                 color: Colors.grey[600],
@@ -166,7 +168,7 @@ class _PostView extends State<PostView> {
                               style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500,),
                             ),
                             SizedBox(width: 10,),
-                            Text(post.createdAt.toString(), style: TextStyle(fontSize: 15),),
+                            Text(post.createdAt.toString(), style: TextStyle(fontSize: 14),),
                           ]
                       )
                   ),
@@ -187,81 +189,135 @@ class _PostView extends State<PostView> {
                       ),
                     ),
                   ),
-                  Container(
-                      padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                      child: Row(
-                          children: [
-                            Text(post.like.length.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                            SizedBox(width: 5,),
-                            Text('lượt thích', style: TextStyle(fontSize: 15),),
-                          ]
-                      )
+                  GestureDetector(
+                    onTap: () => _whoLike(post, context),
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                        child: Row(
+                            children: [
+                              Text(post.like.length.toString(),
+                                style: TextStyle(color: Colors.black87,fontSize: 15, fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(width: 5,),
+                              Text('lượt thích', style: TextStyle(fontSize: 15),),
+                            ]
+                        )
+                    ),
                   ),
-                  Container(
-                      padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              post.countComments == 0 ?
-                              'Xem tất cả ${post.countComments} bình luận'
-                              : 'Chưa có bình luận',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ]
-                      )
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        viewAll = viewAll? false : true;
+                      });
+                    },
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                post.countComments == 0 ?
+                                  viewAll? 'Rút gọn'
+                                  :'Xem tất cả ${post.countComments} bình luận'
+                                : 'Chưa có bình luận',
+                                style: TextStyle(fontSize: 15, color: Colors.black54),
+                              ),
+                            ]
+                        )
+                    ),
                   ),
                   post.countComments == 0 ?
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: Comments.allComments.length,
-                      itemBuilder: (context, index) {
-                        final comment = Comments.allComments[index];
-                        return CommentsWidget(comment: comment);
-                      }
-                  )
+                    viewAll?
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: Comments.allComments.length,
+                        itemBuilder: (context, index) {
+                          final comment = Comments.allComments[Comments.allComments.length-1-index];
+                          return CommentsWidget(comment: comment);
+                        }
+                      )
+                    : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-2])
                   : SizedBox(height: 5,),
+                  SizedBox(height: 45,)
                   ],
                 ),
             ]
           ),
-          // ListView.builder(
-          //     shrinkWrap: true,
-          //     physics: BouncingScrollPhysics(),
-          //     itemCount: Comments.allComments.length,
-          //     itemBuilder: (context, index) {
-          //       final comment = Comments.allComments[index];
-          //       return CommentsWidget(comment: comment);
-          //     }
-          // ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: size.width,
+              height:70,
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 16),
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                color: Colors.black87,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Row(
+                  children: [
+                    ProfileAvatar(imageUrl: link,maxSize: 20),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: TextFormField(
+                        controller: writeComment,
+                        textAlign: TextAlign.left,
+                        cursorColor: Colors.black87,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                            hintText: 'Viết bình luận...',
+                            hintStyle: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w300),
+                            border: InputBorder.none
 
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Container(
-          //     height: 60,
-          //     margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-          //     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          //     decoration: BoxDecoration(
-          //       color: Colors.black26,
-          //       borderRadius: BorderRadius.all(Radius.circular(20)),
-          //     ),
-          //     child: Row(
-          //       children: [
-          //         // ProfileAvatar(imageUrl: link, maxSize: 25, hasBorder: true,),
-          //         Container(
-          //           height: 60,
-          //           child: TextFormField(
-          //             textAlign: TextAlign.left,
-          //             maxLines: 2,
-          //             decoration: InputDecoration(
-          //               hintText: "Viết bình luận...",
-          //               // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
-          //             ),
+                          // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(MdiIcons.send),
+                      onPressed: () {print(writeComment);},
+                    ),
+                  ],
+                ),
+              )
+            )
+          )
+
+          // Container(
+          //   height: 60,
+          //   margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+          //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          //   decoration: BoxDecoration(
+          //     color: Colors.black26,
+          //     borderRadius: BorderRadius.all(Radius.circular(20)),
+          //   ),
+          //   child: Row(
+          //     children: [
+                // ProfileAvatar(imageUrl: link, maxSize: 25, hasBorder: true,),
+          //       Container(
+          //         height: 60,
+          //         child:
+          //         TextFormField(
+          //           textAlign: TextAlign.left,
+          //           maxLines: 2,
+          //           decoration: InputDecoration(
+          //             hintText: "Viết bình luận...",
+          //             // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
           //           ),
-          //         )
-          //       ]
-          //     )
+          //         ),
+          //       )
+          //     ]
           //   )
           // ),
         ],
@@ -271,9 +327,7 @@ class _PostView extends State<PostView> {
 }
 
 _whoLike(PostData post, BuildContext context) {
-}
-
-_whoComment(PostData post, BuildContext context) {
+  print("${post.like.length} người thích bài viết");
 }
 
 _whoShare(PostData post, BuildContext context) {
