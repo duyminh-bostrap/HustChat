@@ -34,8 +34,8 @@ class _PostView extends State<PostView> {
   final PostData post;
   final Animation animation;
   bool viewAll = false;
-  bool isLove= false;
   TextEditingController writeComment = TextEditingController();
+  // final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   _PostView({
     required this.post,
@@ -116,7 +116,6 @@ class _PostView extends State<PostView> {
                       SizedBox(width: 15,),
                       GestureDetector(
                         onTap: () async {
-                          print("tap");
                           setState(() {
                             post.isLike = post.isLike? false:true;
                           });
@@ -149,9 +148,9 @@ class _PostView extends State<PostView> {
                       InkWell(
                           onTap: () => _whoShare(post, context),
                           child: Icon(
-                            MdiIcons.send,
+                            Icons.bookmark_border,
                             color: Colors.grey[600],
-                            size: 25.0,
+                            size: 28.0,
                           )
                       ),
                       SizedBox(width: 15,),
@@ -239,7 +238,7 @@ class _PostView extends State<PostView> {
                       )
                     : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-1])
                   : SizedBox(height: 5,),
-                  SizedBox(height: 45,)
+                  SizedBox(height: 55,)
                   ],
                 ),
             ]
@@ -330,7 +329,7 @@ _showMore(PostData post, context) async {
       Size size = MediaQuery.of(context).size;
       return post.author.id.toString() == userID.toString()?
       Container(
-          margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-170, 10.0, 90),
+          margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-180, 10.0, 100),
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
           decoration: BoxDecoration(
             color: Colors.white,

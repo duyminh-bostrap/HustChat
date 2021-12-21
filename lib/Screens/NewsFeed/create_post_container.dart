@@ -87,6 +87,6 @@ createPost(User currentUser, context) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (BuildContext bcx) => CreatePost(currentUser: currentUser,)
+      builder: (BuildContext bcx) => CreatePost()
   );
 }

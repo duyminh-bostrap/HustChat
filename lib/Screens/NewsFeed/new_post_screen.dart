@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -13,9 +14,19 @@ import 'package:hust_chat/Screens/main_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-class CreatePost extends StatelessWidget {
+String link = currentUser.imageUrl;
+
+class CreatePost extends StatefulWidget {
+  CreatePost({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _CreatePost createState() => _CreatePost();
+}
+class _CreatePost extends State<CreatePost> {
+  bool isListIcons = false;
   File? image;
-  final User currentUser;
 
   Future pickImage(ImageSource source) async {
     try {
@@ -29,10 +40,9 @@ class CreatePost extends StatelessWidget {
     }
   }
 
-  CreatePost({
-    Key? key,
-    required this.currentUser,
-  }) : super(key: key);
+  _CreatePost({
+  Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,259 +50,370 @@ class CreatePost extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Column(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.white,
+        body: Stack(
           children: [
-            Container(
-              color: pinkColor,
-              child: Column(
-                children: [
-                  Container(
-                    height: size.height * 0.06,
-                    color: pinkColor,
-                  ),
-                  Container(
-                    height: size.height * 0.063,
-                    color: pinkColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: size.width * 0.15,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.chevron_left,
-                              size: 32,
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.15,
-                        ),
-                        SizedBox(
-                          width: size.width * 0.4,
-                          child: Center(
-                            child: Text(
-                              'Tạo bài viết',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.3,
-                          child: Padding(
-                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                              child: RaisedButton(
-                                onPressed: () => AddNewPost(status, context),
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25))),
-                                child: Text(
-                                  'Đăng',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400),
+            ListView(
+              children: [
+                Container(
+                  color: pinkColor,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: size.height * 0.06,
+                        color: pinkColor,
+                      ),
+                      Container(
+                        height: size.height * 0.063,
+                        color: pinkColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.15,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.chevron_left,
+                                  size: 32,
                                 ),
-                              )),
-                        )
-                      ],
-                    ),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.15,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.4,
+                              child: Center(
+                                child: Text(
+                                  'Tạo bài viết',
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  child: RaisedButton(
+                                    onPressed: () => AddNewPost(status, context),
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(25))),
+                                    child: Text(
+                                      'Đăng',
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/mytimeline');
-                    },
-                    child: ProfileAvatar(
-                      imageUrl: currentUser.imageUrl,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/mytimeline');
                         },
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              showName(
-                                color: Colors.black87,
-                                size: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              // Text(
-                              //   currentUser.name,
-                              //   style: TextStyle(
-                              //       color: Colors.black87,
-                              //       fontSize: 16,
-                              //       fontWeight: FontWeight.w600),
-                              // ),
-                              Row(
+                        child: ProfileAvatar(
+                          imageUrl: link,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/mytimeline');
+                            },
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Công khai',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 14,
-                                    ),
-                                    // fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.public,
-                                    color: Colors.grey[600],
+                                  showName(
+                                    color: Colors.black87,
                                     size: 16,
-                                  )
-                                ],
-                              ),
-                            ]),
-                      )
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  // Text(
+                                  //   currentUser.name,
+                                  //   style: TextStyle(
+                                  //       color: Colors.black87,
+                                  //       fontSize: 16,
+                                  //       fontWeight: FontWeight.w600),
+                                  // ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Công khai',
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 14,
+                                        ),
+                                        // fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(
+                                        Icons.public,
+                                        color: Colors.grey[600],
+                                        size: 16,
+                                      )
+                                    ],
+                                  ),
+                                ]),
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: TextFormField(
-                controller: status,
-                cursorColor: Colors.black45,
-                maxLines: 10,
-                decoration: InputDecoration(
-                    hintText: 'Bạn đang nghĩ gì?',
-                    hintStyle: TextStyle(
-                        fontSize: 17,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w300),
-                    border: InputBorder.none),
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
-                child: Column(children: [
-                  GestureDetector(
-                    onTap: () => pickImage(ImageSource.gallery),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 20,
-                          height: 50,
-                          child: Icon(Icons.collections,
-                              size: 30,
-                              color: Color.fromRGBO(74, 198, 104, 1.0)),
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        Text(
-                          'Chọn ảnh từ thư viện',
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: TextFormField(
+                    controller: status,
+                    cursorColor: Colors.black45,
+                    maxLines: 10,
+                    decoration: InputDecoration(
+                        hintText: 'Bạn đang nghĩ gì?',
+                        hintStyle: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w300),
+                        border: InputBorder.none),
                   ),
-                  Divider(
-                    height: 10,
-                    color: Colors.black54,
-                    thickness: 1.2,
-                    indent: 20,
-                    endIndent: 20,
+                ),
+                // Container(
+                //     margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                //     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                //     decoration: BoxDecoration(
+                //       color: Colors.black12,
+                //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                //     ),
+                //     child: Column(children: [
+                //       GestureDetector(
+                //         onTap: () => pickImage(ImageSource.gallery),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.start,
+                //           children: [
+                //             SizedBox(
+                //               width: 20,
+                //             ),
+                //             Container(
+                //               width: 20,
+                //               height: 50,
+                //               child: Icon(Icons.videocam,
+                //                   size: 30, color: Colors.redAccent),
+                //             ),
+                //             SizedBox(
+                //               width: 25,
+                //             ),
+                //             Text(
+                //               'Chọn ảnh từ thư viện',
+                //               style: TextStyle(
+                //                   color: Colors.black87,
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.w500),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //       Divider(
+                //         height: 10,
+                //         color: Colors.black54,
+                //         thickness: 1.2,
+                //         indent: 20,
+                //         endIndent: 20,
+                //       ),
+                //       GestureDetector(
+                //         onTap: () => pickImage(ImageSource.camera),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.start,
+                //           children: [
+                //             SizedBox(
+                //               width: 20,
+                //             ),
+                //             Container(
+                //               width: 20,
+                //               height: 50,
+                //               child: Icon(Icons.photo_camera,
+                //                   size: 30, color: blueColor),
+                //             ),
+                //             SizedBox(
+                //               width: 25,
+                //             ),
+                //             Text(
+                //               'Chụp ảnh',
+                //               style: TextStyle(
+                //                   color: Colors.black87,
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.w500),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //       Divider(
+                //         height: 10,
+                //         color: Colors.black54,
+                //         thickness: 1.2,
+                //         indent: 20,
+                //         endIndent: 20,
+                //       ),
+                //       GestureDetector(
+                //         onTap: () => pickImage(ImageSource.gallery),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.start,
+                //           children: [
+                //             SizedBox(
+                //               width: 20,
+                //             ),
+                //             Container(
+                //               width: 20,
+                //               height: 50,
+                //               child: Icon(Icons.videocam,
+                //                   size: 30, color: Colors.redAccent),
+                //             ),
+                //             SizedBox(
+                //               width: 25,
+                //             ),
+                //             Text(
+                //               'Chọn video từ thư viện',
+                //               style: TextStyle(
+                //                   color: Colors.black87,
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.w500),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ])),
+              ],
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      isListIcons = isListIcons? false : true;
+                    });
+                  },
+                  child: isListIcons?
+                  Container(
+                      width: size.width,
+                      height: 210,
+                      padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child:
+                            GestureDetector(
+                              onTap: () => pickImage(ImageSource.gallery),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.collections, size: 28, color: Color.fromRGBO(74, 198, 104, 1.0)),
+                                  SizedBox(width: 15),
+                                  Text('Chọn ảnh từ thư viện',
+                                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Divider(height: 10, color: Colors.white, thickness: 1.2,),
+                          Expanded(
+                            child:
+                            GestureDetector(
+                              onTap: () => pickImage(ImageSource.camera),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.photo_camera, size: 28, color: blueColor),
+                                  SizedBox(width: 15),
+                                  Text('Chụp ảnh / Quay video',
+                                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Divider(height: 10, color: Colors.white, thickness: 1.2,),
+                          Expanded(
+                            child:
+                            GestureDetector(
+                              onTap: () => pickImage(ImageSource.gallery),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.videocam, size: 28, color: Colors.redAccent),
+                                  SizedBox(width: 15),
+                                  Text('Chọn video từ thư viện',
+                                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                  )
+                  : Container(
+                      width: size.width,
+                      height: 60,
+                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 15,),
+                          Expanded(
+                            child: Text(
+                              'Thêm vào bài viết của bạn',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          Icon(Icons.collections, size: 28, color: Color.fromRGBO(74, 198, 104, 1.0)),
+                          SizedBox(width: 5,),
+                          Icon(Icons.photo_camera, size: 28, color: blueColor),
+                          SizedBox(width: 5,),
+                          Icon(Icons.videocam, size: 28, color: Colors.redAccent),
+                          SizedBox(width: 15,),
+                        ],
+                      )
                   ),
-                  GestureDetector(
-                    onTap: () => pickImage(ImageSource.camera),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 20,
-                          height: 50,
-                          child: Icon(Icons.photo_camera,
-                              size: 30, color: blueColor),
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        Text(
-                          'Chụp ảnh',
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    height: 10,
-                    color: Colors.black54,
-                    thickness: 1.2,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  GestureDetector(
-                    onTap: () => pickImage(ImageSource.gallery),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 20,
-                          height: 50,
-                          child: Icon(Icons.videocam,
-                              size: 30, color: Colors.redAccent),
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        Text(
-                          'Chọn video từ thư viện',
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
-                  ),
-                ])),
+                )
+            )
           ],
-        ));
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.black,
+          child: Container(
+          height: 0,
+        ),
+      ),
+    );
   }
 }
 

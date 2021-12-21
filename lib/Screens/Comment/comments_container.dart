@@ -2,6 +2,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/models/models.dart';
@@ -26,73 +27,65 @@ class _CommentsWidget extends State<CommentsWidget> {
     required this.comment,
   });
 
-@override
-Widget build(BuildContext context) =>
-  Container(
-    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.black12,
-              backgroundImage: NetworkImage(comment.user.imageUrl),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                comment.user.name,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundColor: Colors.black12,
+                backgroundImage: NetworkImage(comment.user.imageUrl),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 5.0),
-              child: GestureDetector(
-                onTap: () async => setState(() {
-                  print('1');
-                  isLiked? false: true;
-                }),
-                  child: isLiked? Icon(Icons.favorite, size: 16)
-                        : Icon(Icons.favorite_border, size: 16),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  comment.user.name,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8),
-        ExpandableText(
-          comment.description,
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 14.0,
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      isLiked = isLiked ? false : true;
+                    });
+                  },
+                  child: isLiked ? Icon(Icons.favorite, color: pinkColor ,size: 16)
+                      : Icon(Icons.favorite_border, size: 16),
+                ),
+              ),
+            ],
           ),
-          expandText: 'Xem thêm',
-          collapseText: 'Rút gọn',
-          maxLines: 2,
-          linkColor: Colors.black54,
-        ),
-        SizedBox(height: 3),
-        Row(
-          children: [
-            SizedBox(
-              width: 100,
-              child: Text(
-                comment.date,
-                style: TextStyle(color: Colors.black54, fontSize: 13),
-              ),
+          SizedBox(height: 8),
+          ExpandableText(
+            comment.description,
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 14.0,
             ),
-            GestureDetector(
-              onTap: () => print("reply"),
-              child: Text(
-                " Trả lời ",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
-              ),
+            expandText: 'Xem thêm',
+            collapseText: 'Rút gọn',
+            maxLines: 2,
+            linkColor: Colors.black54,
+          ),
+          SizedBox(height: 5),
+          Container(
+            alignment: Alignment.bottomLeft,
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              comment.date,
+              style: TextStyle(color: Colors.black54, fontSize: 13),
             ),
-          ],
-        ),
-      ],
-    ),
-  );
+          ),
+        ],
+      ),
+    );
+  }
 }

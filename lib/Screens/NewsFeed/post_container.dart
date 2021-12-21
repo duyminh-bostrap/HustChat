@@ -289,12 +289,12 @@ class _PostStatsState extends State<PostStats> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        MdiIcons.send,
+                        Icons.bookmark_border,
                         color: Colors.grey[600],
                         size: 25.0,
                       ),
                       const SizedBox(width: 4.0),
-                      Text('Chia sẻ'),
+                      Text('Lưu trữ'),
                     ],
                   ),
                 ),
