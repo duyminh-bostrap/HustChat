@@ -205,7 +205,6 @@ class _CreatePost extends State<CreatePost> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     // alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.black,
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
                     child:
