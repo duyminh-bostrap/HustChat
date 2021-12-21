@@ -78,35 +78,6 @@ class _MyTimeLineScreenState extends State<MyTimeLineScreen> {
               children: [
                 SizedBox(
                   width: 10,
-// =======
-//                 // color: pinkColor,
-//                 child: Stack(alignment: Alignment.center, children: [
-//                   Positioned(
-//                     top: 0,
-//                     child: Container(
-//                       height: 220,
-//                       width: MediaQuery.of(context).size.width,
-//                       // color: Colors.red,
-//                       // width: 200,
-//                       child: Image.asset(
-//                         'assets/IMG_8114.JPG',
-//                         fit: BoxFit.cover,
-//                       ),
-//                     ),
-//                   ),
-//                   Positioned(
-//                     top: 40,
-//                     left: 15,
-//                     child: IconButton(
-//                       icon: Icon(
-//                         Icons.chevron_left,
-//                         color: whiteColor,
-//                         size: 28,
-//                       ),
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                       },
-// >>>>>>> 7f86f18 (UI update)
                 ),
                 showName(color: Colors.black87, size: 20, fontWeight: FontWeight.w600,)
               ],

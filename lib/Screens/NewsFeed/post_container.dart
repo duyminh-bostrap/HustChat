@@ -324,7 +324,7 @@ _openPost(PostData post, BuildContext context) {
           final curvedAnimation = CurvedAnimation(parent: animation, curve: Interval(0, 0.5));
           return FadeTransition(
             opacity: curvedAnimation,
-            child: PostView(animation: animation, post: post, currentUser: currentUser,)
+            child: PostView(animation: animation, post: post)
           );
         },
       )
@@ -345,7 +345,9 @@ _share(PostData post) {
   print("share");
 }
 
-_showMore(User currentUser, PostData post, context) {
+_showMore(User currentUser, PostData post, context) async {
+
+    String? userID = await storage.read(key: "id");
 
     showModalBottomSheet(
       isScrollControlled: false,
@@ -353,9 +355,9 @@ _showMore(User currentUser, PostData post, context) {
       context: context,
       builder: (BuildContext bcx) {
         Size size = MediaQuery.of(context).size;
-        return post.author.id == storage.read(key: "id")?
+        return post.author.id.toString() == userID.toString()?
         Container(
-            margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
+            margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-195, 10.0, 115),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -364,7 +366,7 @@ _showMore(User currentUser, PostData post, context) {
             child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () => print(post.author.id.toString() + "___" + storage.read(key: "id").toString()),
+                    onTap: () => print(post.author.id.toString()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -429,7 +431,10 @@ _showMore(User currentUser, PostData post, context) {
           child: Column(
               children: [
                 GestureDetector(
-                  onTap: () => print(post.author.id.toString() + "___" + storage.read(key: "data/id").toString()),
+                  onTap: () async {
+                    String? userID = await storage.read(key: "id");
+                    print(post.author.id.toString() + "___" + userID.toString());
+                    },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

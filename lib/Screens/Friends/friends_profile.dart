@@ -719,7 +719,7 @@ _openPost(PostData post, BuildContext context) {
           final curvedAnimation = CurvedAnimation(parent: animation, curve: Interval(0, 0.5));
           return FadeTransition(
               opacity: curvedAnimation,
-              child: PostView(animation: animation, post: post, currentUser: currentUser,)
+              child: PostView(animation: animation, post: post)
           );
         },
       )

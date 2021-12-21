@@ -411,10 +411,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
         floatingActionButton:
         IconButton(
-          icon: Icon(Icons.chevron_left,size: 35,color: Colors.black87,),
+          icon: Icon(Icons.chevron_left,size: 35,color: Colors.black54,),
           onPressed: () {setState(() { isProfile = false;});},
         ),
       )
@@ -422,207 +422,207 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Container(
           color: Color.fromRGBO(0, 0, 0, 0.05),
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () async{
-                    setState(() {
-                      isProfile = true;
-                    });
-                  },
-                  child: Container(
-                    // color: Colors.red,
-                    height: 60,
-                    width: 60,
-                    alignment: Alignment.center,
-                    // color: Colors.red,
-                    child: ProfileAvatar(
-                      imageUrl: link,
-                      maxSize: 40,
-                    ),
-                  ),
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
+                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: size.height * 0.01,
-                    ),
                     GestureDetector(
                       onTap: () async{
                         setState(() {
                           isProfile = true;
                         });
                       },
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            showName(
-                              color: Colors.black87,
-                              size: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Xem trang cá nhân của bạn',
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14,
-                              ),
-                              // fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                          ]),
-                    )
+                      child: Container(
+                        // color: Colors.red,
+                        height: 60,
+                        width: 60,
+                        alignment: Alignment.center,
+                        // color: Colors.red,
+                        child: ProfileAvatar(
+                          imageUrl: link,
+                          maxSize: 40,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        GestureDetector(
+                          onTap: () async{
+                            setState(() {
+                              isProfile = true;
+                            });
+                          },
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                showName(
+                                  color: Colors.black87,
+                                  size: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Xem trang cá nhân của bạn',
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 14,
+                                  ),
+                                  // fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                              ]),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-              padding: EdgeInsets.fromLTRB(1.0, 10.0, 10.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
               ),
-              child: Column(children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/changepass'),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        width: size.width * 0.12,
-                        height: size.height * 0.05,
-                        child: Icon(MdiIcons.keyVariant,
-                            size: 30, color: Colors.black87),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        'Đổi mật khẩu',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
+              Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(1.0, 10.0, 10.0, 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
                   ),
-                ),
-                Divider(
-                  height: 10,
-                  color: Colors.black54,
-                  thickness: 1.2,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/post'),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 20,
+                  child: Column(children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/changepass'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: size.width * 0.12,
+                            height: size.height * 0.05,
+                            child: Icon(MdiIcons.keyVariant,
+                                size: 30, color: Colors.black87),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'Đổi mật khẩu',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
                       ),
-                      Container(
-                        width: size.width * 0.12,
-                        height: size.height * 0.05,
-                        // color: Colors.green,
-                        child:
-                            Icon(Icons.block, size: 30, color: Colors.black87),
+                    ),
+                    Divider(
+                      height: 10,
+                      color: Colors.black54,
+                      thickness: 1.2,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/post'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: size.width * 0.12,
+                            height: size.height * 0.05,
+                            // color: Colors.green,
+                            child:
+                                Icon(Icons.block, size: 30, color: Colors.black87),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'Người bị chặn',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 20,
+                    ),
+                    Divider(
+                        height: 10,
+                        color: Colors.black54,
+                        thickness: 1.2,
+                        indent: 20,
+                        endIndent: 20),
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/');
+                        await storage.deleteAll();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: size.width * 0.12,
+                            height: size.height * 0.05,
+                            // color: Colors.green,
+                            child:
+                                Icon(Icons.logout, size: 30, color: Colors.black87),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'Đăng xuất',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
                       ),
-                      Text(
-                        'Người bị chặn',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                ),
-                Divider(
-                    height: 10,
-                    color: Colors.black54,
-                    thickness: 1.2,
-                    indent: 20,
-                    endIndent: 20),
-                GestureDetector(
-                  onTap: () async {
-                    Navigator.pushNamed(context, '/');
-                    await storage.deleteAll();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        width: size.width * 0.12,
-                        height: size.height * 0.05,
-                        // color: Colors.green,
-                        child:
-                            Icon(Icons.logout, size: 30, color: Colors.black87),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        'Đăng xuất',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                ),
-              ])),
-          SizedBox(
-            height: size.width * 0.60,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                child: Image.asset(
-                  'assets/watermelon2.png',
-                  width: size.width * 0.25,
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: size.width * 0.1,
+                    ),
+                  ])),
+              SizedBox(
+                height: size.width * 0.60,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                    child: Image.asset(
+                      'assets/watermelon2.png',
+                      width: size.width * 0.25,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: size.width * 0.1,
           ),
         ],
       ),
