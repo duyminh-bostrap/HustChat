@@ -237,7 +237,7 @@ class _PostView extends State<PostView> {
                           return CommentsWidget(comment: comment);
                         }
                       )
-                    : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-2])
+                    : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-1])
                   : SizedBox(height: 5,),
                   SizedBox(height: 45,)
                   ],
@@ -248,11 +248,11 @@ class _PostView extends State<PostView> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: size.width,
-              height:70,
-              padding: const EdgeInsets.fromLTRB(5, 5, 5, 16),
+              height:55,
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
-                color: Colors.black87,
+                color: Color.fromRGBO(27, 27, 27, 1.0),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Container(
@@ -275,7 +275,7 @@ class _PostView extends State<PostView> {
                         decoration: InputDecoration(
                             hintText: 'Viết bình luận...',
                             hintStyle: TextStyle(
-                                fontSize: 17,
+                                fontSize: 16,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w300),
                             border: InputBorder.none
@@ -294,33 +294,13 @@ class _PostView extends State<PostView> {
             )
           )
 
-          // Container(
-          //   height: 60,
-          //   margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-          //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          //   decoration: BoxDecoration(
-          //     color: Colors.black26,
-          //     borderRadius: BorderRadius.all(Radius.circular(20)),
-          //   ),
-          //   child: Row(
-          //     children: [
-                // ProfileAvatar(imageUrl: link, maxSize: 25, hasBorder: true,),
-          //       Container(
-          //         height: 60,
-          //         child:
-          //         TextFormField(
-          //           textAlign: TextAlign.left,
-          //           maxLines: 2,
-          //           decoration: InputDecoration(
-          //             hintText: "Viết bình luận...",
-          //             // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
-          //           ),
-          //         ),
-          //       )
-          //     ]
-          //   )
-          // ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black87,
+        child: Container(
+          height: 0,
+        ),
       ),
     );
   }
