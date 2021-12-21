@@ -34,7 +34,9 @@ class _CreatePost extends State<CreatePost> {
       if (image == null) return;
 
       final imageTemporary = File(image.path);
-      this.image = imageTemporary;
+      setState(() {
+        this.image = imageTemporary;
+      });
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
     }
@@ -189,7 +191,6 @@ class _CreatePost extends State<CreatePost> {
                   child: TextFormField(
                     controller: status,
                     cursorColor: Colors.black45,
-                    maxLines: 10,
                     decoration: InputDecoration(
                         hintText: 'Bạn đang nghĩ gì?',
                         hintStyle: TextStyle(
@@ -199,110 +200,20 @@ class _CreatePost extends State<CreatePost> {
                         border: InputBorder.none),
                   ),
                 ),
-                // Container(
-                //     margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                //     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                //     decoration: BoxDecoration(
-                //       color: Colors.black12,
-                //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                //     ),
-                //     child: Column(children: [
-                //       GestureDetector(
-                //         onTap: () => pickImage(ImageSource.gallery),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.start,
-                //           children: [
-                //             SizedBox(
-                //               width: 20,
-                //             ),
-                //             Container(
-                //               width: 20,
-                //               height: 50,
-                //               child: Icon(Icons.videocam,
-                //                   size: 30, color: Colors.redAccent),
-                //             ),
-                //             SizedBox(
-                //               width: 25,
-                //             ),
-                //             Text(
-                //               'Chọn ảnh từ thư viện',
-                //               style: TextStyle(
-                //                   color: Colors.black87,
-                //                   fontSize: 16,
-                //                   fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //       Divider(
-                //         height: 10,
-                //         color: Colors.black54,
-                //         thickness: 1.2,
-                //         indent: 20,
-                //         endIndent: 20,
-                //       ),
-                //       GestureDetector(
-                //         onTap: () => pickImage(ImageSource.camera),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.start,
-                //           children: [
-                //             SizedBox(
-                //               width: 20,
-                //             ),
-                //             Container(
-                //               width: 20,
-                //               height: 50,
-                //               child: Icon(Icons.photo_camera,
-                //                   size: 30, color: blueColor),
-                //             ),
-                //             SizedBox(
-                //               width: 25,
-                //             ),
-                //             Text(
-                //               'Chụp ảnh',
-                //               style: TextStyle(
-                //                   color: Colors.black87,
-                //                   fontSize: 16,
-                //                   fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //       Divider(
-                //         height: 10,
-                //         color: Colors.black54,
-                //         thickness: 1.2,
-                //         indent: 20,
-                //         endIndent: 20,
-                //       ),
-                //       GestureDetector(
-                //         onTap: () => pickImage(ImageSource.gallery),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.start,
-                //           children: [
-                //             SizedBox(
-                //               width: 20,
-                //             ),
-                //             Container(
-                //               width: 20,
-                //               height: 50,
-                //               child: Icon(Icons.videocam,
-                //                   size: 30, color: Colors.redAccent),
-                //             ),
-                //             SizedBox(
-                //               width: 25,
-                //             ),
-                //             Text(
-                //               'Chọn video từ thư viện',
-                //               style: TextStyle(
-                //                   color: Colors.black87,
-                //                   fontSize: 16,
-                //                   fontWeight: FontWeight.w500),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     ])),
+                Container(
+                    width: size.width,
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    // alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    child:
+                        image != null ?
+                      Image.file(image!, width: size.width, fit: BoxFit.fitWidth,)
+                      : SizedBox(height: 10,),
+                ),
+                SizedBox(height: 100,)
               ],
             ),
             Align(

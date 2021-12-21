@@ -63,40 +63,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Container(
                                 width: size.width,
-                                height: 200,
+                                height: 230,
                                 child: GestureDetector(
                                   onTap: () {print('coverimage');}, //_showProfile(post, context),
                                   child: link != null
-                                      ? CachedNetworkImage(imageUrl: link)
+                                      ? CachedNetworkImage(imageUrl: link, fit: BoxFit.fitWidth,)
                                       : const SizedBox.shrink(),
                                 ),
                               ),
                               Container(
                                 width: size.width,
-                                height: 260,
+                                height: 310,
                                 alignment: Alignment.bottomCenter,
                                 child: GestureDetector(
                                   onTap: () {print('avatar');}, //_showProfile(post, context),
                                   child: ProfileAvatar(
                                     imageUrl: link,
                                     hasBorder: true,
-                                    minSize: 63,
-                                    maxSize: 65,
+                                    minSize: 75,
+                                    maxSize: 80,
                                   ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(225, 210, 0, 0), //top: 210, left: size.width*0.55
+                                padding: const EdgeInsets.fromLTRB(225, 250, 0, 0), //top: 210, left: size.width*0.55
                                 child: Container(
-                                    width: 40,
-                                    height: 40,
+                                    width: 48,
+                                    height: 48,
+                                    alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Color.fromRGBO(
-                                          54, 54, 54, 1.0),
+                                      color: Color.fromRGBO(35, 35, 35, 0.9),
                                       borderRadius: BorderRadius.all(Radius.circular(size.width*0.225)),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.photo_camera, color: Colors.white, size: 25,),
+                                      icon: Icon(Icons.photo_camera, color: Colors.white, size: 32,),
                                       onPressed: () {print('Đổi avatar');},
                                     )
                                 ),
