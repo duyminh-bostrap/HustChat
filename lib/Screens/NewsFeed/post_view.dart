@@ -8,7 +8,6 @@ import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/data/comments.dart';
-import 'package:hust_chat/data/posts_data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

@@ -5,7 +5,7 @@ import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/get_data/get_post.dart';
-import 'package:hust_chat/models/post_model_2.dart';
+import 'package:hust_chat/models/post_model.dart';
 import 'package:hust_chat/models/user_model.dart';
 
 
@@ -33,7 +33,7 @@ class NewsFeed extends StatelessWidget {
                 CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: CreatePostContainer(currentUser: currentUser),
+                      child: CreatePostContainer(),
                     ),
                     posts!.length != 0?
                     SliverList(

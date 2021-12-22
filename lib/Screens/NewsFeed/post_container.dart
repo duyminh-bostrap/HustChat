@@ -9,7 +9,7 @@ import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:hust_chat/models/post_model_2.dart';
+import 'package:hust_chat/models/post_model.dart';
 import 'package:hust_chat/models/user_model.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

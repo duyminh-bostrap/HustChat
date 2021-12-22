@@ -10,7 +10,6 @@ import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/data/posts_data.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -20,19 +19,18 @@ import '../../get_data/get_info.dart';
 String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 class ProfileScreen extends StatefulWidget {
-  final bool isProfile;
 
-  const ProfileScreen({Key? key, required this.isProfile}) : super(key: key);
+  const ProfileScreen({Key? key,}) : super(key: key);
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState(isProfile: isProfile);
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isProfile;
+  bool isProfile = false;
   final storage = new FlutterSecureStorage();
 
-  _ProfileScreenState({Key? key, required this.isProfile});
+  _ProfileScreenState({Key? key,});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -144,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         IconButton(
                                           icon: Icon(Icons.add_photo_alternate, size: 28, color: blueColor),
                                           onPressed: () {
-                                            createPost(currentUser, context);
+                                            createPost(context);
                                           },
                                         ),
                                         Text('Thêm ảnh', style: TextStyle(color: blueColor),)
@@ -311,13 +309,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(postimgs[1].imageUrl),
+                                                Image.network(link),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(postimgs[3].imageUrl),
+                                                Image.network(link),
                                               )
                                           )
                                         ],),
@@ -325,19 +323,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(postimgs[2].imageUrl),
+                                                Image.network(link),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(postimgs[2].imageUrl),
+                                                Image.network(link),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(postimgs[2].imageUrl),
+                                                Image.network(link),
                                               )
                                           )
                                         ],)
@@ -371,7 +369,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                               ),
-                              CreatePostContainer(currentUser: currentUser),
+                              CreatePostContainer(),
                             ],
                           ),
                         ),

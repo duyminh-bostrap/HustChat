@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
-import 'package:hust_chat/Screens/Profile/my_news_feed.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 // import 'package:hust_chat/Screens/home_screen.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';
-import 'package:hust_chat/Screens/Profile/my_timeline.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
 import 'package:hust_chat/Screens/signup_screen.dart';
 import 'package:hust_chat/data/current_user.dart';
@@ -39,7 +37,6 @@ class MyApp extends StatelessWidget {
         '/message': (context) => MessageScreen(),
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),
-        '/mynewsfeed': (context) => MyNewsFeed(),
         '/post': (context) => ShowListFriendsRequested()
       },
       title: 'Flutter Demo',

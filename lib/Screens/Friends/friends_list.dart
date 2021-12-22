@@ -187,7 +187,7 @@ class _FriendsList extends State<FriendsList> {
   }
 }
 
-_showProfile(Post post, BuildContext context) {
+_showProfile(PostData post, BuildContext context) {
   print("profile");
   Navigator.pushNamed(context, '/mytimeline');
 }

@@ -3,9 +3,10 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/comment_list.dart';
-import 'package:hust_chat/models/post_model_2.dart';
+import 'package:hust_chat/models/post_model.dart';
 import '../network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -29,6 +30,19 @@ class PostsApi {
     if (token != null && userID != null) {
       print(userID);
       String url = "/posts/list?userId=" + userID;
+      var response = await networkHandler.getWithAuth(url, token);
+      final posts = postsFromJson(response.body);
+      final List<PostData> post = posts.data;
+
+      return post;
+    }
+    return [];
+  }static Future<List<PostData>> getFriendPosts(String friendID) async {
+    String? token = await storage.read(key: "token");
+    // String? userID = await storage.read(key: "id");
+    if (token != null && friendID != null) {
+      print(friendID);
+      String url = "/posts/list?userId=" + friendID;
       var response = await networkHandler.getWithAuth(url, token);
       final posts = postsFromJson(response.body);
       final List<PostData> post = posts.data;
