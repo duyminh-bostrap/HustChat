@@ -203,7 +203,9 @@ class _PostStatsState extends State<PostStats> {
                 child: GestureDetector(
                   onTap: () => _openPost(post, context),
                   child: Text(
-                    '${post.like.length}',
+                    post.isLike?
+                    '${post.like.length+1} lượt thích'
+                    :'${post.like.length} lượt thích',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
@@ -230,7 +232,7 @@ class _PostStatsState extends State<PostStats> {
                 onTap: () {
                   setState(() {
                     print("like");
-                    post.isLike? false : true;
+                    post.isLike = post.isLike? false : true;
                     // if (!post.isLiked) {
                     //   post.likeList.remove(currentUser);
                     // } else {

@@ -46,59 +46,49 @@ class _PostView extends State<PostView> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: pinkColor,
-        leading:
-          IconButton(
-            icon: Icon(Icons.chevron_left, size: 35, color: Colors.black87,),
-            onPressed: Navigator.of(context).pop,
-          ),
-        title: Row(
-          children: [
-            ProfileAvatar(imageUrl: post.images[0], minSize: 20, maxSize: 22,),
-            SizedBox(width: 15,),
-            Text(
-              post.author.username,
-              style: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w500,),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: pinkColor,
+          leading:
+            IconButton(
+              icon: Icon(Icons.chevron_left, size: 35, color: Colors.black87,),
+              onPressed: Navigator.of(context).pop,
             ),
+          title: Row(
+            children: [
+              ProfileAvatar(imageUrl: post.images[0], minSize: 20, maxSize: 22,),
+              SizedBox(width: 15,),
+              Text(
+                post.author.username,
+                style: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w500,),
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.more_horiz, size: 28, color: Colors.black87,),
+              onPressed: () => _showMore(post, context),
+            ),
+            SizedBox(width: 5,)
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_horiz, size: 28, color: Colors.black87,),
-            onPressed: () => _showMore(post, context),
-          ),
-          SizedBox(width: 5,)
-        ],
-      ),
-      body: Stack(
-        children: [
-          ListView(
-            shrinkWrap: true,
-            children: [
-              Column(
-                children: [
-                  Container(
-                    // width: size.width,
-                    // height: size.width*4.5/3,
-                    color: Color.fromRGBO(0, 0, 0, 0.05),
-                    child: GestureDetector(
-                      onTap: () => openImage(post, context),
-                      child:
-                      // post.images[0] != null ?
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(vertical: 0.0),
-                      //   child: HeroWidget(
-                      //     tag: HeroTag.image(post.images[0]),
-                      //     child: CachedNetworkImage(imageUrl: post.images[0]),
-                      //   ),
-                      // )
-                      //     : const SizedBox.shrink(),
-                      link != null ?
+        body: Stack(
+          children: [
+            ListView(
+              shrinkWrap: true,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      // width: size.width,
+                      // height: size.width*4.5/3,
+                      color: Color.fromRGBO(0, 0, 0, 0.05),
+                      child: link != null ?
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 0.0),
                         child: HeroWidget(
@@ -108,197 +98,197 @@ class _PostView extends State<PostView> {
                       )
                           : const SizedBox.shrink(),
                     ),
-                  ),
-                  SizedBox(height: 5,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 15,),
-                      GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            post.isLike = post.isLike? false:true;
-                          });
-                        },
-                        child: post.isLike ?
-                        Icon(
-                          Icons.favorite,
-                          color: pinkColor,
-                          size: 25.0,
-                        ): Icon(
-                          Icons.favorite_border,
-                          color: Colors.grey[600],
-                          size: 25.0,
-                        ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: InkWell(
-                              onTap: () => {}, // _seeComment(post, context),
-                              child: Icon(
-                                MdiIcons.commentOutline,
-                                color: Colors.grey[600],
-                                size: 25.0,
-                              )
+                    SizedBox(height: 5,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 15,),
+                        GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              post.isLike = post.isLike? false:true;
+                            });
+                          },
+                          child: post.isLike ?
+                          Icon(
+                            Icons.favorite,
+                            color: pinkColor,
+                            size: 25.0,
+                          ): Icon(
+                            Icons.favorite_border,
+                            color: Colors.grey[600],
+                            size: 25.0,
                           ),
                         ),
-                      ),
-                      InkWell(
-                          onTap: () => _whoShare(post, context),
-                          child: Icon(
-                            Icons.bookmark_border,
-                            color: Colors.grey[600],
-                            size: 28.0,
-                          )
-                      ),
-                      SizedBox(width: 15,),
-                    ],
-                  ),
-                  Container(
-                      height: 30,
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              post.author.username,
-                              style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500,),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: InkWell(
+                                onTap: () => {}, // _seeComment(post, context),
+                                child: Icon(
+                                  MdiIcons.commentOutline,
+                                  color: Colors.grey[600],
+                                  size: 25.0,
+                                )
                             ),
-                            SizedBox(width: 10,),
-                            Text(post.createdAt.toString(), style: TextStyle(fontSize: 14),),
-                          ]
-                      )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: ExpandableText(
-                        post.described,
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        expandText: 'Xem thêm',
-                        collapseText: 'Rút gọn',
-                        maxLines: 3,
-                        linkColor: Colors.black54,
-                      ),
+                        InkWell(
+                            onTap: () => _whoShare(post, context),
+                            child: Icon(
+                              Icons.bookmark_border,
+                              color: Colors.grey[600],
+                              size: 28.0,
+                            )
+                        ),
+                        SizedBox(width: 15,),
+                      ],
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => _whoLike(post, context),
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                        child: Row(
-                            children: [
-                              Text(post.like.length.toString(),
-                                style: TextStyle(color: Colors.black87,fontSize: 15, fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(width: 5,),
-                              Text('lượt thích', style: TextStyle(fontSize: 15),),
-                            ]
-                        )
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        viewAll = viewAll? false : true;
-                      });
-                    },
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                    Container(
+                        height: 30,
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                post.countComments == 0 ?
-                                  viewAll? 'Rút gọn'
-                                  :'Xem tất cả ${post.countComments} bình luận'
-                                : 'Chưa có bình luận',
-                                style: TextStyle(fontSize: 15, color: Colors.black54),
+                                post.author.username,
+                                style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500,),
                               ),
+                              SizedBox(width: 10,),
+                              Text(post.createdAt.toString(), style: TextStyle(fontSize: 14),),
                             ]
                         )
                     ),
-                  ),
-                  post.countComments == 0 ?
-                    viewAll?
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: Comments.allComments.length,
-                        itemBuilder: (context, index) {
-                          final comment = Comments.allComments[Comments.allComments.length-1-index];
-                          return CommentsWidget(comment: comment);
-                        }
-                      )
-                    : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-1])
-                  : SizedBox(height: 5,),
-                  SizedBox(height: 55,)
-                  ],
-                ),
-            ]
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: size.width,
-              height:55,
-              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-              alignment: Alignment.topCenter,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(27, 27, 27, 1.0),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Row(
-                  children: [
-                    ProfileAvatar(imageUrl: link,maxSize: 20),
-                    SizedBox(width: 10,),
-                    Expanded(
-                      child: TextFormField(
-                        controller: writeComment,
-                        textAlign: TextAlign.left,
-                        cursorColor: Colors.black87,
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                            hintText: 'Viết bình luận...',
-                            hintStyle: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w300),
-                            border: InputBorder.none
-
-                          // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: ExpandableText(
+                          post.described,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          expandText: 'Xem thêm',
+                          collapseText: 'Rút gọn',
+                          maxLines: 3,
+                          linkColor: Colors.black54,
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(MdiIcons.send),
-                      onPressed: () {print(writeComment);},
+                    GestureDetector(
+                      onTap: () => _whoLike(post, context),
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                          child: Row(
+                              children: [
+                                Text(post.isLike?'${post.like.length+1}':'${post.like.length}',
+                                  style: TextStyle(color: Colors.black87,fontSize: 15, fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(width: 5,),
+                                Text('lượt thích', style: TextStyle(fontSize: 15),),
+                              ]
+                          )
+                      ),
                     ),
-                  ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          viewAll = viewAll? false : true;
+                        });
+                      },
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  post.countComments == 0 ?
+                                    viewAll? 'Rút gọn'
+                                    :'Xem tất cả ${post.countComments} bình luận'
+                                  : 'Chưa có bình luận',
+                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                ),
+                              ]
+                          )
+                      ),
+                    ),
+                    post.countComments == 0 ?
+                      viewAll?
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: Comments.allComments.length,
+                          itemBuilder: (context, index) {
+                            final comment = Comments.allComments[Comments.allComments.length-1-index];
+                            return CommentsWidget(comment: comment);
+                          }
+                        )
+                      : CommentsWidget(comment: Comments.allComments[Comments.allComments.length-1])
+                    : SizedBox(height: 5,),
+                    SizedBox(height: 55,)
+                    ],
+                  ),
+              ]
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: size.width,
+                height:55,
+                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(27, 27, 27, 1.0),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Row(
+                    children: [
+                      ProfileAvatar(imageUrl: link,maxSize: 20),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: TextFormField(
+                          controller: writeComment,
+                          textAlign: TextAlign.left,
+                          cursorColor: Colors.black87,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              hintText: 'Viết bình luận...',
+                              hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w300),
+                              border: InputBorder.none
+
+                            // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(MdiIcons.send),
+                        onPressed: () {print(writeComment);},
+                      ),
+                    ],
+                  ),
+                )
               )
             )
-          )
 
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black87,
-        child: Container(
-          height: 0,
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.black87,
+          child: Container(
+            height: 0,
+          ),
         ),
       ),
     );
@@ -310,10 +300,6 @@ _whoLike(PostData post, BuildContext context) {
 }
 
 _whoShare(PostData post, BuildContext context) {
-}
-
-openImage(PostData post, BuildContext context) {
-  print("open image");
 }
 
 
