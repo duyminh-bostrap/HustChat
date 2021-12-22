@@ -5,10 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
+import 'package:hust_chat/models/comment_list.dart';
 import 'package:hust_chat/models/models.dart';
 
+String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+
 class CommentsWidget extends StatefulWidget {
-  final Comment comment;
+  final CommentData comment;
   CommentsWidget({
     Key? key,
     required this.comment,
@@ -19,7 +22,7 @@ class CommentsWidget extends StatefulWidget {
 }
 
 class _CommentsWidget extends State<CommentsWidget> {
-  final Comment comment;
+  final CommentData comment;
   bool isLiked = false;
 
   _CommentsWidget({
@@ -40,12 +43,12 @@ class _CommentsWidget extends State<CommentsWidget> {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: Colors.black12,
-                backgroundImage: NetworkImage(comment.user.imageUrl),
+                backgroundImage: NetworkImage(link),
               ),
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  comment.user.name,
+                  comment.user.username,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -64,23 +67,26 @@ class _CommentsWidget extends State<CommentsWidget> {
             ],
           ),
           SizedBox(height: 8),
-          ExpandableText(
-            comment.description,
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 14.0,
+          Container(
+            alignment: Alignment.centerLeft,
+            child: ExpandableText(
+              comment.content,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 14.0,
+              ),
+              expandText: 'Xem thêm',
+              collapseText: 'Rút gọn',
+              maxLines: 2,
+              linkColor: Colors.black54,
             ),
-            expandText: 'Xem thêm',
-            collapseText: 'Rút gọn',
-            maxLines: 2,
-            linkColor: Colors.black54,
           ),
           SizedBox(height: 5),
           Container(
             alignment: Alignment.bottomLeft,
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              comment.date,
+              comment.createdAt.toString(),
               style: TextStyle(color: Colors.black54, fontSize: 13),
             ),
           ),

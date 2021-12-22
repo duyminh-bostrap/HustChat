@@ -15,8 +15,8 @@ import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
-String link =
-"https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/257806154_1304809436632593_5544268618515568260_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=uDg0Jhmowo8AX-EoNMg&tn=gL_fe3OQHx5hr7J6&_nc_ht=scontent.fhan14-1.fna&oh=00_AT8fIEil90ej5dlYMlzA-x03ESLqV3A6vlz1YNaAVz1WGQ&oe=61C1846F";
+String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -203,9 +203,7 @@ class _PostStatsState extends State<PostStats> {
                 child: GestureDetector(
                   onTap: () => _openPost(post, context),
                   child: Text(
-                    post.isLike?
-                    '${post.like.length+1} lượt thích'
-                    :'${post.like.length} lượt thích',
+                    '${post.like.length} lượt thích',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
@@ -231,13 +229,8 @@ class _PostStatsState extends State<PostStats> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    print("like");
                     post.isLike = post.isLike? false : true;
-                    // if (!post.isLiked) {
-                    //   post.likeList.remove(currentUser);
-                    // } else {
-                    //   post.likeList.add(currentUser);
-                    // };
+                    PostsApi.likePost(post);
                   });
                 },
                 child: Container(
@@ -284,7 +277,7 @@ class _PostStatsState extends State<PostStats> {
             ),
             Expanded(
               child: InkWell(
-                onTap: () => _share(post),
+                onTap: () {},
                 child: Container(
                   height: 25.0,
                   child: Row(
@@ -305,6 +298,94 @@ class _PostStatsState extends State<PostStats> {
           ],
         ),
       ],
+    );
+  }
+  Future RemovePost() async {
+    Size size = MediaQuery.of(context).size;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          height: 130,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: size.width*0.6,
+                height: 50,
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text(
+                  'Bạn có chắc chắn muốn xoá bài viết?',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                    },
+                    child: Container(
+                      height: 40,
+                      width: size.width*0.3,
+                      margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
+                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: pinkColor,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Text(
+                        'Huỷ kết bạn',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 40,
+                      width: size.width*0.3,
+                      margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
+                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black87,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Text(
+                        'Trở lại',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -331,20 +412,6 @@ _openPost(PostData post, BuildContext context) {
         },
       )
   );
-}
-
-_like(PostData post, User currentUser) {
-    print("like");
-    post.isLike? false : true;
-    if (!post.isLike) {
-      post.like.remove(currentUser);
-    } else {
-      post.like.add(currentUser);
-    }
-}
-
-_share(PostData post) {
-  print("share");
 }
 
 _showMore(User currentUser, PostData post, context) async {

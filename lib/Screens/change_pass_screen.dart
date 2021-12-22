@@ -21,66 +21,98 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   TextEditingController passwordController3 = TextEditingController();
   final storage = new FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: pinkColor,
-        title: Text(
-          'Đổi mật khẩu',
-          style: TextStyle(fontSize: 21),
+    return Form(
+      key: formKey,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: pinkColor,
+          title: Text(
+            'Đổi mật khẩu',
+            style: TextStyle(fontSize: 21),
+          ),
         ),
-      ),
-      body: Container(
-        child: BackGround(
-          child: Column(
-            children: [
-              SizedBox(
-                height: size.height * 0.10,
-              ),
-              rounded_password_field(
+        body: Container(
+          child: BackGround(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.height * 0.10,
+                ),
+                rounded_password_field(
                   size: size,
                   text: "Mật khẩu hiện tại",
-                  passwordController: passwordController),
-              rounded_password_field(
+                  passwordController: passwordController,
+                  validator: (value) {
+                    if (value!.isEmpty) return "Password cannot be empty";
+                    if (value.length <= 8) {
+                      return "Password length must have >=8";
+                    }
+                    return null;
+                  },
+                ),
+                rounded_password_field(
                   size: size,
                   text: "Nhập mật khẩu mới",
-                  passwordController: passwordController2),
-              rounded_password_field(
+                  passwordController: passwordController2,
+                  validator: (value) {
+                    if (value!.isEmpty) return "Password cannot be empty";
+                    if (value.length <= 8) {
+                      return "Password length must have >=8";
+                    }
+                    return null;
+                  },
+                ),
+
+                rounded_password_field(
                   size: size,
                   text: "Nhập lại mật khẩu",
-                  passwordController: passwordController3),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                  ),
-                  rounded_button(
-                      onPressed: () async {
-                        String? token = await storage.read(key: "token");
-                        if (token != null) {
-                          Map<String, String> data = {
-                            "currentPassword": passwordController.text,
-                            "newPassword": passwordController2.text
-                          };
-                          var response = await networkHandler.postAuth(
-                              "/users/change-password", data, token);
-                          Map output = json.decode(response.body);
-                          print(output);
-                          if (response.statusCode < 300) {
-                            Navigator.pop(context);
+                  passwordController: passwordController3,
+                  validator: (value) {
+                    if (value!.isEmpty) return "Password cannot be empty";
+                    if (value.length <= 8) {
+                      return "Password length must have >=8";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 40,
+                    ),
+                    rounded_button(
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            String? token = await storage.read(key: "token");
+                            if (token != null) {
+                              Map<String, String> data = {
+                                "currentPassword": passwordController.text,
+                                "newPassword": passwordController2.text
+                              };
+                              var response = await networkHandler.postAuth(
+                                  "/users/change-password", data, token);
+                              Map output = json.decode(response.body);
+                              print(output);
+                              if (response.statusCode < 300) {
+                                Navigator.pop(context);
+                              }
+                            }
                           }
-                        }
-                      },
-                      text: "Cập nhật")
-                ],
-              )
-            ],
+                        },
+                        text: "Cập nhật")
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

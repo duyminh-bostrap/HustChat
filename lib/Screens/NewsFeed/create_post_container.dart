@@ -4,6 +4,8 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
+String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+
 class CreatePostContainer extends StatelessWidget {
 
   const CreatePostContainer({

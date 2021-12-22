@@ -35,6 +35,8 @@ class _FriendsList extends State<FriendsList> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
       color: Colors.white,
@@ -161,21 +163,14 @@ class _FriendsList extends State<FriendsList> {
                       )
                     : FloatingActionButton(
                         mini: true,
-                        child: Icon(Icons.person_off,
-                            color: pinkColor, size: 26.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: Icon(Icons.person_remove,   // Icons.no_accounts,
+                              color: pinkColor, size: 26.0),
+                        ),
                         backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                        onPressed: () async {
-                          String? token = await storage.read(key: "token");
-
-                          if (token != null) {
-                            Map<String, String> data = {
-                              "user_id": userData.id,
-                            };
-                            var response = await networkHandler.postAuth(
-                                "/friends/set-remove", data, token);
-                            debugPrint(response.body);
-                          }
-                          ;
+                        onPressed: ()  {
+                          RemoveFriend();
                         },
                       ),
               ],
@@ -185,9 +180,109 @@ class _FriendsList extends State<FriendsList> {
       ),
     );
   }
+  Future RemoveFriend() async {
+    Size size = MediaQuery.of(context).size;
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: Container(
+            height: 130,
+            width: size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: size.width*0.6,
+                  height: 50,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    'Bạn có chắc chắn muốn xoá bạn bè?',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        String? token = await storage.read(key: "token");
+
+                        if (token != null) {
+                          Map<String, String> data = {
+                            "user_id": userData.id,
+                          };
+                          var response = await networkHandler.postAuth(
+                              "/friends/set-remove", data, token);
+                          debugPrint(response.body);
+                        };
+                      },
+                      child: Container(
+                        height: 40,
+                        width: size.width*0.3,
+                        margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
+                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: pinkColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: Text(
+                          'Huỷ kết bạn',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 40,
+                        width: size.width*0.3,
+                        margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
+                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black87,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: Text(
+                          'Trở lại',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+    );
+  }
 }
 
 _showProfile(PostData post, BuildContext context) {
   print("profile");
   Navigator.pushNamed(context, '/mytimeline');
 }
+

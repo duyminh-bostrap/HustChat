@@ -16,6 +16,8 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'bad_connection.dart';
 // import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class MainPage extends StatefulWidget {
@@ -35,8 +37,8 @@ class _MainPageState extends State<MainPage> {
   User user = currentUser;
 
   final List<Widget> screens = [
-    MessageScreen(), //Trang tin nhắn
-    // FriendsProfile(user: currentUser,),
+    // MessageScreen(), //Trang tin nhắn
+    BadConnection(),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(), // Trang cá nhân
