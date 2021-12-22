@@ -42,6 +42,7 @@ dependencies:
   video_player: ^2.2.7
   flutter_secure_storage: ^5.0.2
   comment_box: ^0.0.16
+  flutter_keyboard_visibility: ^5.1.0
   # material_design_icons_flutter: ^4.0.5345
 
 dev_dependencies:
