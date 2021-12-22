@@ -5,11 +5,9 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
 class CreatePostContainer extends StatelessWidget {
-  final User currentUser;
 
   const CreatePostContainer({
     Key? key,
-    required this.currentUser,
   }) : super(key: key);
 
   @override
@@ -23,11 +21,11 @@ class CreatePostContainer extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 5.0),
-              ProfileAvatar(imageUrl: currentUser.imageUrl),
+              ProfileAvatar(imageUrl: link),
               const SizedBox(width: 10.0),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => createPost(currentUser, context),
+                  onTap: () => createPost(context),
                   child: Text(
                     'Hôm nay bạn thế nào?',
                     style: TextStyle(fontSize: 16, color: Colors.black54 ),
@@ -52,7 +50,7 @@ class CreatePostContainer extends StatelessWidget {
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),
                         extendedIconLabelSpacing: 20.0,
                         extendedPadding: EdgeInsets.fromLTRB(30.0, 0.0, 40.0, 0.0),
-                        onPressed: () => createPost(currentUser, context),
+                        onPressed: () => createPost(context),
                       ),
                     ),
                   ),
@@ -68,7 +66,7 @@ class CreatePostContainer extends StatelessWidget {
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),
                         extendedIconLabelSpacing: 20.0,
                         extendedPadding: EdgeInsets.fromLTRB(30.0, 0.0, 40.0, 0.0),
-                        onPressed: () => createPost(currentUser, context),
+                        onPressed: () => createPost(context),
                       ),
                     ),
                   ),
@@ -83,7 +81,7 @@ class CreatePostContainer extends StatelessWidget {
   }
 }
 
-createPost(User currentUser, context) {
+createPost(context) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,

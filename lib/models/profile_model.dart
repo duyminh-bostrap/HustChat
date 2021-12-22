@@ -1,5 +1,5 @@
 
-import 'package:hust_chat/models/post_model_2.dart';
+import 'package:hust_chat/models/post_model.dart';
 import 'package:hust_chat/models/searchUsers_model.dart';
 
 class Profile {
