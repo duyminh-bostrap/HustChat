@@ -13,7 +13,6 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 String link = currentUser.imageUrl;
 
