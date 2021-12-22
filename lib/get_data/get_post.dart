@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
+import 'package:hust_chat/models/comment_list.dart';
 import 'package:hust_chat/models/post_model_2.dart';
 import '../network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -21,6 +22,7 @@ class PostsApi {
     }
     return [];
   }
+
   static Future<List<PostData>> getMyPosts() async {
     String? token = await storage.read(key: "token");
     String? userID = await storage.read(key: "id");
@@ -35,6 +37,44 @@ class PostsApi {
     }
     return [];
   }
+
+  static void likePost(PostData post) async {
+    String? token = await storage.read(key: "token");
+    String postId = post.id;
+    if (token != null) {
+      String url = "/postLike/action/" + postId;
+      var response = await networkHandler.postAuthWithoutBody(url, token);
+      debugPrint(response.body);
+    }
+  }
+
+  static void commentPost(
+      PostData post, TextEditingController commentController) async {
+    String? token = await storage.read(key: "token");
+    String postId = post.id;
+    if (token != null) {
+      String url = "/postComment/create/" + postId;
+      Map<String, String> data = {
+        "content": commentController.text,
+      };
+      var response = await networkHandler.postAuth(url, data, token);
+      debugPrint(response.body);
+    }
+  }
+  static Future<List<CommentData>> getPostComments(PostData post) async {
+    String? token = await storage.read(key: "token");
+    String postId = post.id;
+    if (token != null) {
+      String url = "/postComment/list/" + postId;
+      var response = await networkHandler.getWithAuth(url, token);
+      final comments = commentListFromJson(response.body);
+      final List<CommentData> comment = comments.data;
+
+      return comment;
+    }
+    return [];
+  }
+
 }
 
 class ShowPostInfo extends StatelessWidget {

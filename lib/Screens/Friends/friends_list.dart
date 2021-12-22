@@ -6,8 +6,8 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link =
-"http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+
 class FriendsList extends StatefulWidget {
   final UserData userData;
   final bool isRequest;
@@ -19,8 +19,10 @@ class FriendsList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FriendsList createState() =>_FriendsList(userData: userData, isRequest: isRequest);
+  _FriendsList createState() =>
+      _FriendsList(userData: userData, isRequest: isRequest);
 }
+
 class _FriendsList extends State<FriendsList> {
   final UserData userData;
   final bool isRequest;
@@ -144,26 +146,6 @@ class _FriendsList extends State<FriendsList> {
                         onPressed: () async {
                           String? token = await storage.read(key: "token");
 
-                    if (token != null) {
-                      Map<String, String> data = {
-                        "user_id": userData.id,
-                        "is_accept": "2"
-                      };
-                      var response = await networkHandler.postAuth(
-                          "/friends/set-accept", data, token);
-                      debugPrint(response.body);
-                      // friends.removeWhere((element) => element.id == friends.id);
-                    }
-                    ;
-                  },
-                )
-                :  FloatingActionButton(
-                  mini: true,
-                  child: Icon(Icons.person_off, color: pinkColor, size: 26.0),
-                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                  onPressed: () async {
-                    String? token = await storage.read(key: "token");
-
                           if (token != null) {
                             Map<String, String> data = {
                               "user_id": userData.id,
@@ -171,6 +153,26 @@ class _FriendsList extends State<FriendsList> {
                             };
                             var response = await networkHandler.postAuth(
                                 "/friends/set-accept", data, token);
+                            debugPrint(response.body);
+                            // friends.removeWhere((element) => element.id == friends.id);
+                          }
+                          ;
+                        },
+                      )
+                    : FloatingActionButton(
+                        mini: true,
+                        child: Icon(Icons.person_off,
+                            color: pinkColor, size: 26.0),
+                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                        onPressed: () async {
+                          String? token = await storage.read(key: "token");
+
+                          if (token != null) {
+                            Map<String, String> data = {
+                              "user_id": userData.id,
+                            };
+                            var response = await networkHandler.postAuth(
+                                "/friends/set-remove", data, token);
                             debugPrint(response.body);
                           }
                           ;
