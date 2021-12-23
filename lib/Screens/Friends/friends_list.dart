@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
+import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/main_page.dart';
-import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../../network_handler.dart';
 import '../bad_connection.dart';
 
 String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+NetworkHandler networkHandler = NetworkHandler();
+final storage = new FlutterSecureStorage();
 
 class FriendsList extends StatefulWidget {
   final UserData userData;
@@ -292,7 +294,7 @@ class _FriendsList extends State<FriendsList> {
 showProfile(UserData user, BuildContext context) {
   print("profile");
   Navigator.of(context).push(
-      CupertinoPageRoute(builder: (context) => BadConnection())
+      CupertinoPageRoute(builder: (context) => FriendsProfile(user: user,))
   );
 }
 

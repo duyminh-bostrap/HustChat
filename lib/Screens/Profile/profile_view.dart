@@ -10,35 +10,33 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../get_data/get_info.dart';
-
 String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
-class ProfileScreen extends StatefulWidget {
-  bool isProfile;
-  ProfileScreen({
+class ProfileView extends StatefulWidget {
+  final UserData user;
+  ProfileView({
     Key? key,
-    required this.isProfile,
+    required this.user,
   }) : super(key: key);
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState(isProfile: isProfile);
+  _ProfileView createState() => _ProfileView(user: user);
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  bool isProfile = false;
-  final storage = new FlutterSecureStorage();
+class _ProfileView extends State<ProfileView> {
+  final UserData user;
 
-  _ProfileScreenState({
+  _ProfileView({
     Key? key,
-    required this.isProfile,
+    required this.user,
   });
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext cx) {
     Size size = MediaQuery.of(context).size;
-    return isProfile?
+    return
       Scaffold(
         appBar: null,
         body:
@@ -124,9 +122,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     //       fontWeight: FontWeight.bold
                                     //   )
                                     // ),
-                                    showName(color: Colors.black,
-                                        size: 20,
-                                        fontWeight: FontWeight.bold),
+                                    Text(
+                                      user.username,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                     SizedBox(width: 10.0,),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
@@ -145,8 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       children: <Widget>[
                                         IconButton(
                                           icon: Icon(Icons.add_photo_alternate, size: 28, color: blueColor),
-                                          onPressed: () {
-                                            createPost(context);
+                                          onPressed: () {;
                                           },
                                         ),
                                         Text('Thêm ảnh', style: TextStyle(color: blueColor),)
@@ -170,7 +172,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         IconButton(
                                           icon: Icon(Icons.more_vert, color: Colors.black),
                                           onPressed: () {
-                                            _showMoreOption(context);
                                           },
                                         ),
                                         Text('Thêm', style: TextStyle(
@@ -180,48 +181,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     )
                                   ],
                                 ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                //   children: <Widget>[
-                                //     Column(
-                                //       children: <Widget>[
-                                //         IconButton(
-                                //           icon: Icon(Icons.person, size: 28, color: Colors.black),
-                                //           onPressed: () {
-                                //             print("collections");
-                                //           },
-                                //         ),
-                                //         Text('Bạn bè', style: TextStyle(color: Colors.black),)
-                                //       ],
-                                //     ),
-                                //     Column(
-                                //       children: <Widget>[
-                                //         IconButton(
-                                //           icon: Icon(MdiIcons.facebookMessenger, color: Colors.black),
-                                //           onPressed: () {
-                                //             print("collections");
-                                //           },
-                                //         ),
-                                //         Text('Nhắn tin', style: TextStyle(
-                                //             color: Colors.black
-                                //         ),)
-                                //       ],
-                                //     ),
-                                //     Column(
-                                //       children: <Widget>[
-                                //         IconButton(
-                                //           icon: Icon(Icons.more_vert, color: Colors.black),
-                                //           onPressed: () {
-                                //             _showMoreOption(context);
-                                //           },
-                                //         ),
-                                //         Text('Thêm', style: TextStyle(
-                                //             color: Colors.black
-                                //         ),)
-                                //       ],
-                                //     )
-                                //   ],
-                                // ),
                               ),
                               SizedBox(height: 20.0,),
                               Container(
@@ -387,7 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             childCount: posts.length,
                           ),
                         )
-                        : SliverToBoxAdapter(
+                            : SliverToBoxAdapter(
                           child:
                           Container(
                             margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -413,303 +372,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
-        floatingActionButton:
-        IconButton(
-          icon: Icon(Icons.chevron_left,size: 35,color: Colors.black54,),
-          onPressed: () {setState(() { isProfile = false;});},
-        ),
-      )
-      : SingleChildScrollView(
-        child: Container(
-          color: Color.fromRGBO(0, 0, 0, 0.05),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
-                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () async{
-                        setState(() {
-                          isProfile = true;
-                        });
-                      },
-                      child: Container(
-                        // color: Colors.red,
-                        height: 60,
-                        width: 60,
-                        alignment: Alignment.center,
-                        // color: Colors.red,
-                        child: ProfileAvatar(
-                          imageUrl: link,
-                          maxSize: 40,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        GestureDetector(
-                          onTap: () async{
-                            setState(() {
-                              isProfile = true;
-                            });
-                          },
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                showName(
-                                  color: Colors.black87,
-                                  size: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Xem trang cá nhân của bạn',
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 14,
-                                  ),
-                                  // fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                              ]),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                  padding: EdgeInsets.fromLTRB(1.0, 10.0, 10.0, 10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  ),
-                  child: Column(children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/changepass'),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: size.width * 0.12,
-                            height: size.height * 0.05,
-                            child: Icon(MdiIcons.keyVariant,
-                                size: 30, color: Colors.black87),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Đổi mật khẩu',
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      height: 10,
-                      color: Colors.black54,
-                      thickness: 1.2,
-                      indent: 20,
-                      endIndent: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/post'),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: size.width * 0.12,
-                            height: size.height * 0.05,
-                            // color: Colors.green,
-                            child:
-                                Icon(Icons.block, size: 30, color: Colors.black87),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Người bị chặn',
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                    ),
-                    Divider(
-                        height: 10,
-                        color: Colors.black54,
-                        thickness: 1.2,
-                        indent: 20,
-                        endIndent: 20),
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.pushNamed(context, '/');
-                        await storage.deleteAll();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: size.width * 0.12,
-                            height: size.height * 0.05,
-                            // color: Colors.green,
-                            child:
-                                Icon(Icons.logout, size: 30, color: Colors.black87),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Đăng xuất',
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                    ),
-                  ])),
-              SizedBox(
-                height: size.width * 0.60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                    child: Image.asset(
-                      'assets/watermelon2.png',
-                      width: size.width * 0.25,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: size.width * 0.1,
-          ),
-        ],
-      ),
-    ));
-  }
-}
-
-_showMoreOption(cx) {
-
-  showModalBottomSheet(
-    context: cx,
-    builder: (BuildContext bcx) {
-
-      return new Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child:
-            Row(children: <Widget>[
-              Icon(Icons.feedback,
-                color: Colors.black,),
-              SizedBox(width: 10.0,),
-              Text('Give feedback or report this profile',
-                style: TextStyle(
-                    fontSize: 18.0
-                ),)
-            ],),),
-
-
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child:
-            Row(children: <Widget>[
-              Icon(Icons.block,
-                color: Colors.black,),
-              SizedBox(width: 10.0,),
-              Text('Block',
-                style: TextStyle(
-                    fontSize: 18.0
-                ),)
-            ],),),
-
-
-
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child:
-            Row(children: <Widget>[
-              Icon(Icons.link,
-                color: Colors.black,),
-              SizedBox(width: 10.0,),
-              Text('Copy link to profile',
-                style: TextStyle(
-                    fontSize: 18.0
-                ),)
-            ],),),
-
-
-
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child:
-            Row(children: <Widget>[
-              Icon(Icons.search,
-                color: Colors.black,),
-              SizedBox(width: 10.0,),
-              Text('Search Profile',
-                style: TextStyle(
-                    fontSize: 18.0
-                ),)
-            ],),)
-
-
-
-
-
-
-        ],
       );
-
-    },
-
-
-  );
-
-
+  }
 }

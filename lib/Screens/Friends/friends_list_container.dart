@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_list.dart';
-import 'package:hust_chat/Screens/Friends/friends_suggest.dart';
-import 'package:hust_chat/Screens/Friends/friends_suggest_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
