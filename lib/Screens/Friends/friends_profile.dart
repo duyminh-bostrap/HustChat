@@ -5,8 +5,6 @@ import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/data/data.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
@@ -15,7 +13,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 class FriendsProfile extends StatefulWidget {
-  final User user;
+  final UserData user;
   FriendsProfile({
     Key? key,
     required this.user,
@@ -26,7 +24,7 @@ class FriendsProfile extends StatefulWidget {
 }
 
 class _FriendsProfile extends State<FriendsProfile> {
-  final User user;
+  final UserData user;
 
   _FriendsProfile({
     Key? key,
@@ -80,7 +78,7 @@ class _FriendsProfile extends State<FriendsProfile> {
                                       alignment: Alignment.center,
                                       child: GestureDetector(
                                           onTap: () => print("avatar"),  //_openPost(post, context),
-                                          child: ProfileAvatar(imageUrl: user.imageUrl, minSize: 62, maxSize: 65, hasBorder: true,)
+                                          child: ProfileAvatar(imageUrl: link,)
                                       ),
                                     ),
                                   ),
@@ -233,7 +231,7 @@ class _FriendsProfile extends State<FriendsProfile> {
                                         onPressed: () {
                                           print("collections");
                                         },
-                                        child: Text('Xem thêm vể '+ user.name),
+                                        child: Text('Xem thêm vể '+ user.username),
                                       ),
                                     )
                                   ],),

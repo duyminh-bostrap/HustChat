@@ -1,12 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
-import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/models/post_model.dart';
@@ -45,7 +42,7 @@ class PostContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PostHeader(post: post, user: currentUser, isPersonalPost: isPersonalPost, ),
+                _PostHeader(post: post, isPersonalPost: isPersonalPost, ),
                 const SizedBox(height: 5.0),
                 GestureDetector(
                   onTap: () => _openPost(post, context),
@@ -95,14 +92,12 @@ class PostContainer extends StatelessWidget {
 
 class _PostHeader extends StatelessWidget {
   final PostData post;
-  final User user;
   final bool isPersonalPost;
   // bool _liked;
 
   const _PostHeader({
     Key? key,
     required this.post,
-    required this.user,
     required this.isPersonalPost,
   }) : super(key: key);
 
@@ -112,7 +107,7 @@ class _PostHeader extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => _showProfile(post, context),
-          child:ProfileAvatar( imageUrl: isPersonalPost? user.imageUrl : user.imageUrl),
+          child:ProfileAvatar( imageUrl: link),
         ),
         const SizedBox(width: 10.0),
         Expanded(
@@ -152,7 +147,7 @@ class _PostHeader extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.more_horiz),
-          onPressed: () => _showMore(user, post, context),
+          onPressed: () => _showMore(post, context),
         ),
       ],
     );
@@ -414,7 +409,7 @@ _openPost(PostData post, BuildContext context) {
   );
 }
 
-_showMore(User currentUser, PostData post, context) async {
+_showMore( PostData post, context) async {
 
     String? userID = await storage.read(key: "id");
 

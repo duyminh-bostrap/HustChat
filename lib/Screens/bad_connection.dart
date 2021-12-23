@@ -1,15 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Widget/background.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/Widget/rounded_button.dart';
-import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
-import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/network_handler.dart';
-
-import 'Widget/rounded_password_field.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BadConnection extends StatefulWidget {

@@ -2,19 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:hust_chat/data/current_user.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:hust_chat/Screens/main_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-String link = currentUser.imageUrl;
+String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 class CreatePost extends StatefulWidget {
   CreatePost({
