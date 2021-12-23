@@ -197,28 +197,7 @@ class _PostView extends State<PostView> {
                           )
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          viewAll = viewAll? false : true;
-                        });
-                      },
-                      child: Container(
-                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  post.countComments != 0 ?
-                                  viewAll? 'Rút gọn'
-                                      :'Xem tất cả ${post.countComments} bình luận'
-                                      : 'Chưa có bình luận',
-                                  style: TextStyle(fontSize: 15, color: Colors.black54),
-                                ),
-                              ]
-                          )
-                      ),
-                    ),
+
                     FutureBuilder<List<CommentData>>(
                         future: PostsApi.getPostComments(post),
                         builder: (context, snapshot) {
@@ -226,27 +205,57 @@ class _PostView extends State<PostView> {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                           return Center(
-                            child: CircularProgressIndicator(
-                            color: pinkColor,
+                            child: Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: pinkColor,
+                                fontSize: 14,
+                              ),
                             ));
                           default:
                             if (snapshot.hasError) {
                             return Center(child: Text('Some error occurred!'));
                             } else {
                             return
-                              comments!.length != 0 ?
-                                viewAll?
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: comments.length,
-                                  itemBuilder: (context, index) {
-                                  final comment = comments[comments.length-1-index];
-                                  return CommentsWidget(comment: comment);
-                                  }
-                                )
-                              : CommentsWidget(comment: comments[comments.length-1])
-                            : SizedBox(height: 5,);
+                              Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        viewAll = viewAll? false : true;
+                                      });
+                                    },
+                                    child: Container(
+                                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                        child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                comments!.length != 0 ?
+                                                viewAll? 'Rút gọn'
+                                                    :'Xem tất cả ${comments.length} bình luận'
+                                                    : 'Chưa có bình luận',
+                                                style: TextStyle(fontSize: 15, color: Colors.black54),
+                                              ),
+                                            ]
+                                        )
+                                    ),
+                                  ),
+                                  comments.length != 0 ?
+                                    viewAll?
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: BouncingScrollPhysics(),
+                                      itemCount: comments.length,
+                                      itemBuilder: (context, index) {
+                                      final comment = comments[comments.length-1-index];
+                                      return CommentsWidget(comment: comment);
+                                      }
+                                    )
+                                        : CommentsWidget(comment: comments[comments.length-1])
+                                  : SizedBox(height: 5,),
+                                ],
+                              );
                             }
                           }
                         },

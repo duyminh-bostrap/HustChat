@@ -1,10 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
+import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../bad_connection.dart';
 
 String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
@@ -43,7 +49,7 @@ class _FriendsList extends State<FriendsList> {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () => {}, //_showProfile(post, context),
+            onTap: () => showProfile(userData, context),
             child: link != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -64,7 +70,7 @@ class _FriendsList extends State<FriendsList> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => {}, //_showProfile(post, context),
+                  onTap: () => showProfile(userData, context),
                   child: ProfileAvatar(
                     imageUrl: link,
                     hasBorder: true,
@@ -76,7 +82,7 @@ class _FriendsList extends State<FriendsList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () => {}, //_showProfile(post, context),
+                        onTap: () => showProfile(userData, context),
                         child:
                             // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
                             Text(
@@ -123,8 +129,10 @@ class _FriendsList extends State<FriendsList> {
                             var response = await networkHandler.postAuth(
                                 "/friends/set-accept", data, token);
                             debugPrint(response.body);
-                          }
-                          ;
+                          };
+                          setState(() {
+                            Fluttertoast.showToast(msg: "Kết bạn thành công", fontSize: 18);
+                          });
                         },
                       )
                     : FloatingActionButton(
@@ -191,6 +199,7 @@ class _FriendsList extends State<FriendsList> {
             width: size.width,
             decoration: BoxDecoration(
               color: Colors.white,
+              border: Border.all(color: Colors.black87,),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             child: Column(
@@ -228,11 +237,12 @@ class _FriendsList extends State<FriendsList> {
                       child: Container(
                         height: 40,
                         width: size.width*0.3,
-                        margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
+                        margin: EdgeInsets.fromLTRB(9, 5, 4, 5),
                         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: pinkColor,
+                          // border: Border.all(color: Colors.black87,),
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                         ),
                         child: Text(
@@ -252,13 +262,11 @@ class _FriendsList extends State<FriendsList> {
                       child: Container(
                         height: 40,
                         width: size.width*0.3,
-                        margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
+                        margin: EdgeInsets.fromLTRB(4, 5, 9, 5),
                         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black87,
-                          ),
+                          border: Border.all(color: Colors.black87,),
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                         ),
                         child: Text(
@@ -281,8 +289,10 @@ class _FriendsList extends State<FriendsList> {
   }
 }
 
-_showProfile(PostData post, BuildContext context) {
+showProfile(UserData user, BuildContext context) {
   print("profile");
-  Navigator.pushNamed(context, '/mytimeline');
+  Navigator.of(context).push(
+      CupertinoPageRoute(builder: (context) => BadConnection())
+  );
 }
 

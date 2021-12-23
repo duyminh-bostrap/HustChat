@@ -87,9 +87,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     rounded_button(
                         onPressed: () async {
-                          setState(() {
-                            Fluttertoast.showToast(msg: "Đăng nhập thành công", fontSize: 18);
-                          });
 
                           if (formKey.currentState!.validate()) {
 

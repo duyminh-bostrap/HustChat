@@ -1,40 +1,31 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
 import 'package:hust_chat/Screens/Search/user_search_info.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/news_feed.dart';
-import 'package:hust_chat/data/current_user.dart';
-import 'package:hust_chat/get_data/get_user_info.dart';
-import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'bad_connection.dart';
-// import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 
 class MainPage extends StatefulWidget {
   int current_index;
-  User user = currentUser;
+  bool isProfile = false;
   MainPage(
       this.current_index,
+      this.isProfile,
       {Key? key}
-      ) : super(key: key);
+      );
 
   @override
-  _MainPageState createState() => _MainPageState(current_index: current_index);
+  _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int current_index;
-  User user = currentUser;
 
   final List<Widget> screens = [
     // MessageScreen(), //Trang tin nhắn
@@ -45,7 +36,6 @@ class _MainPageState extends State<MainPage> {
   ];
   _MainPageState({
     Key? key,
-    required this.current_index,
   });
   @override
   Widget build(BuildContext context) {
@@ -99,10 +89,12 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             )),
-        body: IndexedStack(index: this.current_index, children: screens),
+        body: IndexedStack(index: widget.current_index, children: screens),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: current_index,
-          onTap: (index) => setState(() => this.current_index = index),
+          currentIndex: widget.current_index,
+          onTap: (index) async => setState(() {
+            widget.current_index = index;
+          }),
           // selectedItemColor: Color(0xffaedd94),
           unselectedItemColor: Colors.white,
           selectedFontSize: 16,
@@ -156,3 +148,4 @@ SearchFriend(TextEditingController searchController) async {
     print(output["data"]);
   }
 }
+

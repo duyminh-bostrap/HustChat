@@ -16,6 +16,9 @@ import 'package:hust_chat/models/models.dart';
 String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 class FriendListContainer extends StatefulWidget {
+  bool isRequest = false;
+  bool isProfile = false;
+  UserData userData = new UserData(gender: '', blockedInbox: [], blockedDiary: [], id: '', phonenumber: '', password: '', username: '', avatar: Avatar(type: '', fileName: '', id: ''), coverImage: CoverIMG(id: '', type: '', fileName: ''), createdAt: DateTime.now(), updatedAt: DateTime.now(), v: 0);
   FriendListContainer(
       {Key? key}) : super(key: key);
 
@@ -24,20 +27,18 @@ class FriendListContainer extends StatefulWidget {
 }
 
 class _FriendListContainer extends State<FriendListContainer>{
-  bool isRequest = false;
-  bool isProfile = false;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: isProfile?
+      body: (widget.isProfile && widget.userData.id != '')?
           Scaffold(
             appBar: null,
             body:
             FutureBuilder<List<PostData>>(
-              future: PostsApi.getMyPosts(),
+              future: PostsApi.getFriendPosts(widget.userData.id),
               builder: (context, snapshot) {
                 final posts = snapshot.data;
                 switch (snapshot.connectionState) {
@@ -411,12 +412,12 @@ class _FriendListContainer extends State<FriendListContainer>{
             floatingActionButton:
             IconButton(
               icon: Icon(Icons.chevron_left,size: 35,color: Colors.black54,),
-              onPressed: () {setState(() { isProfile = false;});},
+              onPressed: () {setState(() { widget.isProfile = false;});},
             ),
           )
             // danh sách kết bạn và gợi ý kết bạn
           : FutureBuilder<List<UserData>>(
-            future: isRequest? FriendsApi.getListFriendsRequested(): FriendsApi.getListFriends(),
+            future: widget.isRequest? FriendsApi.getListFriendsRequested(): FriendsApi.getListFriends(),
             builder: (context, snapshot) {
               final friends = snapshot.data;
               switch (snapshot.connectionState) {
@@ -447,13 +448,13 @@ class _FriendListContainer extends State<FriendListContainer>{
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       GestureDetector(
-                                        onTap: () async => setState(() => isRequest = false),
+                                        onTap: () async => setState(() => widget.isRequest = false),
                                         child: Container(
                                           width: (size.width-40)*0.5,
                                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            color:  !isRequest? Color.fromRGBO(204, 248, 171, 1.0): pinkColor,
+                                            color:  !widget.isRequest? Color.fromRGBO(204, 248, 171, 1.0): pinkColor,
                                             borderRadius: BorderRadius.all(Radius.circular(15)),
                                           ),
                                           child: Text(
@@ -467,13 +468,13 @@ class _FriendListContainer extends State<FriendListContainer>{
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () async => setState(() => isRequest = true),
+                                        onTap: () async => setState(() => widget.isRequest = true),
                                         child: Container(
                                           width: (size.width-40)*0.5,
                                           alignment: Alignment.center,
                                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                           decoration: BoxDecoration(
-                                            color: isRequest? Color.fromRGBO(204, 248, 171, 1.0): pinkColor,
+                                            color: widget.isRequest? Color.fromRGBO(204, 248, 171, 1.0): pinkColor,
                                             borderRadius: BorderRadius.all(Radius.circular(15)),
                                           ),
                                           child: Text(
@@ -497,7 +498,7 @@ class _FriendListContainer extends State<FriendListContainer>{
                           delegate: SliverChildBuilderDelegate(
                                 (context, index) {
                               final UserData userData = friends[friends.length-index-1];
-                              return isRequest?
+                              return widget.isRequest?
                                 FriendsList(userData: userData, isRequest: true,)
                               : FriendsList(userData: userData, isRequest: false,);
                             },
@@ -515,7 +516,7 @@ class _FriendListContainer extends State<FriendListContainer>{
                                 borderRadius: BorderRadius.all(Radius.circular(15)),
                               ),
                               child: Text(
-                                isRequest? 'Bạn hiện chưa lời mời kết bạn nào'
+                                widget.isRequest? 'Bạn hiện chưa lời mời kết bạn nào'
                                 : 'Bạn hiện chưa có bạn bè nào',
                                 style: TextStyle(
                                   color: Colors.black87,
@@ -538,9 +539,6 @@ class _FriendListContainer extends State<FriendListContainer>{
 
     );
   }
-}
-
-_showProfile(post, BuildContext context) {
 }
 
 _showMoreOption(cx) {

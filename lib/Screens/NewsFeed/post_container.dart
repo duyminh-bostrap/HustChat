@@ -393,7 +393,7 @@ class _PostStatsState extends State<PostStats> {
 _showProfile(PostData post, BuildContext context) {
   print("profile");
   Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => MainPage(3)),
+    MaterialPageRoute(builder: (context) => MainPage(1, false)),
   );
 }
 
