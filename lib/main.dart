@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         '/message': (context) => MessageScreen(),
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),
-        '/post': (context) => ShowListFriendsRequested()
+        '/post': (context) => ShowListFriendsRequested(),
+        '/friendlist': (context) => MainPage(1),
       },
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
