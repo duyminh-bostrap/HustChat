@@ -11,10 +11,12 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/comment_list.dart';
+import 'package:hust_chat/models/img_model.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 // String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
@@ -49,6 +51,9 @@ class _PostView extends State<PostView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    int pageIndex = 0;
+    final List<ImageModel> img = post.images;
+    final pageController = PageController(viewportFraction: 1);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -65,7 +70,7 @@ class _PostView extends State<PostView> {
             ),
           title: Row(
             children: [
-              ProfileAvatar(imageUrl: "http://10.0.2.2:8000/files/avatar_2.png", minSize: 20, maxSize: 22,),
+              ProfileAvatar(imageUrl: "http://localhost:8000/files/avatar_2.png", minSize: 20, maxSize: 22,),
               SizedBox(width: 15,),
               Text(
                 post.username,
@@ -244,7 +249,23 @@ class _PostView extends State<PostView> {
                         padding: const EdgeInsets.symmetric(vertical: 0.0),
                         child: HeroWidget(
                           tag: HeroTag.image(link),
-                          child: CachedNetworkImage(imageUrl: link),
+                          child: Container(
+                            height: 300,
+                            child: PageView.builder(
+                              controller: pageController,
+                              itemCount: img.length+3,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  child: CachedNetworkImage(imageUrl: link, fit: BoxFit.cover,),
+                                );
+                              },
+                              onPageChanged: (index) => setState(() {pageIndex = index; print(index);}),
+                            ),
+                          ),
                         ),
                       )
                           : const SizedBox.shrink(),
@@ -271,20 +292,32 @@ class _PostView extends State<PostView> {
                             size: 25.0,
                           ),
                         ),
-                        const SizedBox(width: 10.0),
+                        SizedBox(width: 10.0),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                              onTap: () => {}, // _seeComment(post, context),
+                              child: Icon(
+                                MdiIcons.commentOutline,
+                                color: Colors.grey[600],
+                                size: 25.0,
+                              )
+                          ),
+                        ),
                         Expanded(
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: InkWell(
-                                onTap: () => {}, // _seeComment(post, context),
-                                child: Icon(
-                                  MdiIcons.commentOutline,
-                                  color: Colors.grey[600],
-                                  size: 25.0,
-                                )
+                          child: Center(
+                            child: AnimatedSmoothIndicator(
+                              count: img.length+3,
+                              activeIndex: pageIndex,
+                              effect: SwapEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                type: SwapType.yRotation,
+                              ),
                             ),
                           ),
                         ),
+                        SizedBox(width: 25,),
                         InkWell(
                             onTap: () => _whoShare(post, context),
                             child: Icon(

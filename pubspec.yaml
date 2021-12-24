@@ -43,6 +43,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   comment_box: ^0.0.16
   fluttertoast: ^8.0.8
+  smooth_page_indicator: ^1.0.0+2
   # material_design_icons_flutter: ^4.0.5345
 
 dev_dependencies:
