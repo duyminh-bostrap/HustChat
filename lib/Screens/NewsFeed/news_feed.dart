@@ -14,7 +14,7 @@ class NewsFeed extends StatelessWidget {
         future: PostsApi.getPosts(),
         builder: (context, snapshot) {
           final posts = snapshot.data;
-          print(posts!.length);
+          // print(posts![3].content);
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return Center(
@@ -32,7 +32,7 @@ class NewsFeed extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: CreatePostContainer(),
                     ),
-                    posts.isNotEmpty
+                    posts!.isNotEmpty
                         ? SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
@@ -44,7 +44,6 @@ class NewsFeed extends StatelessWidget {
                                 );
                               },
                               childCount: posts.length,
-                              
                             ),
                           )
                         : SliverToBoxAdapter(

@@ -65,7 +65,7 @@ class PostContainer extends StatelessWidget {
                   ),
                   // ShowPostInfo()
                 ),
-                post.images[0] != null
+                img.isNotEmpty
                     ? const SizedBox.shrink()
                     : const SizedBox(height: 6.0),
               ],
@@ -73,12 +73,12 @@ class PostContainer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => _openPost(post, context),
-            child: post.images.isNotEmpty
+            child: img.isNotEmpty
                 ? GridView.count(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     crossAxisCount: 1,
-                    children: post.images
+                    children: img
                         .map((e) => Image.network(
                             "http://10.0.2.2:8000/files/${e.name}"))
                         .toList(),
