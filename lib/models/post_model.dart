@@ -6,107 +6,45 @@ import 'dart:convert';
 
 import 'package:hust_chat/models/searchUsers_model.dart';
 
-Posts postsFromJson(String str) => Posts.fromJson(json.decode(str));
+import 'img_model.dart';
 
-String postsToJson(Posts data) => json.encode(data.toJson());
-
-class Posts {
-    Posts({
-        required this.data,
-    });
-
-    List<PostData> data;
-
-    factory Posts.fromJson(Map<String, dynamic> json) => Posts(
-        data: List<PostData>.from(json["data"].map((x) => PostData.fromJson(x))),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
-}
-List<PostData> postFromJson(String str) => List<PostData>.from(json.decode(str).map((x) => PostData.fromJson(x)));
 class PostData {
-    PostData({
-        required this.images,
-        required this.videos,
-        required this.like,
-        required this.countComments,
-        required this.isLike,
-        required this.id,
-        required this.author,
-        required this.described,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.v,
-    });
+  final String username;
+  final String userID;
+  final String content;
+  final String id;
+  final List<ImageModel> images;
+  // final List<dynamic> videos;
+  final List like;
+  final String createAt;
+  final String updateAt;
+  bool isLike;
+  final int countComments;
 
-    List<dynamic> images;
-    List<dynamic> videos;
-    List<dynamic> like;
-    int countComments;
-    bool isLike;
-    String id;
-    Author author;
-    String described;
-    DateTime createdAt;
-    DateTime updatedAt;
-    int v;
+  PostData(
+      {required this.username,
+      required this.userID,
+      required this.content,
+      required this.id,
+      required this.images,
+      // required this.videos,
+      required this.like,
+      required this.createAt,
+      required this.updateAt,
+      required this.isLike,
+      required this.countComments});
 
-    factory PostData.fromJson(Map<String, dynamic> json) => PostData(
-        images: List<dynamic>.from(json["images"].map((x) => x)),
-        videos: List<dynamic>.from(json["videos"].map((x) => x)),
-        like: List<dynamic>.from(json["like"].map((x) => x)),
-        countComments: json["countComments"],
-        isLike: json["isLike"],
-        id: json["_id"],
-        author: Author.fromJson(json["author"]),
-        described: json["described"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "images": List<dynamic>.from(images.map((x) => x)),
-        "videos": List<dynamic>.from(videos.map((x) => x)),
-        "like": List<dynamic>.from(like.map((x) => x)),
-        "countComments": countComments,
-        "isLike": isLike,
-        "_id": id,
-        "author": author.toJson(),
-        "described": described,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
-    };
+  factory PostData.fromJson(Map<String, dynamic> json) => PostData(
+      username: json["author"]["username"],
+      userID: json["author"]['id'],
+      content: json["described"] == null ? "" : json["described"],
+      id: json["_id"],
+      images: List<ImageModel>.from(
+          json["images"].map((x) => ImageModel.fromJson(x))),
+      // videos: json["videos"],
+      like: json["like"],
+      createAt: json["createdAt"],
+      updateAt: json["updatedAt"],
+      isLike: json["isLike"],
+      countComments: json["countComments"]);
 }
-
-class Author {
-    Author({
-        required this.id,
-        required this.phonenumber,
-        required this.username,
-        required this.avatar,
-    });
-
-    String id;
-    String phonenumber;
-    String username;
-    Avatar avatar;
-
-    factory Author.fromJson(Map<String, dynamic> json) => Author(
-        id: json["_id"],
-        phonenumber: json["phonenumber"],
-        username: json["username"],
-        avatar: Avatar.fromJson(json["avatar"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "phonenumber": phonenumber,
-        "username": username,
-        "avatar": avatar.toJson(),
-    };
-}
-

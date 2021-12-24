@@ -7,6 +7,7 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:hust_chat/models/img_model.dart';
 import 'package:hust_chat/models/post_model.dart';
 import 'package:hust_chat/models/profile_model.dart';
 import 'package:hust_chat/network_handler.dart';
@@ -30,7 +31,8 @@ class PostContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    post.images.add(link);
+    final List<ImageModel> img = post.images;
+    // post.images.add(link);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -43,18 +45,19 @@ class PostContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                PostHeader(post: post, isPersonalPost: isPersonalPost, ),
+                PostHeader(
+                  post: post,
+                  isPersonalPost: isPersonalPost,
+                ),
                 const SizedBox(height: 5.0),
                 GestureDetector(
                   onTap: () => _openPost(post, context),
-                  child:
-                  ExpandableText(
-                    post.described.runtimeType == String?  post.described: '',
+                  child: ExpandableText(
+                    post.content.runtimeType == String ? post.content : '',
                     style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w400
-                    ),
+                        color: Colors.black87,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w400),
                     expandText: 'Xem thêm',
                     collapseText: 'Rút gọn',
                     maxLines: 3,
@@ -70,16 +73,17 @@ class PostContainer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => _openPost(post, context),
-            child:
-              post.images[0] != null ?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: post.images[0]),
-                )
-              )
-                  : const SizedBox.shrink(),
+            child: post.images.isNotEmpty
+                ? GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    crossAxisCount: 1,
+                    children: post.images
+                        .map((e) => Image.network(
+                            "http://10.0.2.2:8000/files/${e.name}"))
+                        .toList(),
+                  )
+                : Container(),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -106,12 +110,13 @@ class PostHeader extends StatefulWidget {
   @override
   _PostHeader createState() => _PostHeader(post: post);
 }
+
 class _PostHeader extends State<PostHeader> {
   final PostData post;
 
   _PostHeader({
-  Key? key,
-  required this.post,
+    Key? key,
+    required this.post,
   });
 
   @override
@@ -119,10 +124,9 @@ class _PostHeader extends State<PostHeader> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-
         GestureDetector(
           onTap: () => _showProfile(post, context),
-          child:ProfileAvatar( imageUrl: link),
+          child: ProfileAvatar(imageUrl: link),
         ),
         const SizedBox(width: 10.0),
         Expanded(
@@ -131,9 +135,8 @@ class _PostHeader extends State<PostHeader> {
             children: [
               GestureDetector(
                 onTap: () => _showProfile(post, context),
-                child:
-                Text(
-                  post.author.username,
+                child: Text(
+                  post.username,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
@@ -144,7 +147,7 @@ class _PostHeader extends State<PostHeader> {
               Row(
                 children: [
                   Text(
-                    '${post.createdAt} • ',
+                    '${post.createAt} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -163,7 +166,6 @@ class _PostHeader extends State<PostHeader> {
         IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () async {
-
             String? userID = await storage.read(key: "id");
 
             showModalBottomSheet(
@@ -172,18 +174,18 @@ class _PostHeader extends State<PostHeader> {
               context: context,
               builder: (BuildContext bcx) {
                 Size size = MediaQuery.of(context).size;
-                return post.author.id.toString() == userID.toString()?
-                Container(
-                    margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-195, 10.0, 115),
-                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    ),
-                    child: Column(
-                        children: [
+                return post.userID.toString() == userID.toString()
+                    ? Container(
+                        margin: EdgeInsets.fromLTRB(
+                            10.0, size.height * 0.5 - 195, 10.0, 115),
+                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        child: Column(children: [
                           GestureDetector(
-                            onTap: () => print(post.author.id.toString()),
+                            onTap: () => print(post.userID.toString()),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -193,7 +195,8 @@ class _PostHeader extends State<PostHeader> {
                                 Container(
                                   width: 20,
                                   height: 50,
-                                  child: Icon(Icons.edit, size: 30,color: Colors.black87),
+                                  child: Icon(Icons.edit,
+                                      size: 30, color: Colors.black87),
                                 ),
                                 SizedBox(
                                   width: 25,
@@ -208,7 +211,13 @@ class _PostHeader extends State<PostHeader> {
                               ],
                             ),
                           ),
-                          Divider(height: size.height*0.01, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
+                          Divider(
+                            height: size.height * 0.01,
+                            color: Colors.black54,
+                            thickness: 1.2,
+                            indent: 20,
+                            endIndent: 20,
+                          ),
                           GestureDetector(
                             onTap: () => RemovePost(),
                             child: Row(
@@ -220,7 +229,8 @@ class _PostHeader extends State<PostHeader> {
                                 Container(
                                   width: 20,
                                   height: 50,
-                                  child: Icon(Icons.delete, size: 30,color: Colors.black87),
+                                  child: Icon(Icons.delete,
+                                      size: 30, color: Colors.black87),
                                 ),
                                 SizedBox(
                                   width: 25,
@@ -235,22 +245,22 @@ class _PostHeader extends State<PostHeader> {
                               ],
                             ),
                           ),
-                        ]
-                    )
-                )
+                        ]))
                     : Container(
-                    margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
-                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    ),
-                    child: Column(
-                        children: [
+                        margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
+                            10.0, size.height * 0.145),
+                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        child: Column(children: [
                           GestureDetector(
                             onTap: () async {
                               String? userID = await storage.read(key: "id");
-                              print(post.author.id.toString() + "___" + userID.toString());
+                              print(post.userID.toString() +
+                                  "___" +
+                                  userID.toString());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -261,7 +271,8 @@ class _PostHeader extends State<PostHeader> {
                                 Container(
                                   width: 20,
                                   height: 50,
-                                  child: Icon(Icons.report_gmailerrorred, size: 30,color: Colors.black87),
+                                  child: Icon(Icons.report_gmailerrorred,
+                                      size: 30, color: Colors.black87),
                                 ),
                                 SizedBox(
                                   width: 25,
@@ -276,7 +287,13 @@ class _PostHeader extends State<PostHeader> {
                               ],
                             ),
                           ),
-                          Divider(height: size.height*0.01, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
+                          Divider(
+                            height: size.height * 0.01,
+                            color: Colors.black54,
+                            thickness: 1.2,
+                            indent: 20,
+                            endIndent: 20,
+                          ),
                           GestureDetector(
                             onTap: () => BlockPost(),
                             child: Row(
@@ -288,7 +305,8 @@ class _PostHeader extends State<PostHeader> {
                                 Container(
                                   width: 20,
                                   height: 50,
-                                  child: Icon(Icons.cancel_presentation, size: 30,color: Colors.black87),
+                                  child: Icon(Icons.cancel_presentation,
+                                      size: 30, color: Colors.black87),
                                 ),
                                 SizedBox(
                                   width: 25,
@@ -303,17 +321,15 @@ class _PostHeader extends State<PostHeader> {
                               ],
                             ),
                           ),
-                        ]
-                    )
-                );
+                        ]));
               },
             );
           },
         ),
       ],
     );
-
   }
+
   Future RemovePost() async {
     Size size = MediaQuery.of(context).size;
     Navigator.pop(context);
@@ -331,7 +347,7 @@ class _PostHeader extends State<PostHeader> {
           child: Column(
             children: [
               Container(
-                width: size.width*0.6,
+                width: size.width * 0.6,
                 height: 50,
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -347,11 +363,10 @@ class _PostHeader extends State<PostHeader> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                    },
+                    onTap: () async {},
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -364,18 +379,17 @@ class _PostHeader extends State<PostHeader> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -390,7 +404,6 @@ class _PostHeader extends State<PostHeader> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
@@ -403,6 +416,7 @@ class _PostHeader extends State<PostHeader> {
       ),
     );
   }
+
   Future BlockPost() async {
     Size size = MediaQuery.of(context).size;
     Navigator.pop(context);
@@ -420,7 +434,7 @@ class _PostHeader extends State<PostHeader> {
           child: Column(
             children: [
               Container(
-                width: size.width*0.6,
+                width: size.width * 0.6,
                 height: 50,
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -436,11 +450,10 @@ class _PostHeader extends State<PostHeader> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                    },
+                    onTap: () async {},
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -453,18 +466,17 @@ class _PostHeader extends State<PostHeader> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -479,7 +491,6 @@ class _PostHeader extends State<PostHeader> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
@@ -658,7 +669,7 @@ class _PostStatsState extends State<PostStats> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    post.isLike = post.isLike? false : true;
+                    post.isLike = post.isLike ? false : true;
                     PostsApi.likePost(post);
                   });
                 },
@@ -667,16 +678,17 @@ class _PostStatsState extends State<PostStats> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      post.isLike?
-                      Icon(
-                        Icons.favorite,
-                        color: pinkColor,
-                        size: 20.0,
-                      ): Icon(
-                        Icons.favorite_border,
-                        color: Colors.grey[600],
-                        size: 20.0,
-                      ),
+                      post.isLike
+                          ? Icon(
+                              Icons.favorite,
+                              color: pinkColor,
+                              size: 20.0,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.grey[600],
+                              size: 20.0,
+                            ),
                       const SizedBox(width: 4.0),
                       Text('Thích'),
                     ],
@@ -729,36 +741,39 @@ class _PostStatsState extends State<PostStats> {
       ],
     );
   }
-
 }
 
 _showProfile(PostData post, BuildContext context) async {
   String? userID = await storage.read(key: "id");
   print("profile");
-  post.author.id.toString() == userID.toString()?
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => MainPage(3, true,)), //ProfileView()),
-    )
-  : Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => MainPage(3, true,)),
-  )
-  ;
+  post.userID.toString() == userID.toString()
+      ? Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => MainPage(
+                    3,
+                    true,
+                  )), //ProfileView()),
+        )
+      : Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => MainPage(
+                    3,
+                    true,
+                  )),
+        );
 }
 
 _openPost(PostData post, BuildContext context) {
   print("open Post");
-  Navigator.of(context).push(
-      PageRouteBuilder(
-        transitionDuration: Duration(seconds: 1),
-        reverseTransitionDuration: Duration(seconds: 1),
-        pageBuilder: (context, animation, secondaryAnimation) {
-          final curvedAnimation = CurvedAnimation(parent: animation, curve: Interval(0, 0.5));
-          return FadeTransition(
-            opacity: curvedAnimation,
-            child: PostView(animation: animation, post: post)
-          );
-        },
-      )
-  );
+  Navigator.of(context).push(PageRouteBuilder(
+    transitionDuration: Duration(seconds: 1),
+    reverseTransitionDuration: Duration(seconds: 1),
+    pageBuilder: (context, animation, secondaryAnimation) {
+      final curvedAnimation =
+          CurvedAnimation(parent: animation, curve: Interval(0, 0.5));
+      return FadeTransition(
+          opacity: curvedAnimation,
+          child: PostView(animation: animation, post: post));
+    },
+  ));
 }
-

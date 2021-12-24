@@ -16,7 +16,7 @@ import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:expandable_text/expandable_text.dart';
 
-String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+// String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -65,10 +65,10 @@ class _PostView extends State<PostView> {
             ),
           title: Row(
             children: [
-              ProfileAvatar(imageUrl: post.images[0], minSize: 20, maxSize: 22,),
+              ProfileAvatar(imageUrl: "http://10.0.2.2:8000/files/avatar_2.png", minSize: 20, maxSize: 22,),
               SizedBox(width: 15,),
               Text(
-                post.author.username,
+                post.username,
                 style: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w500,),
               ),
             ],
@@ -86,7 +86,7 @@ class _PostView extends State<PostView> {
                   context: context,
                   builder: (BuildContext bcx) {
                     Size size = MediaQuery.of(context).size;
-                    return post.author.id.toString() == userID.toString()?
+                    return post.userID.toString() == userID.toString()?
                     Container(
                         margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-195, 10.0, 115),
                         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -97,7 +97,7 @@ class _PostView extends State<PostView> {
                         child: Column(
                             children: [
                               GestureDetector(
-                                onTap: () => print(post.author.id.toString()),
+                                onTap: () => print(post.userID.toString()),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -164,7 +164,7 @@ class _PostView extends State<PostView> {
                               GestureDetector(
                                 onTap: () async {
                                   String? userID = await storage.read(key: "id");
-                                  print(post.author.id.toString() + "___" + userID.toString());
+                                  print(post.userID.toString() + "___" + userID.toString());
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -303,11 +303,11 @@ class _PostView extends State<PostView> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                post.author.username,
+                                post.username,
                                 style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500,),
                               ),
                               SizedBox(width: 10,),
-                              Text(post.createdAt.toString(), style: TextStyle(fontSize: 14),),
+                              Text(post.createAt.toString(), style: TextStyle(fontSize: 14),),
                             ]
                         )
                     ),
@@ -316,7 +316,7 @@ class _PostView extends State<PostView> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: ExpandableText(
-                          post.described,
+                          post.content,
                           style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500,

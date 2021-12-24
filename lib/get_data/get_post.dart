@@ -7,7 +7,6 @@ import 'package:hust_chat/models/post_model.dart';
 import '../network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -16,10 +15,9 @@ class PostsApi {
     String? token = await storage.read(key: "token");
     if (token != null) {
       var response = await networkHandler.getWithAuth("/posts/list", token);
-      final posts = postsFromJson(response.body);
-      final List<PostData> post = posts.data;
-
-      return post;
+      final parsed =
+          json.decode(response.body)["data"].cast<Map<String, dynamic>>();
+      return parsed.map<PostData>((json) => PostData.fromJson(json)).toList();
     }
     return [];
   }
@@ -28,26 +26,27 @@ class PostsApi {
     String? token = await storage.read(key: "token");
     String? userID = await storage.read(key: "id");
     if (token != null && userID != null) {
-      print(userID);
+      // print(userID);
       String url = "/posts/list?userId=" + userID;
       var response = await networkHandler.getWithAuth(url, token);
-      final posts = postsFromJson(response.body);
-      final List<PostData> post = posts.data;
-
-      return post;
+      // final posts = postsFromJson(response.body);
+      final parsed =
+          json.decode(response.body)["data"].cast<Map<String, dynamic>>();
+      return parsed.map<PostData>((json) => PostData.fromJson(json)).toList();
     }
     return [];
-  }static Future<List<PostData>> getFriendPosts(String friendID) async {
+  }
+
+  static Future<List<PostData>> getFriendPosts(String friendID) async {
     String? token = await storage.read(key: "token");
     // String? userID = await storage.read(key: "id");
     if (token != null && friendID != null) {
       print(friendID);
       String url = "/posts/list?userId=" + friendID;
       var response = await networkHandler.getWithAuth(url, token);
-      final posts = postsFromJson(response.body);
-      final List<PostData> post = posts.data;
-
-      return post;
+      final parsed =
+          json.decode(response.body)["data"].cast<Map<String, dynamic>>();
+      return parsed.map<PostData>((json) => PostData.fromJson(json)).toList();
     }
     return [];
   }
@@ -75,6 +74,7 @@ class PostsApi {
       debugPrint(response.body);
     }
   }
+
   static Future<List<CommentData>> getPostComments(PostData post) async {
     String? token = await storage.read(key: "token");
     String postId = post.id;
@@ -88,7 +88,6 @@ class PostsApi {
     }
     return [];
   }
-
 }
 
 class ShowPostInfo extends StatelessWidget {
@@ -128,8 +127,8 @@ class ShowPostInfo extends StatelessWidget {
           final post = posts[index];
 
           return ListTile(
-            title: Text(post.author.username),
-            subtitle: Text(post.described),
+            title: Text(post.username),
+            subtitle: Text(post.content),
           );
         },
       );

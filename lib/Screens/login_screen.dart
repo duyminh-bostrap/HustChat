@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   bool isIncorrect = false;
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   inputController: phoneController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập số điện thoại";
-                    if (value.length < 2 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value) || isIncorrect) {
+                    if (value.length < 1 ||
+                        !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value) ||
+                        isIncorrect) {
                       return "Số điện thoại không chính xác";
                     }
                     return null;
@@ -83,16 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     rounded_button(
                         onPressed: () async {
-
                           if (formKey.currentState!.validate()) {
-
-                            Map<String, String> data =
-                            {
+                            Map<String, String> data = {
                               "phonenumber": phoneController.text,
                               "password": passwordController.text
                             };
                             var response =
-                            await networkHandler.post("/users/login", data);
+                                await networkHandler.post("/users/login", data);
                             Map output = json.decode(response.body);
                             String token = "bearer " + output['token'];
 
@@ -106,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   key: "username",
                                   value: output["data"]["username"]);
                               Navigator.pushNamed(context, '/mainpage');
-                            } else{
+                            } else {
                               setState(() {
                                 isIncorrect = true;
                               });
