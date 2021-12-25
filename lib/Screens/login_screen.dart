@@ -104,7 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   key: "username",
                                   value: output["data"]["username"]);
                               Navigator.pushNamed(context, '/mainpage');
-                            } else {
+                            }
+                            if (response.statusCode > 300){
+                              print('sai mk');
                               setState(() {
                                 isIncorrect = true;
                               });

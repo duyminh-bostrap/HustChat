@@ -12,7 +12,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../../network_handler.dart';
 import '../bad_connection.dart';
 
-String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://localhost:8000/files/avatar_2.png";
+String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
+
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -57,7 +59,7 @@ class _FriendsList extends State<FriendsList> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
-                      child: CachedNetworkImage(imageUrl: link),
+                      child: CachedNetworkImage(imageUrl: link2),
                     ))
                 : const SizedBox.shrink(),
           ),

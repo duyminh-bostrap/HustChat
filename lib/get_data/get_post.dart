@@ -95,14 +95,26 @@ class PostsApi {
       // print(userID);
       String url = "/posts/show/" + id;
       var response = await networkHandler.getWithAuth(url, token);
+      debugPrint(response.body);
       // final posts = postsFromJson(response.body);
-      final parsed =
-      json.decode(response.body)["data"].cast<Map<String, dynamic>>();
-      return parsed.map<PostData>((json) => PostData.fromJson(json)).toList();
+      final json1 = json.decode(response.body)["data"];
+      String a = json.encode(json1);
+      final PostData post = postFromJson(a);
+      // debugPrint(post.content);
+      // debugPrint(parsed);
+      return post;
     }
-    return new PostData(username: '', userID: '', content: '', id: '', images: [], like: [], createAt: '', updateAt: '', isLike: false, countComments: 0);
+    return new PostData(username: '',
+        userID: '',
+        content: '',
+        id: '',
+        images: [],
+        like: [],
+        createAt: '',
+        updateAt: '',
+        isLike: false,
+        countComments: 0);
   }
-
 }
 
 class ShowPostInfo extends StatelessWidget {

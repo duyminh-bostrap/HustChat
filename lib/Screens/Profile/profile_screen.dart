@@ -13,7 +13,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import '../../get_data/get_info.dart';
 
-String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://localhost:8000/files/avatar_2.png";
+
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -69,8 +70,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 230,
                                 child: GestureDetector(
                                   onTap: () {print('coverimage');}, //_showProfile(post, context),
-                                  child: link != null
-                                      ? CachedNetworkImage(imageUrl: link, fit: BoxFit.fitWidth,)
+                                  child: "http://localhost:8000/files/defaul_cover_image.jpg" != null
+                                      ? CachedNetworkImage(imageUrl: "http://localhost:8000/files/defaul_cover_image.jpg", fit: BoxFit.fitWidth,)
                                       : const SizedBox.shrink(),
                                 ),
                               ),
@@ -314,13 +315,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
                                               )
                                           )
                                         ],),
@@ -328,19 +329,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
                                               )
                                           )
                                         ],)

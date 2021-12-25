@@ -10,7 +10,7 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://localhost:8000/files/avatar_2.png";
 
 class ImagePostElement extends StatelessWidget {
   const ImagePostElement(

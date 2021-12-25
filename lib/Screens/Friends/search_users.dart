@@ -4,7 +4,7 @@ import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
-String link = "http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link = "http://localhost:8000/files/avatar_2.png";
 
 class SearchUsers extends StatelessWidget {
   final UserData userData;

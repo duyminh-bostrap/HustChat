@@ -50,4 +50,23 @@ class UsersApi {
     }
     return [];
   }
+
+  static Future<UserData> getUserData(String id) async {
+    String? token = await storage.read(key: "token");
+    if (token != null) {
+      // print(userID);
+      String url = "/users/show/" + id;
+      var response = await networkHandler.getWithAuth(url, token);
+      debugPrint(response.body);
+      // final posts = postsFromJson(response.body);
+      final json1 = json.decode(response.body)["data"];
+      String a = json.encode(json1);
+      final UserData user = UserFromJson(a);
+      // debugPrint(post.content);
+      // debugPrint(parsed);
+      return user;
+    }
+    return new UserData(gender: "", blockedInbox: [], blockedDiary: [], id: "", phonenumber: "", password: "", username: "", avatar: Avatar(type: "", id: "", fileName: ""), coverImage: CoverIMG(type: "", id: "", fileName: ""), createdAt: DateTime(2000), updatedAt: DateTime(2000), v: 0);
+  }
+
 }

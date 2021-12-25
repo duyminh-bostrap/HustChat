@@ -11,7 +11,8 @@ import 'package:hust_chat/get_data/get_list_friend.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/models/models.dart';
 
-String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link ="http://localhost:8000/files/avatar_2.png";
+String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
 
 class FriendListContainer extends StatefulWidget {
   bool isRequest = false;
@@ -62,7 +63,7 @@ class _FriendListContainer extends State<FriendListContainer>{
                                     child: GestureDetector(
                                       onTap: () {print('coverimage');}, //_showProfile(post, context),
                                       child: link != null
-                                          ? CachedNetworkImage(imageUrl: link, fit: BoxFit.fitWidth,)
+                                          ? CachedNetworkImage(imageUrl: link2, fit: BoxFit.fitWidth,)
                                           : const SizedBox.shrink(),
                                     ),
                                   ),
@@ -306,13 +307,13 @@ class _FriendListContainer extends State<FriendListContainer>{
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link),
+                                                    Image.network(link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link),
+                                                    Image.network(link2),
                                                   )
                                               )
                                             ],),
@@ -320,19 +321,19 @@ class _FriendListContainer extends State<FriendListContainer>{
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link),
+                                                    Image.network(link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link),
+                                                    Image.network(link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link),
+                                                    Image.network(link2),
                                                   )
                                               )
                                             ],)

@@ -10,7 +10,7 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link ="http://localhost:8000/files/avatar_2.png";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 

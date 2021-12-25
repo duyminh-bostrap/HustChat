@@ -20,7 +20,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:expandable_text/expandable_text.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-// String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -290,24 +289,21 @@ class _PostView extends State<PostView> {
                                 height: 300,
                                 child: PageView.builder(
                                   controller: pageController,
-                                  itemCount: img.length + 3,
+                                  itemCount: img.length,
                                   itemBuilder: (context, index) {
+                                    final image = img[index];
                                     return Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15.0)),
-                                      ),
-                                      child: CachedNetworkImage(
-                                        imageUrl: link,
-                                        fit: BoxFit.cover,
-                                      ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                        ),
+                                        child: image != ''?
+                                        CachedNetworkImage(
+                                          imageUrl: "http://127.0.0.1:8000/files/${image.name}", fit: BoxFit.cover,)
+                                            : Container(height: 10,),
                                     );
                                   },
-                                  onPageChanged: (index) => setState(() {
-                                    pageIndex = index;
-                                    print(index);
-                                  }),
+                                  onPageChanged: (index) => setState(() {pageIndex = index; print(index);}),
                                 ),
                               ),
                             ),
@@ -317,131 +313,277 @@ class _PostView extends State<PostView> {
                   SizedBox(
                     height: 5,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 15,
-                      ),
-                      GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              post.isLike = post.isLike ? false : true;
-                            });
-                          },
-                          child: post.isLike
-                              ? Icon(
-                            Icons.favorite,
-                            color: pinkColor,
-                            size: 25.0,
-                          )
-                              :Icon(
-                              Icons.favorite_outline,
-                              color: Colors.black,
-                              size: 25.0)
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: InkWell(
-                            onTap: () => {}, // _seeComment(post, context),
-                            child: Icon(
-                              MdiIcons.commentOutline,
-                              color: Colors.grey[600],
-                              size: 25.0,
-                            )),
-                      ),
-                      Expanded(
-                          child: Center(
-                            child: AnimatedSmoothIndicator(
-                              count: img.length+3,
-                              activeIndex: pageIndex,
-                              effect: ExpandingDotsEffect(
-                                dotHeight: 8,
-                                dotWidth: 8,
-                                expansionFactor: 2.3,
-                                activeDotColor: pinkColor,
-                                dotColor: Colors.black26,
-                              ),
-                            ),
-                          ),
-                      ),
-                      SizedBox(
-                        width: 25,
-                      ),
-                      InkWell(
-                          onTap: () => _whoShare(post, context),
-                          child: Icon(
-                            Icons.bookmark_border,
-                            color: Colors.grey[600],
-                            size: 28.0,
-                          )),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                  Container(
-                      height: 30,
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              post.username,
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              post.createAt.toString(),
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ])),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: ExpandableText(
-                        post.content,
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        expandText: 'Xem thêm',
-                        collapseText: 'Rút gọn',
-                        maxLines: 3,
-                        linkColor: Colors.black54,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => _whoLike(post, context),
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                        child: Row(children: [
-                          Text(
-                            '${post.like.length}',
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'lượt thích',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ])),
+                  FutureBuilder<PostData>(
+                    future: PostsApi.getAPost(post.id),
+                    builder: (context, snapshot) {
+                      final onlyPost = snapshot.data;
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return
+                            // onlyPost != null?
+                            // Column(
+                            //   children: [
+                            //     Row(
+                            //       mainAxisAlignment: MainAxisAlignment.start,
+                            //       children: [
+                            //         SizedBox(
+                            //           width: 15,
+                            //         ),
+                            //         onlyPost.isLike
+                            //                 ? Icon(
+                            //               Icons.favorite,
+                            //               color: pinkColor,
+                            //               size: 25.0,
+                            //             )
+                            //                 :Icon(
+                            //                 Icons.favorite_outline,
+                            //                 color: Colors.grey[600],
+                            //                 size: 25.0),
+                            //         SizedBox(
+                            //           width: 10,
+                            //         ),
+                            //         Container(
+                            //           alignment: Alignment.centerLeft,
+                            //           child: InkWell(
+                            //               onTap: () => {}, // _seeComment(post, context),
+                            //               child: Icon(
+                            //                 MdiIcons.commentOutline,
+                            //                 color: Colors.grey[600],
+                            //                 size: 25.0,
+                            //               )),
+                            //         ),
+                            //         Expanded(
+                            //           child: Center(
+                            //             child: AnimatedSmoothIndicator(
+                            //               count: img.length,
+                            //               activeIndex: pageIndex,
+                            //               effect: ExpandingDotsEffect(
+                            //                 dotHeight: 8,
+                            //                 dotWidth: 8,
+                            //                 expansionFactor: 2.3,
+                            //                 activeDotColor: pinkColor,
+                            //                 dotColor: Colors.black26,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //         SizedBox(
+                            //           width: 25,
+                            //         ),
+                            //         Icon(
+                            //           Icons.bookmark_border,
+                            //           color: Colors.grey[600],
+                            //           size: 28.0,
+                            //         ),
+                            //         SizedBox(
+                            //           width: 15,
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     Container(
+                            //         height: 30,
+                            //         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            //         child: Row(
+                            //             mainAxisAlignment: MainAxisAlignment.start,
+                            //             children: [
+                            //               Text(
+                            //                 post.username,
+                            //                 style: TextStyle(
+                            //                   color: Colors.black87,
+                            //                   fontSize: 16,
+                            //                   fontWeight: FontWeight.w500,
+                            //                 ),
+                            //               ),
+                            //               SizedBox(
+                            //                 width: 10,
+                            //               ),
+                            //               Text(
+                            //                 post.createAt.toString(),
+                            //                 style: TextStyle(fontSize: 14),
+                            //               ),
+                            //             ])),
+                            //     Padding(
+                            //       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            //       child: Align(
+                            //         alignment: Alignment.topLeft,
+                            //         child: ExpandableText(
+                            //           post.content,
+                            //           style: TextStyle(
+                            //             fontSize: 15.0,
+                            //             fontWeight: FontWeight.w500,
+                            //           ),
+                            //           expandText: 'Xem thêm',
+                            //           collapseText: 'Rút gọn',
+                            //           maxLines: 3,
+                            //           linkColor: Colors.black54,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     Container(
+                            //         padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                            //         child: Row(children: [
+                            //           Text(
+                            //             '${onlyPost.like.length}',
+                            //             style: TextStyle(
+                            //                 color: Colors.black87,
+                            //                 fontSize: 15,
+                            //                 fontWeight: FontWeight.w500),
+                            //           ),
+                            //           SizedBox(
+                            //             width: 5,
+                            //           ),
+                            //           Text(
+                            //             'lượt thích',
+                            //             style: TextStyle(fontSize: 15),
+                            //           ),
+                            //         ])),
+                            //   ],
+                            // )
+                            //     :
+                            Container(height: 10,);
+                        default:
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Some error occurred!'));
+                          } else {
+                            return
+                              onlyPost != null?
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            print("_______________________");
+                                            setState(() {
+                                              onlyPost.isLike = onlyPost.isLike ? false : true;
+                                              PostsApi.likePost(onlyPost);
+                                              print("_______________________");
+                                            });
+                                          },
+                                          child: onlyPost.isLike
+                                              ? Icon(
+                                            Icons.favorite,
+                                            color: pinkColor,
+                                            size: 25.0,
+                                          )
+                                              :Icon(
+                                              Icons.favorite_outline,
+                                              color: Colors.grey[600],
+                                              size: 25.0)
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: InkWell(
+                                            onTap: () => {}, // _seeComment(post, context),
+                                            child: Icon(
+                                              MdiIcons.commentOutline,
+                                              color: Colors.grey[600],
+                                              size: 25.0,
+                                            )),
+                                      ),
+                                      Expanded(
+                                        child: Center(
+                                          child: AnimatedSmoothIndicator(
+                                            count: img.length,
+                                            activeIndex: pageIndex,
+                                            effect: ExpandingDotsEffect(
+                                              dotHeight: 8,
+                                              dotWidth: 8,
+                                              expansionFactor: 2.3,
+                                              activeDotColor: pinkColor,
+                                              dotColor: Colors.black26,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      InkWell(
+                                          onTap: () => _whoShare(post, context),
+                                          child: Icon(
+                                            Icons.bookmark_border,
+                                            color: Colors.grey[600],
+                                            size: 28.0,
+                                          )),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                      height: 30,
+                                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                      child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              post.username,
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              post.createAt.toString(),
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                          ])),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: ExpandableText(
+                                        post.content,
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        expandText: 'Xem thêm',
+                                        collapseText: 'Rút gọn',
+                                        maxLines: 3,
+                                        linkColor: Colors.black54,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => _whoLike(onlyPost, context),
+                                    child: Container(
+                                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                        child: Row(children: [
+                                          Text(
+                                            '${onlyPost.like.length}',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'lượt thích',
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        ])),
+                                  ),
+                                ],
+                              )
+                              : Container(height: 10,);
+                          }
+                      }
+                    },
                   ),
                   FutureBuilder<List<CommentData>>(
                     future: PostsApi.getPostComments(post),
@@ -449,7 +591,9 @@ class _PostView extends State<PostView> {
                       final comments = snapshot.data;
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return Column(
+                          return
+                            comments != null?
+                            Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -464,7 +608,7 @@ class _PostView extends State<PostView> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            comments!.length != 0
+                                            comments.length != 0
                                                 ? viewAll
                                                     ? 'Rút gọn'
                                                     : 'Xem tất cả ${comments.length} bình luận'
@@ -494,7 +638,8 @@ class _PostView extends State<PostView> {
                                       height: 5,
                                     ),
                             ],
-                          );
+                          )
+                            :Container(height: 10,);
                         default:
                           if (snapshot.hasError) {
                             return Center(child: Text('Some error occurred!'));

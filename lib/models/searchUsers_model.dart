@@ -9,6 +9,9 @@ import 'dart:convert';
 SearchUser searchUserFromJson(String str) =>
     SearchUser.fromJson(json.decode(str));
 
+UserData UserFromJson(String str) =>
+    UserData.fromJson(json.decode(str));
+
 String searchUserToJson(SearchUser data) => json.encode(data.toJson());
 
 class SearchUser {

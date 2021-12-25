@@ -9,7 +9,9 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link ="http://wikicraze.com/wp-content/uploads/2018/08/alone-boy-5.jpg";
+String link ="http://localhost:8000/files/avatar_2.png";
+String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
+
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -77,8 +79,8 @@ class _FriendsProfile extends State<FriendsProfile> {
                                 height: 230,
                                 child: GestureDetector(
                                   onTap: () {print('coverimage');}, //_showProfile(post, context),
-                                  child: link != null
-                                      ? CachedNetworkImage(imageUrl: link, fit: BoxFit.fitWidth,)
+                                  child: link2 != null
+                                      ? CachedNetworkImage(imageUrl: link2, fit: BoxFit.fitWidth,)
                                       : const SizedBox.shrink(),
                                 ),
                               ),
@@ -273,13 +275,13 @@ class _FriendsProfile extends State<FriendsProfile> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network(link2),
                                               )
                                           )
                                         ],),
@@ -287,19 +289,19 @@ class _FriendsProfile extends State<FriendsProfile> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network(link),
+                                                Image.network(link2),
                                               )
                                           )
                                         ],)
