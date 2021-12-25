@@ -88,6 +88,21 @@ class PostsApi {
     }
     return [];
   }
+
+  static Future<PostData> getAPost(String id) async {
+    String? token = await storage.read(key: "token");
+    if (token != null) {
+      // print(userID);
+      String url = "/posts/show/" + id;
+      var response = await networkHandler.getWithAuth(url, token);
+      // final posts = postsFromJson(response.body);
+      final parsed =
+      json.decode(response.body)["data"].cast<Map<String, dynamic>>();
+      return parsed.map<PostData>((json) => PostData.fromJson(json)).toList();
+    }
+    return new PostData(username: '', userID: '', content: '', id: '', images: [], like: [], createAt: '', updateAt: '', isLike: false, countComments: 0);
+  }
+
 }
 
 class ShowPostInfo extends StatelessWidget {

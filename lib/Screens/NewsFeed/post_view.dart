@@ -44,6 +44,7 @@ class _PostView extends State<PostView> {
   final Animation animation;
   bool viewAll = false;
   TextEditingController writeComment = TextEditingController();
+  int pageIndex = 0;
   // final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   _PostView({
@@ -54,7 +55,6 @@ class _PostView extends State<PostView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int pageIndex = 0;
     final List<ImageModel> img = post.images;
     final pageController = PageController(viewportFraction: 1);
 
@@ -324,24 +324,25 @@ class _PostView extends State<PostView> {
                         width: 15,
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            post.isLike = post.isLike ? false : true;
-                          });
-                        },
-                        child: post.isLike
-                            ? Icon(
-                                Icons.favorite,
-                                color: pinkColor,
-                                size: 25.0,
-                              )
-                            : Icon(
-                                Icons.favorite_border,
-                                color: Colors.grey[600],
-                                size: 25.0,
-                              ),
+                          onTap: () async {
+                            setState(() {
+                              post.isLike = post.isLike ? false : true;
+                            });
+                          },
+                          child: post.isLike
+                              ? Icon(
+                            Icons.favorite,
+                            color: pinkColor,
+                            size: 25.0,
+                          )
+                              :Icon(
+                              Icons.favorite_outline,
+                              color: Colors.black,
+                              size: 25.0)
                       ),
-                      SizedBox(width: 10.0),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: InkWell(
@@ -353,17 +354,19 @@ class _PostView extends State<PostView> {
                             )),
                       ),
                       Expanded(
-                        child: Center(
-                          child: AnimatedSmoothIndicator(
-                            count: img.length + 3,
-                            activeIndex: pageIndex,
-                            effect: SwapEffect(
-                              dotHeight: 8,
-                              dotWidth: 8,
-                              type: SwapType.yRotation,
+                          child: Center(
+                            child: AnimatedSmoothIndicator(
+                              count: img.length+3,
+                              activeIndex: pageIndex,
+                              effect: ExpandingDotsEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                expansionFactor: 2.3,
+                                activeDotColor: pinkColor,
+                                dotColor: Colors.black26,
+                              ),
                             ),
                           ),
-                        ),
                       ),
                       SizedBox(
                         width: 25,
@@ -549,10 +552,12 @@ class _PostView extends State<PostView> {
                   ),
                   SizedBox(
                     height: 55,
-                  )
-                ],
+                  ),
+
+                ]
               ),
-            ]),
+              ],
+            ),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -609,7 +614,7 @@ class _PostView extends State<PostView> {
                         ],
                       ),
                     )))
-          ],
+          ]
         ),
         bottomNavigationBar: BottomAppBar(
           color: Colors.black87,
@@ -617,7 +622,7 @@ class _PostView extends State<PostView> {
             height: 0,
           ),
         ),
-      ),
+    ),
     );
   }
 

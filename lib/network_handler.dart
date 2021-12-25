@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NetworkHandler {
-  String baseurl = 'http://localhost:8000/api/v1';
+  String baseurl = 'http://127.0.0.1:8000/api/v1';
 
   Future<http.Response> get(String url) async {
     url = formater(url);

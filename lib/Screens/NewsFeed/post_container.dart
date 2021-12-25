@@ -23,29 +23,31 @@ final storage = new FlutterSecureStorage();
 class PostContainer extends StatefulWidget {
   final PostData post;
   final bool isPersonalPost;
+  int pageIndex = 0;
 
-  const PostContainer({
+  PostContainer({
     Key? key,
     required this.post,
     required this.isPersonalPost,
   }) : super(key: key);
 
   @override
-  _PostContainer createState() => _PostContainer(post: post, isPersonalPost: isPersonalPost);
+  _PostContainer createState() => _PostContainer(post: post, isPersonalPost: isPersonalPost, pageIndex: pageIndex);
 }
 class _PostContainer extends State<PostContainer> {
   final PostData post;
   final bool isPersonalPost;
+  int pageIndex;
 
   _PostContainer({
     Key? key,
     required this.post,
     required this.isPersonalPost,
+    required this.pageIndex,
   });
 
   @override
   Widget build(BuildContext context) {
-    int pageIndex = 0;
     final List<ImageModel> img = post.images;
     final pageController = PageController(viewportFraction: 1);
     // post.images.add(link);
@@ -92,8 +94,9 @@ class _PostContainer extends State<PostContainer> {
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: PageView.builder(
                 controller: pageController,
-                itemCount: img.length+3,
+                itemCount: img.length,
                 itemBuilder: (context, index) {
+                  final image = img[index];
                 return GestureDetector(
                   onTap: () => _openPost(post, context,pageIndex),
                   child: Container(
@@ -102,7 +105,10 @@ class _PostContainer extends State<PostContainer> {
                       color: Colors.black,
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     ),
-                    child: CachedNetworkImage(imageUrl: link, fit: BoxFit.cover,),
+                    child: image != ''?
+                          CachedNetworkImage(
+                          imageUrl: "http://127.0.0.1:8000/files/${image.name}", fit: BoxFit.cover,)
+                          : Container(height: 10,),
                   ),
                 );
               },
@@ -569,122 +575,125 @@ class _PostStatsState extends State<PostStats> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // FutureBuilder<List<PostData>>(
-        //   future: PostsApi.getPosts(),
-        //   builder: (context, snapshot) {
-        //     final posts = snapshot.data;
-        //     switch (snapshot.connectionState) {
-        //       case ConnectionState.waiting:
-        //         return Padding(
-        //           padding: const EdgeInsets.all(6.0),
-        //           child: Row(
-        //             children: [
-        //               Container(
-        //                 padding: const EdgeInsets.all(5.0),
-        //                 decoration: BoxDecoration(
-        //                   color: Color.fromRGBO(246, 81, 82, 1.0),
-        //                   shape: BoxShape.circle,
-        //                 ),
-        //                 child: const Icon(
-        //                   Icons.favorite,
-        //                   size: 10.0,
-        //                   color: Colors.white,
-        //                 ),
-        //               ),
-        //               const SizedBox(width: 4.0),
-        //               GestureDetector(
-        //                 onTap: () => _openPost(post, context),
-        //                 child: Text(
-        //                   '${post.like.length} lượt thích',
-        //                   style: TextStyle(
-        //                     color: Colors.grey[600],
-        //                   ),
-        //                 ),
-        //               ),
-        //               Expanded(
-        //                 child: Center(
-        //                   child: AnimatedSmoothIndicator(
-        //                     count: post.images.length+3,
-        //                     activeIndex: pageIndex,
-        //                     effect: SwapEffect(
-        //                       dotHeight: 8,
-        //                       dotWidth: 8,
-        //                       type: SwapType.yRotation,
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ),
-        //               GestureDetector(
-        //                 onTap: () => _openPost(post, context),
-        //                 child: Text(
-        //                   '${post.countComments} bình luận',
-        //                   style: TextStyle(
-        //                     color: Colors.grey[600],
-        //                   ),
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         );
-        //       default:
-        //         if (snapshot.hasError) {
-        //           return Center(child: Text('Some error occurred!'));
-        //         } else {
-        //           return Padding(
-        //             padding: const EdgeInsets.all(6.0),
-        //             child: Row(
-        //               children: [
-        //                 Container(
-        //                   padding: const EdgeInsets.all(5.0),
-        //                   decoration: BoxDecoration(
-        //                     color: Color.fromRGBO(246, 81, 82, 1.0),
-        //                     shape: BoxShape.circle,
-        //                   ),
-        //                   child: const Icon(
-        //                     Icons.favorite,
-        //                     size: 10.0,
-        //                     color: Colors.white,
-        //                   ),
-        //                 ),
-        //                 const SizedBox(width: 4.0),
-        //                 GestureDetector(
-        //                   onTap: () => _openPost(post, context),
-        //                   child: Text(
-        //                     '${post.like.length} lượt thích',
-        //                     style: TextStyle(
-        //                       color: Colors.grey[600],
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 Expanded(
-        //                     child: Center(
-        //                       child: AnimatedSmoothIndicator(
-        //                         count: post.images.length+3,
-        //                         activeIndex: pageIndex,
-        //                         effect: SwapEffect(
-        //                           dotHeight: 8,
-        //                           dotWidth: 8,
-        //                           type: SwapType.yRotation,
-        //                         ),
-        //                       ),
-        //                     ),
-        //                 ),
-        //                 GestureDetector(
-        //                   onTap: () => _openPost(post, context),
-        //                   child: Text(
-        //                     '${post.countComments} bình luận',
-        //                     style: TextStyle(
-        //                       color: Colors.grey[600],
-        //                     ),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           );
-        //         }
-        //     }
-        //   },
-        // ),
+        FutureBuilder<PostData>(
+          future: PostsApi.getAPost(post.id),
+          builder: (context, snapshot) {
+            final onlyPost = snapshot.data;
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Text('');
+                //   Padding(
+                //   padding: const EdgeInsets.all(6.0),
+                //   child: Row(
+                //     children: [
+                //       Container(
+                //         padding: const EdgeInsets.all(5.0),
+                //         decoration: BoxDecoration(
+                //           color: Color.fromRGBO(246, 81, 82, 1.0),
+                //           shape: BoxShape.circle,
+                //         ),
+                //         child: const Icon(
+                //           Icons.favorite,
+                //           size: 10.0,
+                //           color: Colors.white,
+                //         ),
+                //       ),
+                //       const SizedBox(width: 4.0),
+                //       GestureDetector(
+                //         onTap: () => _openPost(onlyPost!, context, pageIndex),
+                //         child: Text(
+                //           '${onlyPost!.like.length} lượt thích',
+                //           style: TextStyle(
+                //             color: Colors.grey[600],
+                //           ),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Center(
+                //           child: AnimatedSmoothIndicator(
+                //             count: onlyPost!.images.length,
+                //             activeIndex: pageIndex,
+                //             effect: SwapEffect(
+                //               dotHeight: 8,
+                //               dotWidth: 8,
+                //               type: SwapType.yRotation,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //       GestureDetector(
+                //         onTap: () => _openPost(onlyPost!, context, pageIndex),
+                //         child: Text(
+                //           '${onlyPost!.countComments} bình luận',
+                //           style: TextStyle(
+                //             color: Colors.grey[600],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // );
+              default:
+                if (snapshot.hasError) {
+                  return Center(child: Text('Some error occurred!'));
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(246, 81, 82, 1.0),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.favorite,
+                            size: 10.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 4.0),
+                        GestureDetector(
+                          onTap: () => _openPost(onlyPost!, context, pageIndex),
+                          child: Text(
+                            '${onlyPost!.like.length} lượt thích',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: Center(
+                              child: AnimatedSmoothIndicator(
+                                count: onlyPost!.images.length,
+                                activeIndex: pageIndex,
+                                effect: ExpandingDotsEffect(
+                                  dotHeight: 8,
+                                  dotWidth: 8,
+                                  expansionFactor: 2.3,
+                                  activeDotColor: pinkColor,
+                                  dotColor: Colors.black26,
+                                ),
+                              ),
+                            ),
+                        ),
+                        GestureDetector(
+                          onTap: () => _openPost(onlyPost!, context, pageIndex),
+                          child: Text(
+                            '${onlyPost!.countComments} bình luận',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+            }
+          },
+        ),
         Padding(
           padding: const EdgeInsets.all(6.0),
           child: Row(
@@ -712,17 +721,22 @@ class _PostStatsState extends State<PostStats> {
                 ),
               ),
               Expanded(
-                child: Center(
+                child:
+                post.images.length > 0 ?
+                Center(
                   child: AnimatedSmoothIndicator(
-                    count: post.images.length+3,
+                    count: post.images.length,
                     activeIndex: pageIndex,
-                    effect: SwapEffect(
+                    effect: ExpandingDotsEffect(
                       dotHeight: 8,
                       dotWidth: 8,
-                      type: SwapType.yRotation,
+                      expansionFactor: 2.3,
+                      activeDotColor: pinkColor,
+                      dotColor: Colors.black26,
                     ),
                   ),
-                ),
+                )
+                : Container(),
               ),
               SizedBox(width: 20.0),
               GestureDetector(
