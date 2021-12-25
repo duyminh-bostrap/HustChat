@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
@@ -94,7 +95,7 @@ class _PostContainer extends State<PostContainer> {
             ),
           ),
           Container(
-            height: 300,
+            height: img.length>0? 300: 0,
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: PageView.builder(
               controller: pageController,
@@ -115,7 +116,7 @@ class _PostContainer extends State<PostContainer> {
                             fit: BoxFit.cover,
                           )
                         : Container(
-                            height: 10,
+                            height: 300,
                           ),
                   ),
                 );
@@ -221,7 +222,7 @@ class _PostHeader extends State<PostHeader> {
           icon: const Icon(Icons.more_horiz),
           onPressed: () async {
             String? userID = await storage.read(key: "id");
-
+            print(post.userID.toString());
             showModalBottomSheet(
               isScrollControlled: false,
               backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
@@ -895,17 +896,12 @@ _showProfile(PostData post, BuildContext context) async {
   post.userID.toString() == userID.toString()
       ? Navigator.of(context).push(
           MaterialPageRoute(
-              builder: (context) => MainPage(
-                    3,
-                    true,
-                  )), //ProfileView()),
-        )
+              builder: (context) => FriendsProfile(userId: post.userID, userName: post.username,) //ProfileView()),
+        ))
       : Navigator.of(context).push(
           MaterialPageRoute(
-              builder: (context) => MainPage(
-                    3,
-                    true,
-                  )),
+              builder: (context) => FriendsProfile(userId: post.userID, userName: post.username,)
+          )
         );
 }
 

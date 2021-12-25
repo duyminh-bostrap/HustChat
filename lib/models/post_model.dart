@@ -3,7 +3,7 @@
 //     final posts = postsFromJson(jsonString);
 
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:hust_chat/models/searchUsers_model.dart';
 
 import 'img_model.dart';
@@ -45,16 +45,22 @@ class PostData {
             json["images"].map((x) => ImageModel.fromJson(x))),
         // videos: json["videos"],
         like: json["like"],
-        createAt: json["createdAt"],
-        updateAt: json["updatedAt"],
+        createAt: json["createdAt"] , //timeAgo(json["createdAt"]),
+        updateAt: json["updatedAt"], //timeAgo(json["updatedAt"]),
         isLike: json["isLike"],
         countComments: json["countComments"]);
 
 
 }
 
-// timeAgo(DateTime dateTime) {
+// String timeAgo(DateTime dateTime) {
 //   final diff = DateTime.now().difference(dateTime);
 //
-//   if (diff.indays >8) return DateFormat().format(dateTime);
+//   if (diff.inDays >8) return DateFormat("dd-MM-yyyy").format(dateTime);
+//   else if((diff.inDays / 7).floor() >= 1) return 'Tuần tước';
+//   else if(diff.inDays >= 1) return '${diff.inDays} ngày trước';
+//   else if(diff.inHours >= 1) return '${diff.inHours} giớ trước';
+//   else if(diff.inMinutes >= 1) return '${diff.inMinutes} phút trước';
+//   else if(diff.inSeconds >= 1) return '${diff.inSeconds} giây trước';
+//   else return 'Vừa xong';
 // }

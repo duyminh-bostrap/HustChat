@@ -297,7 +297,7 @@ class _FriendsList extends State<FriendsList> {
 showProfile(UserData user, BuildContext context) {
   print("profile");
   Navigator.of(context).push(
-      CupertinoPageRoute(builder: (context) => FriendsProfile(user: user,))
+      CupertinoPageRoute(builder: (context) => FriendsProfile(userId: user.id, userName: user.username,))
   );
 }
 
