@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class PostView extends StatefulWidget {
   @override
   _PostView createState() => _PostView(post: post, animation: animation);
 }
+
 class _PostView extends State<PostView> {
   final PostData post;
   final Animation animation;
@@ -63,26 +66,42 @@ class _PostView extends State<PostView> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: pinkColor,
-          leading:
-            IconButton(
-              icon: Icon(Icons.chevron_left, size: 35, color: Colors.black87,),
-              onPressed: Navigator.of(context).pop,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              size: 35,
+              color: Colors.black87,
             ),
+            onPressed: Navigator.of(context).pop,
+          ),
           title: Row(
             children: [
-              ProfileAvatar(imageUrl: "http://localhost:8000/files/avatar_2.png", minSize: 20, maxSize: 22,),
-              SizedBox(width: 15,),
+              ProfileAvatar(
+                imageUrl: "http://localhost:8000/files/avatar_2.png",
+                minSize: 20,
+                maxSize: 22,
+              ),
+              SizedBox(
+                width: 15,
+              ),
               Text(
                 post.username,
-                style: TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w500,),
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.more_horiz, size: 28, color: Colors.black87,),
+              icon: const Icon(
+                Icons.more_horiz,
+                size: 28,
+                color: Colors.black87,
+              ),
               onPressed: () async {
-
                 String? userID = await storage.read(key: "id");
 
                 showModalBottomSheet(
@@ -91,16 +110,18 @@ class _PostView extends State<PostView> {
                   context: context,
                   builder: (BuildContext bcx) {
                     Size size = MediaQuery.of(context).size;
-                    return post.userID.toString() == userID.toString()?
-                    Container(
-                        margin: EdgeInsets.fromLTRB(10.0, size.height*0.5-195, 10.0, 115),
-                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Column(
-                            children: [
+                    return post.userID.toString() == userID.toString()
+                        ? Container(
+                            margin: EdgeInsets.fromLTRB(
+                                10.0, size.height * 0.5 - 195, 10.0, 115),
+                            padding:
+                                EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            child: Column(children: [
                               GestureDetector(
                                 onTap: () => print(post.userID.toString()),
                                 child: Row(
@@ -112,7 +133,8 @@ class _PostView extends State<PostView> {
                                     Container(
                                       width: 20,
                                       height: 50,
-                                      child: Icon(Icons.edit, size: 30,color: Colors.black87),
+                                      child: Icon(Icons.edit,
+                                          size: 30, color: Colors.black87),
                                     ),
                                     SizedBox(
                                       width: 25,
@@ -127,7 +149,13 @@ class _PostView extends State<PostView> {
                                   ],
                                 ),
                               ),
-                              Divider(height: size.height*0.01, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
+                              Divider(
+                                height: size.height * 0.01,
+                                color: Colors.black54,
+                                thickness: 1.2,
+                                indent: 20,
+                                endIndent: 20,
+                              ),
                               GestureDetector(
                                 onTap: () => RemovePost(),
                                 child: Row(
@@ -139,7 +167,8 @@ class _PostView extends State<PostView> {
                                     Container(
                                       width: 20,
                                       height: 50,
-                                      child: Icon(Icons.delete, size: 30,color: Colors.black87),
+                                      child: Icon(Icons.delete,
+                                          size: 30, color: Colors.black87),
                                     ),
                                     SizedBox(
                                       width: 25,
@@ -154,22 +183,25 @@ class _PostView extends State<PostView> {
                                   ],
                                 ),
                               ),
-                            ]
-                        )
-                    )
+                            ]))
                         : Container(
-                        margin: EdgeInsets.fromLTRB(10.0, size.height*0.255, 10.0, size.height*0.145),
-                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Column(
-                            children: [
+                            margin: EdgeInsets.fromLTRB(10.0,
+                                size.height * 0.255, 10.0, size.height * 0.145),
+                            padding:
+                                EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            child: Column(children: [
                               GestureDetector(
                                 onTap: () async {
-                                  String? userID = await storage.read(key: "id");
-                                  print(post.userID.toString() + "___" + userID.toString());
+                                  String? userID =
+                                      await storage.read(key: "id");
+                                  print(post.userID.toString() +
+                                      "___" +
+                                      userID.toString());
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -180,7 +212,8 @@ class _PostView extends State<PostView> {
                                     Container(
                                       width: 20,
                                       height: 50,
-                                      child: Icon(Icons.report_gmailerrorred, size: 30,color: Colors.black87),
+                                      child: Icon(Icons.report_gmailerrorred,
+                                          size: 30, color: Colors.black87),
                                     ),
                                     SizedBox(
                                       width: 25,
@@ -195,7 +228,13 @@ class _PostView extends State<PostView> {
                                   ],
                                 ),
                               ),
-                              Divider(height: size.height*0.01, color: Colors.black54, thickness: 1.2, indent: 20, endIndent: 20,),
+                              Divider(
+                                height: size.height * 0.01,
+                                color: Colors.black54,
+                                thickness: 1.2,
+                                indent: 20,
+                                endIndent: 20,
+                              ),
                               GestureDetector(
                                 onTap: () => BlockPost(),
                                 child: Row(
@@ -207,7 +246,8 @@ class _PostView extends State<PostView> {
                                     Container(
                                       width: 20,
                                       height: 50,
-                                      child: Icon(Icons.cancel_presentation, size: 30,color: Colors.black87),
+                                      child: Icon(Icons.cancel_presentation,
+                                          size: 30, color: Colors.black87),
                                     ),
                                     SizedBox(
                                       width: 25,
@@ -222,269 +262,308 @@ class _PostView extends State<PostView> {
                                   ],
                                 ),
                               ),
-                            ]
-                        )
-                    );
+                            ]));
                   },
                 );
               },
             ),
-            SizedBox(width: 5,)
+            SizedBox(
+              width: 5,
+            )
           ],
         ),
-        body:
-        Stack(
+        body: Stack(
           children: [
-            ListView(
-              shrinkWrap: true,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      // width: size.width,
-                      // height: size.width*4.5/3,
-                      color: Color.fromRGBO(0, 0, 0, 0.05),
-                      child: link != null ?
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 0.0),
-                        child: HeroWidget(
-                          tag: HeroTag.image(link),
-                          child: Container(
-                            height: 300,
-                            child: PageView.builder(
-                              controller: pageController,
-                              itemCount: img.length+3,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                  ),
-                                  child: CachedNetworkImage(imageUrl: link, fit: BoxFit.cover,),
-                                );
-                              },
-                              onPageChanged: (index) => setState(() {pageIndex = index; print(index);}),
+            ListView(shrinkWrap: true, children: [
+              Column(
+                children: [
+                  Container(
+                    // width: size.width,
+                    // height: size.width*4.5/3,
+                    color: Color.fromRGBO(0, 0, 0, 0.05),
+                    child: link != null
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 0.0),
+                            child: HeroWidget(
+                              tag: HeroTag.image(link),
+                              child: Container(
+                                height: 300,
+                                child: PageView.builder(
+                                  controller: pageController,
+                                  itemCount: img.length + 3,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0)),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: link,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                  onPageChanged: (index) => setState(() {
+                                    pageIndex = index;
+                                    print(index);
+                                  }),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                          : const SizedBox.shrink(),
-                    ),
-                    SizedBox(height: 5,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 15,),
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              post.isLike = post.isLike? false:true;
-                            });
-                          },
-                          child: post.isLike ?
-                          Icon(
-                            Icons.favorite,
-                            color: pinkColor,
-                            size: 25.0,
-                          ): Icon(
-                            Icons.favorite_border,
-                            color: Colors.grey[600],
-                            size: 25.0,
-                          ),
-                        ),
-                        SizedBox(width: 10.0),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: InkWell(
-                              onTap: () => {}, // _seeComment(post, context),
-                              child: Icon(
-                                MdiIcons.commentOutline,
-                                color: Colors.grey[600],
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            post.isLike = post.isLike ? false : true;
+                          });
+                        },
+                        child: post.isLike
+                            ? Icon(
+                                Icons.favorite,
+                                color: pinkColor,
                                 size: 25.0,
                               )
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: AnimatedSmoothIndicator(
-                              count: img.length+3,
-                              activeIndex: pageIndex,
-                              effect: SwapEffect(
-                                dotHeight: 8,
-                                dotWidth: 8,
-                                type: SwapType.yRotation,
+                            : Icon(
+                                Icons.favorite_border,
+                                color: Colors.grey[600],
+                                size: 25.0,
                               ),
+                      ),
+                      SizedBox(width: 10.0),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
+                            onTap: () => {}, // _seeComment(post, context),
+                            child: Icon(
+                              MdiIcons.commentOutline,
+                              color: Colors.grey[600],
+                              size: 25.0,
+                            )),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: AnimatedSmoothIndicator(
+                            count: img.length + 3,
+                            activeIndex: pageIndex,
+                            effect: SwapEffect(
+                              dotHeight: 8,
+                              dotWidth: 8,
+                              type: SwapType.yRotation,
                             ),
                           ),
                         ),
-                        SizedBox(width: 25,),
-                        InkWell(
-                            onTap: () => _whoShare(post, context),
-                            child: Icon(
-                              Icons.bookmark_border,
-                              color: Colors.grey[600],
-                              size: 28.0,
-                            )
-                        ),
-                        SizedBox(width: 15,),
-                      ],
-                    ),
-                    Container(
-                        height: 30,
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                post.username,
-                                style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500,),
-                              ),
-                              SizedBox(width: 10,),
-                              Text(post.createAt.toString(), style: TextStyle(fontSize: 14),),
-                            ]
-                        )
-                    ),
-                    Padding(
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      InkWell(
+                          onTap: () => _whoShare(post, context),
+                          child: Icon(
+                            Icons.bookmark_border,
+                            color: Colors.grey[600],
+                            size: 28.0,
+                          )),
+                      SizedBox(
+                        width: 15,
+                      ),
+                    ],
+                  ),
+                  Container(
+                      height: 30,
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: ExpandableText(
-                          post.content,
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          expandText: 'Xem thêm',
-                          collapseText: 'Rút gọn',
-                          maxLines: 3,
-                          linkColor: Colors.black54,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              post.username,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              post.createAt.toString(),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ])),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: ExpandableText(
+                        post.content,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
                         ),
+                        expandText: 'Xem thêm',
+                        collapseText: 'Rút gọn',
+                        maxLines: 3,
+                        linkColor: Colors.black54,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => _whoLike(post, context),
-                      child: Container(
-                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                          child: Row(
-                              children: [
-                                Text('${post.like.length}',
-                                  style: TextStyle(color: Colors.black87,fontSize: 15, fontWeight: FontWeight.w500),
-                                ),
-                                SizedBox(width: 5,),
-                                Text('lượt thích', style: TextStyle(fontSize: 15),),
-                              ]
-                          )
-                      ),
-                    ),
-
-                    FutureBuilder<List<CommentData>>(
-                        future: PostsApi.getPostComments(post),
-                        builder: (context, snapshot) {
-                        final comments = snapshot.data;
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
+                  ),
+                  GestureDetector(
+                    onTap: () => _whoLike(post, context),
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                        child: Row(children: [
+                          Text(
+                            '${post.like.length}',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'lượt thích',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ])),
+                  ),
+                  FutureBuilder<List<CommentData>>(
+                    future: PostsApi.getPostComments(post),
+                    builder: (context, snapshot) {
+                      final comments = snapshot.data;
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
                           return Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    viewAll = viewAll? false : true;
+                                    viewAll = viewAll ? false : true;
                                   });
                                 },
                                 child: Container(
                                     padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
                                     child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            comments!.length != 0 ?
-                                            viewAll? 'Rút gọn'
-                                                :'Xem tất cả ${comments.length} bình luận'
+                                            comments!.length != 0
+                                                ? viewAll
+                                                    ? 'Rút gọn'
+                                                    : 'Xem tất cả ${comments.length} bình luận'
                                                 : 'Chưa có bình luận',
-                                            style: TextStyle(fontSize: 15, color: Colors.black54),
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black54),
                                           ),
-                                        ]
-                                    )
-                                ),
+                                        ])),
                               ),
-                              comments.length != 0 ?
-                              viewAll?
-                              ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: comments.length,
-                                  itemBuilder: (context, index) {
-                                    final comment = comments[comments.length-1-index];
-                                    return CommentsWidget(comment: comment);
-                                  }
-                              )
-                                  : CommentsWidget(comment: comments[comments.length-1])
-                                  : SizedBox(height: 5,),
+                              comments.length != 0
+                                  ? viewAll
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: BouncingScrollPhysics(),
+                                          itemCount: comments.length,
+                                          itemBuilder: (context, index) {
+                                            final comment = comments[
+                                                comments.length - 1 - index];
+                                            return CommentsWidget(
+                                                comment: comment);
+                                          })
+                                      : CommentsWidget(
+                                          comment:
+                                              comments[comments.length - 1])
+                                  : SizedBox(
+                                      height: 5,
+                                    ),
                             ],
                           );
-                          default:
-                            if (snapshot.hasError) {
+                        default:
+                          if (snapshot.hasError) {
                             return Center(child: Text('Some error occurred!'));
-                            } else {
-                            return
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        viewAll = viewAll? false : true;
-                                      });
-                                    },
-                                    child: Container(
-                                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                                        child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                comments!.length != 0 ?
-                                                viewAll? 'Rút gọn'
-                                                    :'Xem tất cả ${comments.length} bình luận'
-                                                    : 'Chưa có bình luận',
-                                                style: TextStyle(fontSize: 15, color: Colors.black54),
-                                              ),
-                                            ]
-                                        )
-                                    ),
-                                  ),
-                                  comments.length != 0 ?
-                                    viewAll?
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount: comments.length,
-                                      itemBuilder: (context, index) {
-                                      final comment = comments[comments.length-1-index];
-                                      return CommentsWidget(comment: comment);
-                                      }
-                                    )
-                                        : CommentsWidget(comment: comments[comments.length-1])
-                                  : SizedBox(height: 5,),
-                                ],
-                              );
-                            }
+                          } else {
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      viewAll = viewAll ? false : true;
+                                    });
+                                  },
+                                  child: Container(
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              comments!.length != 0
+                                                  ? viewAll
+                                                      ? 'Rút gọn'
+                                                      : 'Xem tất cả ${comments.length} bình luận'
+                                                  : 'Chưa có bình luận',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black54),
+                                            ),
+                                          ])),
+                                ),
+                                comments.length != 0
+                                    ? viewAll
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: BouncingScrollPhysics(),
+                                            itemCount: comments.length,
+                                            itemBuilder: (context, index) {
+                                              final comment = comments[
+                                                  comments.length - 1 - index];
+                                              return CommentsWidget(
+                                                  comment: comment);
+                                            })
+                                        : CommentsWidget(
+                                            comment:
+                                                comments[comments.length - 1])
+                                    : SizedBox(
+                                        height: 5,
+                                      ),
+                              ],
+                            );
                           }
-                        },
-                      ),
-                    SizedBox(height: 55,)
-                  ],
-                ),
-              ]
-            ),
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 55,
+                  )
+                ],
+              ),
+            ]),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                     width: size.width,
-                    height:55,
+                    height: 55,
                     padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                     alignment: Alignment.topCenter,
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(27, 27, 27, 1.0),
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                     ),
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
@@ -495,8 +574,10 @@ class _PostView extends State<PostView> {
                       ),
                       child: Row(
                         children: [
-                          ProfileAvatar(imageUrl: link,maxSize: 20),
-                          SizedBox(width: 10,),
+                          ProfileAvatar(imageUrl: link, maxSize: 20),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: TextFormField(
                               controller: writeComment,
@@ -511,26 +592,23 @@ class _PostView extends State<PostView> {
                                       fontWeight: FontWeight.w300),
                                   border: InputBorder.none
 
-                                // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
-                              ),
+                                  // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                                  ),
                             ),
                           ),
                           IconButton(
                             icon: Icon(MdiIcons.send),
                             onPressed: () {
                               PostsApi.commentPost(post, writeComment);
-                              Future.delayed(Duration(milliseconds: 1000),(){
+                              Future.delayed(Duration(milliseconds: 1000), () {
                                 writeComment.text = '';
                                 FocusScope.of(context).unfocus();
                               });
-
                             },
                           ),
                         ],
                       ),
-                    )
-                )
-            )
+                    )))
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -542,6 +620,7 @@ class _PostView extends State<PostView> {
       ),
     );
   }
+
   Future RemovePost() async {
     Size size = MediaQuery.of(context).size;
     Navigator.pop(context);
@@ -559,7 +638,7 @@ class _PostView extends State<PostView> {
           child: Column(
             children: [
               Container(
-                width: size.width*0.6,
+                width: size.width * 0.6,
                 height: 50,
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -576,10 +655,21 @@ class _PostView extends State<PostView> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      String? token = await storage.read(key: "token");
+                      if (token != null) {
+                        String userID = post.id;
+                        String url = "posts/delete/" + userID;
+                        var response =
+                            await networkHandler.getWithAuth(url, token);
+                        Map output = json.decode(response.body);
+                        if (response.statusCode < 300) {
+                          Navigator.pop(context);
+                        }
+                      }
                     },
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -592,18 +682,17 @@ class _PostView extends State<PostView> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -618,7 +707,6 @@ class _PostView extends State<PostView> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
@@ -631,6 +719,7 @@ class _PostView extends State<PostView> {
       ),
     );
   }
+
   Future BlockPost() async {
     Size size = MediaQuery.of(context).size;
     Navigator.pop(context);
@@ -648,7 +737,7 @@ class _PostView extends State<PostView> {
           child: Column(
             children: [
               Container(
-                width: size.width*0.6,
+                width: size.width * 0.6,
                 height: 50,
                 alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -664,11 +753,10 @@ class _PostView extends State<PostView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                    },
+                    onTap: () async {},
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(10, 5, 4, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -681,18 +769,17 @@ class _PostView extends State<PostView> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,
-                      width: size.width*0.3,
+                      width: size.width * 0.3,
                       margin: EdgeInsets.fromLTRB(4, 5, 10, 5),
                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                       alignment: Alignment.center,
@@ -707,7 +794,6 @@ class _PostView extends State<PostView> {
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
-
                         ),
                       ),
                     ),
@@ -726,5 +812,4 @@ _whoLike(PostData post, BuildContext context) {
   print("${post.like.length} người thích bài viết");
 }
 
-_whoShare(PostData post, BuildContext context) {
-}
+_whoShare(PostData post, BuildContext context) {}

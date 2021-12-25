@@ -488,11 +488,11 @@ _createPost(
     "videos": []
   };
 
-  // var response = await networkHandler.postAuth1("/posts/create", data, token);
-  // if (response.statusCode < 300) {
-  //   print("success");
-  //   Navigator.pop(context);
-  // } else {
-  //   print("failed");
-  // }
+  var response = await networkHandler.postAuth1("/posts/create", data, token);
+  if (response.statusCode < 300) {
+    print("success");
+    Navigator.pop(context);
+  } else {
+    print("failed");
+  }
 }
