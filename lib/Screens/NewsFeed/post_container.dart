@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -15,7 +16,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:expandable_text/expandable_text.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
+String link = dotenv.env['link'] ?? "";
+String host = dotenv.env['host'] ?? "";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -32,8 +34,10 @@ class PostContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PostContainer createState() => _PostContainer(post: post, isPersonalPost: isPersonalPost, pageIndex: pageIndex);
+  _PostContainer createState() => _PostContainer(
+      post: post, isPersonalPost: isPersonalPost, pageIndex: pageIndex);
 }
+
 class _PostContainer extends State<PostContainer> {
   final PostData post;
   final bool isPersonalPost;
@@ -69,7 +73,7 @@ class _PostContainer extends State<PostContainer> {
                 ),
                 const SizedBox(height: 5.0),
                 GestureDetector(
-                  onTap: () => _openPost(post, context,pageIndex),
+                  onTap: () => _openPost(post, context, pageIndex),
                   child: ExpandableText(
                     post.content.runtimeType == String ? post.content : '',
                     style: TextStyle(
@@ -93,26 +97,33 @@ class _PostContainer extends State<PostContainer> {
             height: 300,
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: PageView.builder(
-                controller: pageController,
-                itemCount: img.length,
-                itemBuilder: (context, index) {
-                  final image = img[index];
+              controller: pageController,
+              itemCount: img.length,
+              itemBuilder: (context, index) {
+                final image = img[index];
                 return GestureDetector(
-                  onTap: () => _openPost(post, context,pageIndex),
+                  onTap: () => _openPost(post, context, pageIndex),
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     ),
-                    child: image != ''?
-                          CachedNetworkImage(
-                          imageUrl: "http://127.0.0.1:8000/files/${image.name}", fit: BoxFit.cover,)
-                          : Container(height: 10,),
+                    child: image != ''
+                        ? CachedNetworkImage(
+                            imageUrl: "$host${image.name}",
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            height: 10,
+                          ),
                   ),
                 );
               },
-                onPageChanged: (index) => setState(() {pageIndex = index; print(index);}),
+              onPageChanged: (index) => setState(() {
+                pageIndex = index;
+                print(index);
+              }),
             ),
           ),
           // GestureDetector(
@@ -558,7 +569,8 @@ class PostStats extends StatefulWidget {
     required this.pageIndex,
   }) : super(key: key);
   @override
-  _PostStatsState createState() => _PostStatsState(post: post, pageIndex: pageIndex);
+  _PostStatsState createState() =>
+      _PostStatsState(post: post, pageIndex: pageIndex);
 }
 
 class _PostStatsState extends State<PostStats> {
@@ -579,290 +591,297 @@ class _PostStatsState extends State<PostStats> {
         final onlyPost = snapshot.data;
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return
-              onlyPost != null?
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(246, 81, 82, 1.0),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.favorite,
-                            size: 10.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(width: 4.0),
-                        GestureDetector(
-                          onTap: () => _openPost(onlyPost, context, pageIndex),
-                          child: Text(
-                            '${onlyPost.like.length} lượt thích',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child:
-                          onlyPost.images.length > 1 ?
-                          Center(
-                            child: AnimatedSmoothIndicator(
-                              count: onlyPost.images.length,
-                              activeIndex: pageIndex,
-                              effect: ExpandingDotsEffect(
-                                dotHeight: 8,
-                                dotWidth: 8,
-                                expansionFactor: 2.3,
-                                activeDotColor: pinkColor,
-                                dotColor: Colors.black26,
+            return onlyPost != null
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                color: Color.fromRGBO(246, 81, 82, 1.0),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.favorite,
+                                size: 10.0,
+                                color: Colors.white,
                               ),
                             ),
-                          )
-                              : Container(),
-                        ),
-                        SizedBox(width: 20.0),
-                        GestureDetector(
-                          onTap: () => _openPost(onlyPost, context, pageIndex),
-                          child: Text(
-                            '${onlyPost.countComments} bình luận',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              onlyPost.isLike = onlyPost.isLike ? false : true;
-                              PostsApi.likePost(post);
-                            });
-                          },
-                          child: Container(
-                            height: 25.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                onlyPost.isLike
-                                    ? Icon(
-                                  Icons.favorite,
-                                  color: pinkColor,
-                                  size: 20.0,
-                                )
-                                    : Icon(
-                                  Icons.favorite_border,
+                            SizedBox(width: 4.0),
+                            GestureDetector(
+                              onTap: () =>
+                                  _openPost(onlyPost, context, pageIndex),
+                              child: Text(
+                                '${onlyPost.like.length} lượt thích',
+                                style: TextStyle(
                                   color: Colors.grey[600],
-                                  size: 20.0,
                                 ),
-                                const SizedBox(width: 4.0),
-                                Text('Thích'),
-                              ],
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              child: onlyPost.images.length > 1
+                                  ? Center(
+                                      child: AnimatedSmoothIndicator(
+                                        count: onlyPost.images.length,
+                                        activeIndex: pageIndex,
+                                        effect: ExpandingDotsEffect(
+                                          dotHeight: 8,
+                                          dotWidth: 8,
+                                          expansionFactor: 2.3,
+                                          activeDotColor: pinkColor,
+                                          dotColor: Colors.black26,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ),
+                            SizedBox(width: 20.0),
+                            GestureDetector(
+                              onTap: () =>
+                                  _openPost(onlyPost, context, pageIndex),
+                              child: Text(
+                                '${onlyPost.countComments} bình luận',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => _openPost(post, context,pageIndex),
-                          child: Container(
-                            height: 25.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  MdiIcons.commentOutline,
-                                  color: Colors.grey[600],
-                                  size: 20.0,
-                                ),
-                                const SizedBox(width: 4.0),
-                                Text('Bình luận'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            height: 25.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.bookmark_border,
-                                  color: Colors.grey[600],
-                                  size: 25.0,
-                                ),
-                                const SizedBox(width: 4.0),
-                                Text('Lưu trữ'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-              : Container(height: 10,);
-          default:
-            if (snapshot.hasError) {
-              return Center(child: Text('Some error occurred!'));
-            } else {
-              return
-                onlyPost != null?
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Row(
+                      Divider(),
+                      Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(246, 81, 82, 1.0),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.favorite,
-                              size: 10.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(width: 4.0),
-                          GestureDetector(
-                            onTap: () => _openPost(onlyPost, context, pageIndex),
-                            child: Text(
-                              '${onlyPost.like.length} lượt thích',
-                              style: TextStyle(
-                                color: Colors.grey[600],
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  onlyPost.isLike =
+                                      onlyPost.isLike ? false : true;
+                                  PostsApi.likePost(post);
+                                });
+                              },
+                              child: Container(
+                                height: 25.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    onlyPost.isLike
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: pinkColor,
+                                            size: 20.0,
+                                          )
+                                        : Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.grey[600],
+                                            size: 20.0,
+                                          ),
+                                    const SizedBox(width: 4.0),
+                                    Text('Thích'),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           Expanded(
-                            child:
-                            onlyPost.images.length > 1 ?
-                            Center(
-                              child: AnimatedSmoothIndicator(
-                                count: onlyPost.images.length,
-                                activeIndex: pageIndex,
-                                effect: ExpandingDotsEffect(
-                                  dotHeight: 8,
-                                  dotWidth: 8,
-                                  expansionFactor: 2.3,
-                                  activeDotColor: pinkColor,
-                                  dotColor: Colors.black26,
+                            child: InkWell(
+                              onTap: () => _openPost(post, context, pageIndex),
+                              child: Container(
+                                height: 25.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      MdiIcons.commentOutline,
+                                      color: Colors.grey[600],
+                                      size: 20.0,
+                                    ),
+                                    const SizedBox(width: 4.0),
+                                    Text('Bình luận'),
+                                  ],
                                 ),
                               ),
-                            )
-                                : Container(),
+                            ),
                           ),
-                          SizedBox(width: 20.0),
-                          GestureDetector(
-                            onTap: () => _openPost(onlyPost, context, pageIndex),
-                            child: Text(
-                              '${onlyPost.countComments} bình luận',
-                              style: TextStyle(
-                                color: Colors.grey[600],
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {},
+                              child: Container(
+                                height: 25.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.bookmark_border,
+                                      color: Colors.grey[600],
+                                      size: 25.0,
+                                    ),
+                                    const SizedBox(width: 4.0),
+                                    Text('Lưu trữ'),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Divider(),
-                    Row(
+                    ],
+                  )
+                : Container(
+                    height: 10,
+                  );
+          default:
+            if (snapshot.hasError) {
+              return Center(child: Text('Some error occurred!'));
+            } else {
+              return onlyPost != null
+                  ? Column(
                       children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                onlyPost.isLike = onlyPost.isLike ? false : true;
-                                PostsApi.likePost(post);
-                              });
-                            },
-                            child: Container(
-                              height: 25.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  onlyPost.isLike
-                                      ? Icon(
-                                    Icons.favorite,
-                                    color: pinkColor,
-                                    size: 20.0,
-                                  )
-                                      : Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.grey[600],
-                                    size: 20.0,
-                                  ),
-                                  const SizedBox(width: 4.0),
-                                  Text('Thích'),
-                                ],
+                        Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(246, 81, 82, 1.0),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.favorite,
+                                  size: 10.0,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
+                              SizedBox(width: 4.0),
+                              GestureDetector(
+                                onTap: () =>
+                                    _openPost(onlyPost, context, pageIndex),
+                                child: Text(
+                                  '${onlyPost.like.length} lượt thích',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: onlyPost.images.length > 1
+                                    ? Center(
+                                        child: AnimatedSmoothIndicator(
+                                          count: onlyPost.images.length,
+                                          activeIndex: pageIndex,
+                                          effect: ExpandingDotsEffect(
+                                            dotHeight: 8,
+                                            dotWidth: 8,
+                                            expansionFactor: 2.3,
+                                            activeDotColor: pinkColor,
+                                            dotColor: Colors.black26,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                              SizedBox(width: 20.0),
+                              GestureDetector(
+                                onTap: () =>
+                                    _openPost(onlyPost, context, pageIndex),
+                                child: Text(
+                                  '${onlyPost.countComments} bình luận',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => _openPost(post, context,pageIndex),
-                            child: Container(
-                              height: 25.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    MdiIcons.commentOutline,
-                                    color: Colors.grey[600],
-                                    size: 20.0,
+                        Divider(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    onlyPost.isLike =
+                                        onlyPost.isLike ? false : true;
+                                    PostsApi.likePost(post);
+                                  });
+                                },
+                                child: Container(
+                                  height: 25.0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      onlyPost.isLike
+                                          ? Icon(
+                                              Icons.favorite,
+                                              color: pinkColor,
+                                              size: 20.0,
+                                            )
+                                          : Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.grey[600],
+                                              size: 20.0,
+                                            ),
+                                      const SizedBox(width: 4.0),
+                                      Text('Thích'),
+                                    ],
                                   ),
-                                  const SizedBox(width: 4.0),
-                                  Text('Bình luận'),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              height: 25.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.bookmark_border,
-                                    color: Colors.grey[600],
-                                    size: 25.0,
+                            Expanded(
+                              child: InkWell(
+                                onTap: () =>
+                                    _openPost(post, context, pageIndex),
+                                child: Container(
+                                  height: 25.0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        MdiIcons.commentOutline,
+                                        color: Colors.grey[600],
+                                        size: 20.0,
+                                      ),
+                                      const SizedBox(width: 4.0),
+                                      Text('Bình luận'),
+                                    ],
                                   ),
-                                  const SizedBox(width: 4.0),
-                                  Text('Lưu trữ'),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  height: 25.0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.bookmark_border,
+                                        color: Colors.grey[600],
+                                        size: 25.0,
+                                      ),
+                                      const SizedBox(width: 4.0),
+                                      Text('Lưu trữ'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                )
-                : Container(height: 10,);
+                    )
+                  : Container(
+                      height: 10,
+                    );
             }
         }
       },

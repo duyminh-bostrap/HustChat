@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
@@ -13,7 +14,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import '../../get_data/get_info.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
+String link =dotenv.env['link']??"";
+String link2 =dotenv.env['link2']??"";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -70,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 230,
                                 child: GestureDetector(
                                   onTap: () {print('coverimage');}, //_showProfile(post, context),
-                                  child: "http://localhost:8000/files/defaul_cover_image.jpg" != null
-                                      ? CachedNetworkImage(imageUrl: "http://localhost:8000/files/defaul_cover_image.jpg", fit: BoxFit.fitWidth,)
+                                  child: link2 != null
+                                      ? CachedNetworkImage(imageUrl: link2, fit: BoxFit.fitWidth,)
                                       : const SizedBox.shrink(),
                                 ),
                               ),
@@ -315,13 +317,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
+                                                Image.network(link2),
                                               )
                                           )
                                         ],),
@@ -329,19 +331,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
+                                                Image.network(link2),
                                               )
                                           ),
                                           Expanded(
                                               child: Card(
                                                 child:
-                                                Image.network("http://localhost:8000/files/defaul_cover_image.jpg"),
+                                                Image.network(link2),
                                               )
                                           )
                                         ],)

@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkHandler {
-  String baseurl = 'http://127.0.0.1:8000/api/v1';
+  String baseurl = dotenv.env['baseurl'] ?? "";
 
   Future<http.Response> get(String url) async {
     url = formater(url);
@@ -47,8 +48,9 @@ class NetworkHandler {
     return response;
     // print(response)
   }
+
   Future<http.Response> postAuth1(
-      String url, Map<dynamic,dynamic> body, String token) async {
+      String url, Map<dynamic, dynamic> body, String token) async {
     url = formater(url);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-type": "application/json", "authorization": token},

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/Comment/comments_container.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
@@ -20,7 +21,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:expandable_text/expandable_text.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
+String link = dotenv.env['link'] ?? "";
+String link2 = dotenv.env['link2'] ?? "";
+String host = dotenv.env['host'] ?? "";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -76,7 +79,7 @@ class _PostView extends State<PostView> {
           title: Row(
             children: [
               ProfileAvatar(
-                imageUrl: "http://localhost:8000/files/avatar_2.png",
+                imageUrl: link,
                 minSize: 20,
                 maxSize: 22,
               ),
@@ -271,55 +274,63 @@ class _PostView extends State<PostView> {
             )
           ],
         ),
-        body: Stack(
-          children: [
-            ListView(shrinkWrap: true, children: [
-              Column(
-                children: [
-                  Container(
-                    // width: size.width,
-                    // height: size.width*4.5/3,
-                    color: Color.fromRGBO(0, 0, 0, 0.05),
-                    child: link != null
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 0.0),
-                            child: HeroWidget(
-                              tag: HeroTag.image(link),
-                              child: Container(
-                                height: 300,
-                                child: PageView.builder(
-                                  controller: pageController,
-                                  itemCount: img.length,
-                                  itemBuilder: (context, index) {
-                                    final image = img[index];
-                                    return Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                        ),
-                                        child: image != ''?
-                                        CachedNetworkImage(
-                                          imageUrl: "http://127.0.0.1:8000/files/${image.name}", fit: BoxFit.cover,)
-                                            : Container(height: 10,),
-                                    );
-                                  },
-                                  onPageChanged: (index) => setState(() {pageIndex = index; print(index);}),
-                                ),
+        body: Stack(children: [
+          ListView(
+            shrinkWrap: true,
+            children: [
+              Column(children: [
+                Container(
+                  // width: size.width,
+                  // height: size.width*4.5/3,
+                  color: Color.fromRGBO(0, 0, 0, 0.05),
+                  child: link != null
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0.0),
+                          child: HeroWidget(
+                            tag: HeroTag.image(link),
+                            child: Container(
+                              height: 300,
+                              child: PageView.builder(
+                                controller: pageController,
+                                itemCount: img.length,
+                                itemBuilder: (context, index) {
+                                  final image = img[index];
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                    ),
+                                    child: image != ''
+                                        ? CachedNetworkImage(
+                                            imageUrl: "$host${image.name}",
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(
+                                            height: 10,
+                                          ),
+                                  );
+                                },
+                                onPageChanged: (index) => setState(() {
+                                  pageIndex = index;
+                                  print(index);
+                                }),
                               ),
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  FutureBuilder<PostData>(
-                    future: PostsApi.getAPost(post.id),
-                    builder: (context, snapshot) {
-                      final onlyPost = snapshot.data;
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                FutureBuilder<PostData>(
+                  future: PostsApi.getAPost(post.id),
+                  builder: (context, snapshot) {
+                    final onlyPost = snapshot.data;
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return
                             // onlyPost != null?
                             // Column(
                             //   children: [
@@ -440,160 +451,227 @@ class _PostView extends State<PostView> {
                             //   ],
                             // )
                             //     :
-                            Container(height: 10,);
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(child: Text('Some error occurred!'));
-                          } else {
-                            return
-                              onlyPost != null?
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      GestureDetector(
-                                          onTap: () async {
-                                            print("_______________________");
-                                            setState(() {
-                                              onlyPost.isLike = onlyPost.isLike ? false : true;
-                                              PostsApi.likePost(onlyPost);
-                                              print("_______________________");
-                                            });
-                                          },
-                                          child: onlyPost.isLike
-                                              ? Icon(
-                                            Icons.favorite,
-                                            color: pinkColor,
-                                            size: 25.0,
-                                          )
-                                              :Icon(
-                                              Icons.favorite_outline,
-                                              color: Colors.grey[600],
-                                              size: 25.0)
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: InkWell(
-                                            onTap: () => {}, // _seeComment(post, context),
-                                            child: Icon(
-                                              MdiIcons.commentOutline,
-                                              color: Colors.grey[600],
-                                              size: 25.0,
-                                            )),
-                                      ),
-                                      Expanded(
-                                        child: Center(
-                                          child: AnimatedSmoothIndicator(
-                                            count: img.length,
-                                            activeIndex: pageIndex,
-                                            effect: ExpandingDotsEffect(
-                                              dotHeight: 8,
-                                              dotWidth: 8,
-                                              expansionFactor: 2.3,
-                                              activeDotColor: pinkColor,
-                                              dotColor: Colors.black26,
-                                            ),
-                                          ),
+                            Container(
+                          height: 10,
+                        );
+                      default:
+                        if (snapshot.hasError) {
+                          return Center(child: Text('Some error occurred!'));
+                        } else {
+                          return onlyPost != null
+                              ? Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 15,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 25,
-                                      ),
-                                      InkWell(
-                                          onTap: () => _whoShare(post, context),
-                                          child: Icon(
-                                            Icons.bookmark_border,
-                                            color: Colors.grey[600],
-                                            size: 28.0,
-                                          )),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                      height: 30,
-                                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                      child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              post.username,
-                                              style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
+                                        GestureDetector(
+                                            onTap: () async {
+                                              print("_______________________");
+                                              setState(() {
+                                                onlyPost.isLike =
+                                                    onlyPost.isLike
+                                                        ? false
+                                                        : true;
+                                                PostsApi.likePost(onlyPost);
+                                                print(
+                                                    "_______________________");
+                                              });
+                                            },
+                                            child: onlyPost.isLike
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: pinkColor,
+                                                    size: 25.0,
+                                                  )
+                                                : Icon(Icons.favorite_outline,
+                                                    color: Colors.grey[600],
+                                                    size: 25.0)),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: InkWell(
+                                              onTap: () =>
+                                                  {}, // _seeComment(post, context),
+                                              child: Icon(
+                                                MdiIcons.commentOutline,
+                                                color: Colors.grey[600],
+                                                size: 25.0,
+                                              )),
+                                        ),
+                                        Expanded(
+                                          child: Center(
+                                            child: AnimatedSmoothIndicator(
+                                              count: img.length,
+                                              activeIndex: pageIndex,
+                                              effect: ExpandingDotsEffect(
+                                                dotHeight: 8,
+                                                dotWidth: 8,
+                                                expansionFactor: 2.3,
+                                                activeDotColor: pinkColor,
+                                                dotColor: Colors.black26,
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              post.createAt.toString(),
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                          ])),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: ExpandableText(
-                                        post.content,
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                        expandText: 'Xem thêm',
-                                        collapseText: 'Rút gọn',
-                                        maxLines: 3,
-                                        linkColor: Colors.black54,
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        InkWell(
+                                            onTap: () =>
+                                                _whoShare(post, context),
+                                            child: Icon(
+                                              Icons.bookmark_border,
+                                              color: Colors.grey[600],
+                                              size: 28.0,
+                                            )),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                        height: 30,
+                                        padding:
+                                            EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                post.username,
+                                                style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                post.createAt.toString(),
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                            ])),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ExpandableText(
+                                          post.content,
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          expandText: 'Xem thêm',
+                                          collapseText: 'Rút gọn',
+                                          maxLines: 3,
+                                          linkColor: Colors.black54,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      onTap: () => _whoLike(onlyPost, context),
+                                      child: Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                          child: Row(children: [
+                                            Text(
+                                              '${onlyPost.like.length}',
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'lượt thích',
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                          ])),
+                                    ),
+                                  ],
+                                )
+                              : Container(
+                                  height: 10,
+                                );
+                        }
+                    }
+                  },
+                ),
+                FutureBuilder<List<CommentData>>(
+                  future: PostsApi.getPostComments(post),
+                  builder: (context, snapshot) {
+                    final comments = snapshot.data;
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return comments != null
+                            ? Column(
+                                children: [
                                   GestureDetector(
-                                    onTap: () => _whoLike(onlyPost, context),
+                                    onTap: () {
+                                      setState(() {
+                                        viewAll = viewAll ? false : true;
+                                      });
+                                    },
                                     child: Container(
-                                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                                        child: Row(children: [
-                                          Text(
-                                            '${onlyPost.like.length}',
-                                            style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            'lượt thích',
-                                            style: TextStyle(fontSize: 15),
-                                          ),
-                                        ])),
+                                        padding:
+                                            EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                comments.length != 0
+                                                    ? viewAll
+                                                        ? 'Rút gọn'
+                                                        : 'Xem tất cả ${comments.length} bình luận'
+                                                    : 'Chưa có bình luận',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54),
+                                              ),
+                                            ])),
                                   ),
+                                  comments.length != 0
+                                      ? viewAll
+                                          ? ListView.builder(
+                                              shrinkWrap: true,
+                                              physics: BouncingScrollPhysics(),
+                                              itemCount: comments.length,
+                                              itemBuilder: (context, index) {
+                                                final comment = comments[
+                                                    comments.length -
+                                                        1 -
+                                                        index];
+                                                return CommentsWidget(
+                                                    comment: comment);
+                                              })
+                                          : CommentsWidget(
+                                              comment:
+                                                  comments[comments.length - 1])
+                                      : SizedBox(
+                                          height: 5,
+                                        ),
                                 ],
                               )
-                              : Container(height: 10,);
-                          }
-                      }
-                    },
-                  ),
-                  FutureBuilder<List<CommentData>>(
-                    future: PostsApi.getPostComments(post),
-                    builder: (context, snapshot) {
-                      final comments = snapshot.data;
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return
-                            comments != null?
-                            Column(
+                            : Container(
+                                height: 10,
+                              );
+                      default:
+                        if (snapshot.hasError) {
+                          return Center(child: Text('Some error occurred!'));
+                        } else {
+                          return Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -608,7 +686,7 @@ class _PostView extends State<PostView> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            comments.length != 0
+                                            comments!.length != 0
                                                 ? viewAll
                                                     ? 'Rút gọn'
                                                     : 'Xem tất cả ${comments.length} bình luận'
@@ -638,136 +716,81 @@ class _PostView extends State<PostView> {
                                       height: 5,
                                     ),
                             ],
-                          )
-                            :Container(height: 10,);
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(child: Text('Some error occurred!'));
-                          } else {
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      viewAll = viewAll ? false : true;
-                                    });
-                                  },
-                                  child: Container(
-                                      padding:
-                                          EdgeInsets.fromLTRB(15, 5, 15, 0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              comments!.length != 0
-                                                  ? viewAll
-                                                      ? 'Rút gọn'
-                                                      : 'Xem tất cả ${comments.length} bình luận'
-                                                  : 'Chưa có bình luận',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.black54),
-                                            ),
-                                          ])),
-                                ),
-                                comments.length != 0
-                                    ? viewAll
-                                        ? ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: BouncingScrollPhysics(),
-                                            itemCount: comments.length,
-                                            itemBuilder: (context, index) {
-                                              final comment = comments[
-                                                  comments.length - 1 - index];
-                                              return CommentsWidget(
-                                                  comment: comment);
-                                            })
-                                        : CommentsWidget(
-                                            comment:
-                                                comments[comments.length - 1])
-                                    : SizedBox(
-                                        height: 5,
-                                      ),
-                              ],
-                            );
-                          }
-                      }
-                    },
+                          );
+                        }
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 55,
+                ),
+              ]),
+            ],
+          ),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                  width: size.width,
+                  height: 55,
+                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(27, 27, 27, 1.0),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
                   ),
-                  SizedBox(
-                    height: 55,
-                  ),
-
-                ]
-              ),
-              ],
-            ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                    width: size.width,
-                    height: 55,
-                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
                     alignment: Alignment.topCenter,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(27, 27, 27, 1.0),
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Row(
-                        children: [
-                          ProfileAvatar(imageUrl: link, maxSize: 20),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              controller: writeComment,
-                              textAlign: TextAlign.left,
-                              cursorColor: Colors.black87,
-                              maxLines: 1,
-                              decoration: InputDecoration(
-                                  hintText: 'Viết bình luận...',
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.w300),
-                                  border: InputBorder.none
+                    child: Row(
+                      children: [
+                        ProfileAvatar(imageUrl: link, maxSize: 20),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            controller: writeComment,
+                            textAlign: TextAlign.left,
+                            cursorColor: Colors.black87,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                                hintText: 'Viết bình luận...',
+                                hintStyle: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w300),
+                                border: InputBorder.none
 
-                                  // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
-                                  ),
-                            ),
+                                // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                                ),
                           ),
-                          IconButton(
-                            icon: Icon(MdiIcons.send),
-                            onPressed: () {
-                              PostsApi.commentPost(post, writeComment);
-                              Future.delayed(Duration(milliseconds: 1000), () {
-                                writeComment.text = '';
-                                FocusScope.of(context).unfocus();
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    )))
-          ]
-        ),
+                        ),
+                        IconButton(
+                          icon: Icon(MdiIcons.send),
+                          onPressed: () {
+                            PostsApi.commentPost(post, writeComment);
+                            Future.delayed(Duration(milliseconds: 1000), () {
+                              writeComment.text = '';
+                              FocusScope.of(context).unfocus();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  )))
+        ]),
         bottomNavigationBar: BottomAppBar(
           color: Colors.black87,
           child: Container(
             height: 0,
           ),
         ),
-    ),
+      ),
     );
   }
 

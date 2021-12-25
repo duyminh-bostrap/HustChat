@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
@@ -10,7 +11,7 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link ="http://localhost:8000/files/avatar_2.png";
+String link =dotenv.env['link']??"";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 

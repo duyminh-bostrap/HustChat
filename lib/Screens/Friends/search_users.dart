@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
+String link =dotenv.env['link']??"";
 
 class SearchUsers extends StatelessWidget {
   final UserData userData;

@@ -2,13 +2,15 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/models/comment_list.dart';
 import 'package:hust_chat/models/models.dart';
 
-String link ="http://localhost:8000/files/avatar_2.png";
+String link =dotenv.env['link']??"";
+
 
 class CommentsWidget extends StatefulWidget {
   final CommentData comment;

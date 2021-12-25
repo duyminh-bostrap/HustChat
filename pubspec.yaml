@@ -44,6 +44,7 @@ dependencies:
   comment_box: ^0.0.16
   fluttertoast: ^8.0.8
   smooth_page_indicator: ^1.0.0+2
+  flutter_dotenv: ^5.0.2
   # material_design_icons_flutter: ^4.0.5345
 
 dev_dependencies:
@@ -90,6 +91,7 @@ flutter:
     - assets/change_pass.png
     - assets/log_out.png
     - assets/IMG_8114.JPG
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

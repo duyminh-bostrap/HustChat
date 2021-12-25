@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
+String link =dotenv.env['link']??"";
 
 class ImagePostElement extends StatelessWidget {
   const ImagePostElement(
