@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
+import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
@@ -99,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     child: IconButton(
                                       icon: Icon(Icons.photo_camera, color: Colors.white, size: 32,),
-                                      onPressed: () {print('Đổi avatar');},
+                                      onPressed: () => createPost(context),
                                     )
                                 ),
                               ),
