@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NetworkHandler {
-  String baseurl = 'http://localhost:8000/api/v1';
+  String baseurl = 'http://10.0.2.2:8000/api/v1';
 
   Future<http.Response> get(String url) async {
     url = formater(url);
@@ -37,6 +37,18 @@ class NetworkHandler {
 
   Future<http.Response> postAuth(
       String url, Map<String, String> body, String token) async {
+    url = formater(url);
+    var response = await http.post(Uri.parse(url),
+        headers: {"Content-type": "application/json", "authorization": token},
+        body: json.encode(body));
+    // int code = response.statusCode;
+    // if (response.statusCode == 200 || response.statusCode == 201) {
+    // int code = response.statusCode;
+    return response;
+    // print(response)
+  }
+  Future<http.Response> postAuth1(
+      String url, Map<dynamic,dynamic> body, String token) async {
     url = formater(url);
     var response = await http.post(Uri.parse(url),
         headers: {"Content-type": "application/json", "authorization": token},
