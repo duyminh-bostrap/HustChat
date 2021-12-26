@@ -50,9 +50,6 @@ class UserData {
     required this.username,
     required this.avatar,
     required this.coverImage,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
   });
 
   String gender;
@@ -64,9 +61,6 @@ class UserData {
   String username;
   Avatar avatar;
   CoverIMG coverImage;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int v;
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         gender: json["gender"],
@@ -78,9 +72,9 @@ class UserData {
         username: json["username"],
         avatar: Avatar.fromJson(json["avatar"]),
         coverImage: CoverIMG.fromJson(json["cover_image"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
+        // createdAt: DateTime.parse(json["createdAt"]),
+        // updatedAt: DateTime.parse(json["updatedAt"]),
+        // v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,9 +87,9 @@ class UserData {
         "username": username,
         "avatar": avatar.toJson(),
         "cover_image": coverImage.toJson(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
+        // "createdAt": createdAt.toIso8601String(),
+        // "updatedAt": updatedAt.toIso8601String(),
+        // "__v": v,
       };
 }
 

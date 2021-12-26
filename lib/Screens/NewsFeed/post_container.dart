@@ -95,7 +95,7 @@ class _PostContainer extends State<PostContainer> {
             ),
           ),
           Container(
-            height: img.length>0? 300: 0,
+            height: img.length > 0 ? 300 : 0,
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: PageView.builder(
               controller: pageController,
@@ -892,17 +892,21 @@ class _PostStatsState extends State<PostStats> {
 
 _showProfile(PostData post, BuildContext context) async {
   String? userID = await storage.read(key: "id");
+  // print(userID);
+  // print(post.userID);
   print("profile");
   post.userID.toString() == userID.toString()
-      ? Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => FriendsProfile(userId: post.userID, userName: post.username,) //ProfileView()),
-        ))
-      : Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => FriendsProfile(userId: post.userID, userName: post.username,)
-          )
-        );
+      ? Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FriendsProfile(
+                userId: post.userID,
+                userName: post.username,
+              ) //ProfileView()),
+          ))
+      : Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FriendsProfile(
+                userId: post.userID,
+                userName: post.username,
+              )));
 }
 
 _openPost(PostData post, BuildContext context, int pageIndex) {

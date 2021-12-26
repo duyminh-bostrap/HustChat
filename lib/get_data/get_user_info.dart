@@ -62,11 +62,21 @@ class UsersApi {
       final json1 = json.decode(response.body)["data"];
       String a = json.encode(json1);
       final UserData user = UserFromJson(a);
+      debugPrint(user.phonenumber);
       // debugPrint(post.content);
       // debugPrint(parsed);
       return user;
     }
-    return new UserData(gender: "", blockedInbox: [], blockedDiary: [], id: "", phonenumber: "", password: "", username: "", avatar: Avatar(type: "", id: "", fileName: ""), coverImage: CoverIMG(type: "", id: "", fileName: ""), createdAt: DateTime(2000), updatedAt: DateTime(2000), v: 0);
+    return new UserData(
+      gender: "",
+      blockedInbox: [],
+      blockedDiary: [],
+      id: "",
+      phonenumber: "",
+      password: "",
+      username: "",
+      avatar: Avatar(type: "", id: "", fileName: ""),
+      coverImage: CoverIMG(type: "", id: "", fileName: ""),
+    );
   }
-
 }

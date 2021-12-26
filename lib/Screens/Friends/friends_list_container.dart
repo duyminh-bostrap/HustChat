@@ -28,9 +28,7 @@ class FriendListContainer extends StatefulWidget {
       username: '',
       avatar: Avatar(type: '', fileName: '', id: ''),
       coverImage: CoverIMG(id: '', type: '', fileName: ''),
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      v: 0);
+      );
   FriendListContainer({Key? key}) : super(key: key);
 
   @override

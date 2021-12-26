@@ -3,6 +3,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/comment_list.dart';
+import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/models/post_model.dart';
 import '../network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -104,7 +105,8 @@ class PostsApi {
       // debugPrint(parsed);
       return post;
     }
-    return new PostData(username: '',
+    return new PostData(
+        username: '',
         userID: '',
         content: '',
         id: '',
@@ -114,6 +116,35 @@ class PostsApi {
         updateAt: '',
         isLike: false,
         countComments: 0);
+  }
+
+  static Future<UserData> getUserData(String id) async {
+    String? token = await storage.read(key: "token");
+    if (token != null) {
+      // print(userID);
+      String url = "/users/show/" + id;
+      var response = await networkHandler.getWithAuth(url, token);
+      debugPrint(response.body);
+      // final posts = postsFromJson(response.body);
+      final json1 = json.decode(response.body)["data"];
+      String a = json.encode(json1);
+      final UserData user = UserFromJson(a);
+      debugPrint("aaa");
+      // debugPrint(post.content);
+      // debugPrint(parsed);
+      return user;
+    }
+    return new UserData(
+      gender: "",
+      blockedInbox: [],
+      blockedDiary: [],
+      id: "",
+      phonenumber: "",
+      password: "",
+      username: "",
+      avatar: Avatar(type: "", id: "", fileName: ""),
+      coverImage: CoverIMG(type: "", id: "", fileName: ""),
+    );
   }
 }
 
@@ -125,8 +156,8 @@ class ShowPostInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<PostData>>(
-        future: PostsApi.getPosts(),
+      body: FutureBuilder<UserData>(
+        future: PostsApi.getUserData("60c45025ae8c0f00220f4616"),
         builder: (context, snapshot) {
           final posts = snapshot.data;
           switch (snapshot.connectionState) {
@@ -147,15 +178,15 @@ class ShowPostInfo extends StatelessWidget {
     );
   }
 
-  Widget buildPosts(List<PostData> posts) => ListView.builder(
+  Widget buildPosts(UserData posts) => ListView.builder(
         physics: BouncingScrollPhysics(),
-        itemCount: posts.length,
+        itemCount: 1,
         itemBuilder: (context, index) {
-          final post = posts[index];
+          // final post = posts[index];
 
           return ListTile(
-            title: Text(post.username),
-            subtitle: Text(post.content),
+            title: Text(posts.username),
+            subtitle: Text(posts.phonenumber),
           );
         },
       );

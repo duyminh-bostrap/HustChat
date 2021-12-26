@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:hust_chat/models/searchUsers_model.dart';
 
 import 'img_model.dart';
-PostData postFromJson(String str) => PostData.fromJson(json.decode(str));
 
+PostData postFromJson(String str) => PostData.fromJson(json.decode(str));
 
 class PostData {
   final String username;
@@ -37,20 +37,18 @@ class PostData {
       required this.countComments});
 
   factory PostData.fromJson(Map<String, dynamic> json) => PostData(
-        username: json["author"]["username"],
-        userID: json["author"]['id'],
-        content: json["described"] == null ? "" : json["described"],
-        id: json["_id"],
-        images: List<ImageModel>.from(
-            json["images"].map((x) => ImageModel.fromJson(x))),
-        // videos: json["videos"],
-        like: json["like"],
-        createAt: json["createdAt"] , //timeAgo(json["createdAt"]),
-        updateAt: json["updatedAt"], //timeAgo(json["updatedAt"]),
-        isLike: json["isLike"],
-        countComments: json["countComments"]);
-
-
+      username: json["author"]["username"],
+      userID: json["author"]['_id'],
+      content: json["described"] == null ? "" : json["described"],
+      id: json["_id"],
+      images: List<ImageModel>.from(
+          json["images"].map((x) => ImageModel.fromJson(x))),
+      // videos: json["videos"],
+      like: json["like"],
+      createAt: json["createdAt"], //timeAgo(json["createdAt"]),
+      updateAt: json["updatedAt"], //timeAgo(json["updatedAt"]),
+      isLike: json["isLike"],
+      countComments: json["countComments"]);
 }
 
 // String timeAgo(DateTime dateTime) {
