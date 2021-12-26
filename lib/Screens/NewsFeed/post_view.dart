@@ -331,126 +331,129 @@ class _PostView extends State<PostView> {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
                         return
-                            // onlyPost != null?
-                            // Column(
-                            //   children: [
-                            //     Row(
-                            //       mainAxisAlignment: MainAxisAlignment.start,
-                            //       children: [
-                            //         SizedBox(
-                            //           width: 15,
-                            //         ),
-                            //         onlyPost.isLike
-                            //                 ? Icon(
-                            //               Icons.favorite,
-                            //               color: pinkColor,
-                            //               size: 25.0,
-                            //             )
-                            //                 :Icon(
-                            //                 Icons.favorite_outline,
-                            //                 color: Colors.grey[600],
-                            //                 size: 25.0),
-                            //         SizedBox(
-                            //           width: 10,
-                            //         ),
-                            //         Container(
-                            //           alignment: Alignment.centerLeft,
-                            //           child: InkWell(
-                            //               onTap: () => {}, // _seeComment(post, context),
-                            //               child: Icon(
-                            //                 MdiIcons.commentOutline,
-                            //                 color: Colors.grey[600],
-                            //                 size: 25.0,
-                            //               )),
-                            //         ),
-                            //         Expanded(
-                            //           child: Center(
-                            //             child: AnimatedSmoothIndicator(
-                            //               count: img.length,
-                            //               activeIndex: pageIndex,
-                            //               effect: ExpandingDotsEffect(
-                            //                 dotHeight: 8,
-                            //                 dotWidth: 8,
-                            //                 expansionFactor: 2.3,
-                            //                 activeDotColor: pinkColor,
-                            //                 dotColor: Colors.black26,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //         SizedBox(
-                            //           width: 25,
-                            //         ),
-                            //         Icon(
-                            //           Icons.bookmark_border,
-                            //           color: Colors.grey[600],
-                            //           size: 28.0,
-                            //         ),
-                            //         SizedBox(
-                            //           width: 15,
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     Container(
-                            //         height: 30,
-                            //         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            //         child: Row(
-                            //             mainAxisAlignment: MainAxisAlignment.start,
-                            //             children: [
-                            //               Text(
-                            //                 post.username,
-                            //                 style: TextStyle(
-                            //                   color: Colors.black87,
-                            //                   fontSize: 16,
-                            //                   fontWeight: FontWeight.w500,
-                            //                 ),
-                            //               ),
-                            //               SizedBox(
-                            //                 width: 10,
-                            //               ),
-                            //               Text(
-                            //                 post.createAt.toString(),
-                            //                 style: TextStyle(fontSize: 14),
-                            //               ),
-                            //             ])),
-                            //     Padding(
-                            //       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            //       child: Align(
-                            //         alignment: Alignment.topLeft,
-                            //         child: ExpandableText(
-                            //           post.content,
-                            //           style: TextStyle(
-                            //             fontSize: 15.0,
-                            //             fontWeight: FontWeight.w500,
-                            //           ),
-                            //           expandText: 'Xem thêm',
-                            //           collapseText: 'Rút gọn',
-                            //           maxLines: 3,
-                            //           linkColor: Colors.black54,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     Container(
-                            //         padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                            //         child: Row(children: [
-                            //           Text(
-                            //             '${onlyPost.like.length}',
-                            //             style: TextStyle(
-                            //                 color: Colors.black87,
-                            //                 fontSize: 15,
-                            //                 fontWeight: FontWeight.w500),
-                            //           ),
-                            //           SizedBox(
-                            //             width: 5,
-                            //           ),
-                            //           Text(
-                            //             'lượt thích',
-                            //             style: TextStyle(fontSize: 15),
-                            //           ),
-                            //         ])),
-                            //   ],
-                            // )
-                            //     :
+                            onlyPost != null?
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    onlyPost.isLike
+                                            ? Icon(
+                                          Icons.favorite,
+                                          color: pinkColor,
+                                          size: 25.0,
+                                        )
+                                            :Icon(
+                                            Icons.favorite_outline,
+                                            color: Colors.grey[600],
+                                            size: 25.0),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: InkWell(
+                                          onTap: () => {}, // _seeComment(post, context),
+                                          child: Icon(
+                                            MdiIcons.commentOutline,
+                                            color: Colors.grey[600],
+                                            size: 25.0,
+                                          )),
+                                    ),
+                                    Expanded(
+                                      child:
+                                        img.length > 1?
+                                        Center(
+                                        child: AnimatedSmoothIndicator(
+                                          count: img.length,
+                                          activeIndex: pageIndex,
+                                          effect: ExpandingDotsEffect(
+                                            dotHeight: 8,
+                                            dotWidth: 8,
+                                            expansionFactor: 2.3,
+                                            activeDotColor: pinkColor,
+                                            dotColor: Colors.black26,
+                                          ),
+                                        ),
+                                      )
+                                      : Container(height: 10,),
+                                    ),
+                                    SizedBox(
+                                      width: 25,
+                                    ),
+                                    Icon(
+                                      Icons.bookmark_border,
+                                      color: Colors.grey[600],
+                                      size: 28.0,
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                    height: 30,
+                                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            post.username,
+                                            style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            post.createAt.toString(),
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ])),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: ExpandableText(
+                                      post.content,
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      expandText: 'Xem thêm',
+                                      collapseText: 'Rút gọn',
+                                      maxLines: 3,
+                                      linkColor: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                                    child: Row(children: [
+                                      Text(
+                                        '${onlyPost.like.length}',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'lượt thích',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ])),
+                              ],
+                            )
+                                :
                             Container(
                           height: 10,
                         );
@@ -505,7 +508,8 @@ class _PostView extends State<PostView> {
                                               )),
                                         ),
                                         Expanded(
-                                          child: Center(
+                                          child: img.length > 1?
+                                          Center(
                                             child: AnimatedSmoothIndicator(
                                               count: img.length,
                                               activeIndex: pageIndex,
@@ -517,7 +521,8 @@ class _PostView extends State<PostView> {
                                                 dotColor: Colors.black26,
                                               ),
                                             ),
-                                          ),
+                                          )
+                                              : Container(height: 10,)
                                         ),
                                         SizedBox(
                                           width: 25,

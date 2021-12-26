@@ -239,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 16.0
                                       ),),
                                       SizedBox(width: 5.0,),
-                                      Text('Hà  Nội', style: TextStyle(
+                                      Text('Chưa rõ', style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600
                                       ),)
@@ -254,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 16.0
                                       ),),
                                       SizedBox(width: 5.0,),
-                                      Text('Nam', style: TextStyle(
+                                      Text('secret', style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600
                                       ),)
@@ -269,7 +269,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 16.0
                                       ),),
                                       SizedBox(width: 5.0,),
-                                      Text('100K người bạn', style: TextStyle(
+                                      Text('100 người bạn', style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600
                                       ),)
@@ -282,7 +282,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           onPressed: () {
                                             print("collections");
                                           },
-                                          child: Text('Xem thêm vể '),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text('Xem thêm vể '),
+                                              showName(color: Colors.black87, size: 14, fontWeight: FontWeight.w500)
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],),
@@ -420,7 +426,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
         floatingActionButton:
         IconButton(
-          icon: Icon(Icons.chevron_left,size: 35,color: Colors.black54,),
+          icon: Icon(Icons.chevron_left,size: 35,color: Colors.white60,),
           onPressed: () {setState(() { isProfile = false;});},
         ),
       )

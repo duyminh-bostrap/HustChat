@@ -1,11 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hust_chat/Screens/Friends/friends_profile.dart';
+import 'package:hust_chat/Screens/Profile/current_user_profile.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:hust_chat/network_handler.dart';
 
 String link =dotenv.env['link']??"";
+String link2 =dotenv.env['link2']??"";
+
+NetworkHandler networkHandler = NetworkHandler();
+final storage = new FlutterSecureStorage();
 
 class SearchUsers extends StatelessWidget {
   final UserData userData;
@@ -24,12 +32,12 @@ class SearchUsers extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => {}, //_showProfile(post, context),
-            child: link != null
+            child: link2 != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
-                      child: CachedNetworkImage(imageUrl: link),
+                      child: CachedNetworkImage(imageUrl: link2),
                     ))
                 : const SizedBox.shrink(),
           ),
@@ -44,7 +52,7 @@ class SearchUsers extends StatelessWidget {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => {}, //_showProfile(post, context),
+                  onTap: () => {print('a')}, //_showProfile(post, context),
                   child: ProfileAvatar(
                     imageUrl: link,
                     hasBorder: true,
@@ -56,7 +64,7 @@ class SearchUsers extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () => {}, //_showProfile(post, context),
+                        onTap: () => _showProfile(userData, context),
                         child:
                             // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
                             Text(
@@ -124,7 +132,19 @@ class SearchUsers extends StatelessWidget {
   }
 }
 
-_showProfile(PostData post, BuildContext context) {
+_showProfile(UserData user, BuildContext context) async {
+  String? userID = await storage.read(key: "id");
   print("profile");
-  Navigator.pushNamed(context, '/mytimeline');
+  user.id.toString() == userID.toString()
+      ? Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => CurrentUserProfile(
+        userId: user.id,
+        userName: user.username,
+      ) //ProfileView()),
+  ))
+      : Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => FriendsProfile(
+        userId: user.id,
+        userName: user.username,
+      )));
 }

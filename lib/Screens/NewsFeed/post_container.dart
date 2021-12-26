@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
+import 'package:hust_chat/Screens/Profile/current_user_profile.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
@@ -732,9 +733,120 @@ class _PostStatsState extends State<PostStats> {
                       ),
                     ],
                   )
-                : Container(
-                    height: 10,
-                  );
+                : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(246, 81, 82, 1.0),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.favorite,
+                          size: 10.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 4.0),
+                      Text(
+                        '0 lượt thích',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      Expanded(
+                        child:Center(
+                          child: AnimatedSmoothIndicator(
+                            count: 0,
+                            activeIndex: pageIndex,
+                            effect: ExpandingDotsEffect(
+                              dotHeight: 8,
+                              dotWidth: 8,
+                              expansionFactor: 2.3,
+                              activeDotColor: pinkColor,
+                              dotColor: Colors.black26,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20.0),
+                      Text(
+                        '0 bình luận',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                  Divider(),
+                  Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 25.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.favorite_border,
+                              color: Colors.grey[600],
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text('Thích'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => _openPost(post, context, pageIndex),
+                        child: Container(
+                          height: 25.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                MdiIcons.commentOutline,
+                                color: Colors.grey[600],
+                                size: 20.0,
+                              ),
+                              const SizedBox(width: 4.0),
+                              Text('Bình luận'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          height: 25.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bookmark_border,
+                                color: Colors.grey[600],
+                                size: 25.0,
+                              ),
+                              const SizedBox(width: 4.0),
+                              Text('Lưu trữ'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
           default:
             if (snapshot.hasError) {
               return Center(child: Text('Some error occurred!'));
@@ -805,12 +917,16 @@ class _PostStatsState extends State<PostStats> {
                           children: [
                             Expanded(
                               child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    onlyPost.isLike =
-                                        onlyPost.isLike ? false : true;
-                                    PostsApi.likePost(post);
+                                onTap: () async {
+                                  setState(()  {
+                                    onlyPost.isLike = onlyPost.isLike ? false : true;
                                   });
+                                  String? token = await storage.read(key: "token");
+                                  String postId = post.id;
+                                  if (token != null) {
+                                    String url = "/postLike/action/" + postId;
+                                    var response = await networkHandler.postAuthWithoutBody(url, token);
+                                  };
                                 },
                                 child: Container(
                                   height: 25.0,
@@ -897,7 +1013,7 @@ _showProfile(PostData post, BuildContext context) async {
   print("profile");
   post.userID.toString() == userID.toString()
       ? Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FriendsProfile(
+          builder: (context) => CurrentUserProfile(
                 userId: post.userID,
                 userName: post.username,
               ) //ProfileView()),

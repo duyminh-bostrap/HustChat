@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
+import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Search/user_search_info.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -28,8 +29,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
 
   final List<Widget> screens = [
-    // MessageScreen(), //Trang tin nhắn
-    BadConnection(),
+    MessageScreen(), //Trang tin nhắn
+    // BadConnection(),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(isProfile: false,), // Trang cá nhân
