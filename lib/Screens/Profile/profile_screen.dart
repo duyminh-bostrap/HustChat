@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hust_chat/Screens/Message/auth_firebase.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
@@ -32,6 +33,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isProfile = false;
   final storage = new FlutterSecureStorage();
+  AuthMethods authMethods = new AuthMethods();
 
   _ProfileScreenState({
     Key? key,
@@ -580,6 +582,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         endIndent: 20),
                     GestureDetector(
                       onTap: () async {
+
+                        // logout Firebase
+                        authMethods.signOut();
+
                         Navigator.pushNamed(context, '/');
                         await storage.deleteAll();
                       },

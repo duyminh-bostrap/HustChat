@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "755349872012",
+    "project_id": "chat-app-hust",
+    "storage_bucket": "chat-app-hust.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755349872012:android:f60fa8e3d3f5da31b78aa9",
+        "android_client_info": {
+          "package_name": "com.example.hust_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755349872012-q0moce5j80aasb4g95jns7rvg49c0ehu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfgtmXksSxiWf3rXQ20dRubD3VNI6QXgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755349872012-q0moce5j80aasb4g95jns7rvg49c0ehu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

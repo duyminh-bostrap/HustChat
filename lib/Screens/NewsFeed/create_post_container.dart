@@ -47,6 +47,7 @@ class CreatePostContainer extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(0, 10, 8, 10),
                     child: Container(
                       child: FloatingActionButton.extended(
+                        heroTag: '8',
                         icon: Icon(Icons.photo_library, color: Colors.black87, size: 25.0),
                         label: Text('Photo',style: TextStyle(color: Colors.black87, fontSize: 17.0)),
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),
@@ -63,6 +64,7 @@ class CreatePostContainer extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 10, 0, 10),
                     child: Container(
                       child: FloatingActionButton.extended(
+                        heroTag: '9',
                         icon: Icon(Icons.videocam, color: Colors.redAccent, size: 30.0),
                         label: Text('Video', style: TextStyle(color: Colors.black87, fontSize: 17.0)),
                         backgroundColor: Color.fromRGBO(211, 255, 176, 1.0),

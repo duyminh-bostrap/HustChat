@@ -83,6 +83,7 @@ class SearchUsers extends StatelessWidget {
                   ),
                 ),
                 FloatingActionButton(
+                  heroTag: '6',
                   mini: true,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 3),
@@ -109,6 +110,7 @@ class SearchUsers extends StatelessWidget {
                 ),
                 SizedBox(width: 3.0),
                 FloatingActionButton(
+                  heroTag: '7',
                   mini: true,
                   child: Icon(Icons.close, color: Colors.red, size: 26.0),
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),

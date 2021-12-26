@@ -115,6 +115,7 @@ class _FriendsList extends State<FriendsList> {
                 ),
                 isRequest
                     ? FloatingActionButton(
+                  heroTag: '1',
                         mini: true,
                         child: Icon(
                           Icons.done,
@@ -140,6 +141,7 @@ class _FriendsList extends State<FriendsList> {
                         },
                       )
                     : FloatingActionButton(
+                  heroTag: '2',
                         mini: true,
                         child: Icon(
                           MdiIcons.facebookMessenger,
@@ -154,6 +156,7 @@ class _FriendsList extends State<FriendsList> {
                 SizedBox(width: 3.0),
                 isRequest
                     ? FloatingActionButton(
+                  heroTag: '3',
                         mini: true,
                         child: Icon(Icons.close, color: Colors.red, size: 26.0),
                         backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
@@ -174,6 +177,7 @@ class _FriendsList extends State<FriendsList> {
                         },
                       )
                     : FloatingActionButton(
+                  heroTag: '4',
                         mini: true,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 3.0),

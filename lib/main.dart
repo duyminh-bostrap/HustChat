@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hust_chat/Screens/Message/chat_screen.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';
@@ -10,8 +11,11 @@ import 'Screens/login_screen.dart';
 import 'Screens/welcome_screen.dart';
 import 'Screens/signup_screen.dart';
 import 'Screens/main_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/blocklist': (context) => BlockListScreen(),
         '/changepass': (context) => ChangePassScreen(),
         '/post': (context) => ShowPostInfo(),
+        //'/chat': (context) => ChatScreen(),
         // '/friendlist': (context) => MainPage(1),
       },
       title: 'Flutter Demo',
