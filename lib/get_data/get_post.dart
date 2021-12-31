@@ -96,7 +96,7 @@ class PostsApi {
       // print(userID);
       String url = "/posts/show/" + id;
       var response = await networkHandler.getWithAuth(url, token);
-      debugPrint(response.body);
+      // debugPrint(response.body);
       // final posts = postsFromJson(response.body);
       final json1 = json.decode(response.body)["data"];
       String a = json.encode(json1);
