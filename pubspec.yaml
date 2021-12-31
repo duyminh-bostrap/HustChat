@@ -70,6 +70,7 @@ dev_dependencies:
   material_design_icons_flutter: ^4.0.5345
   expandable_text: ^2.2.0
   flutter_slidable: ^0.6.0
+  flutter_chat_bubble: any
 
 
 # For information on the generic Dart part of this file, see the
