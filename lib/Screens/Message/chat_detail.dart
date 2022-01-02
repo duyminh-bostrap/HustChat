@@ -18,10 +18,14 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
 
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
+  CollectionReference chatList = FirebaseFirestore.instance.collection('chat_list');
   final String friendUid;
   final String friendName;
-  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  var chatListId;
+  var chatListIdFriend;
   var chatDocId;
+  var currentName;
   var _textController = new TextEditingController();
   _ChatDetailState(this.friendUid, this.friendName);
   //Kiem tra xem co chat truoc do khong
@@ -29,24 +33,112 @@ class _ChatDetailState extends State<ChatDetail> {
   @override
   void initState() {
     super.initState();
+
+    // tao chatbox voi 2id la 2 nguoi dung
     chats.where('users',isEqualTo: {friendUid:null, currentUserId: null})
     .limit(1)
     .get()
     .then((QuerySnapshot querySnapshot){
       if (querySnapshot.docs.isNotEmpty){
-        chatDocId = querySnapshot.docs.single.id;
+        setState(() {
+          chatDocId = querySnapshot.docs.single.id;
+        });
       } else{
         chats.add({
           'users':{
             currentUserId: null,
             friendUid: null,
           }
-        }).then((value) => {
-          chatDocId = value
+        }).then((value) {
+          setState(() {
+            chatDocId = value.id;
+          });
         });
       }
     }
     ).catchError((error){});
+
+    // tao list chat friend nguoi 1.
+    chatList.where('users',isEqualTo: {currentUserId:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        setState(() {
+          chatListId = querySnapshot.docs.single.id;
+        });
+      } else{
+        chatList.add({
+          'users':{
+            currentUserId: null,
+          }
+        }).then((value)   {
+          setState(() {
+            chatListId = value.id;
+          });
+        } );
+      }
+    }
+    ).catchError((error){});
+
+    // tao list chat friend nguoi 2.
+    chatList.where('users',isEqualTo: {friendUid:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        setState(() {
+          chatListIdFriend = querySnapshot.docs.single.id;
+        });
+      } else{
+        chatList.add({
+          'users':{
+            friendUid: null,
+          }
+        }).then((value)   {
+          setState(() {
+            chatListIdFriend = value.id;
+          });
+        } );
+      }
+    }
+    ).catchError((error){});
+  }
+
+  //return chat list id cua nguoi dung hien tai, tao id moi neu chua co
+  void addFriendToChatList(String chatId, String friendId, String friendName, String msg){
+    if (msg == '') return;
+    chatList.doc(chatId).collection('friends')
+    .where('userId', isEqualTo: friendId)
+    .get()
+    .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isEmpty){
+        chatList.doc(chatId).collection('friends').add(
+      {
+        'userId':friendId,
+        'userName':friendName
+      }
+      );
+      }
+    });
+  }
+
+  Future getUserCurrentName(String uid)async {
+    CollectionReference user= FirebaseFirestore.instance.collection('users');
+    await user.where('uid',isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.forEach((element) {
+          setState(() {
+            currentName = element["name"];
+          });
+        });
+      }
+    }
+    ).catchError((error){});
+
   }
 
   void sendMassage (String msg){
@@ -175,9 +267,20 @@ class _ChatDetailState extends State<ChatDetail> {
                       Expanded(child: CupertinoTextField(controller: _textController,)),
                       CupertinoButton(
                         child: Icon(Icons.send_sharp),
-                        onPressed: () => sendMassage(_textController.text),
+                        onPressed: () async
+                        {
+                          await getUserCurrentName(currentUserId);
+                          //print("current user : " + currentUserId);
+                          //print("friend user :" +friendUid);
+                          //print(chatListId);
+                          addFriendToChatList(chatListId, friendUid, friendName, _textController.text);
+                          //print(chatListIdFriend);
+                          addFriendToChatList(chatListIdFriend, currentUserId, currentName, _textController.text);
+                          sendMassage(_textController.text);
+                        }
                       )
-                    ],)
+                    ],
+                    )
                   ],
                 ),
               ),

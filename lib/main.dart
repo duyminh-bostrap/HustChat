@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hust_chat/Screens/Message/chat_screen.dart';
 import 'package:hust_chat/Screens/change_pass_screen.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/Screens/Message/message_screen.dart';

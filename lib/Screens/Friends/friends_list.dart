@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
+import 'package:hust_chat/Screens/Message/chat_detail.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:hust_chat/Screens/Message/database_firebase.dart';
 
 import '../../network_handler.dart';
 import '../bad_connection.dart';
@@ -42,6 +45,32 @@ class _FriendsList extends State<FriendsList> {
     required this.userData,
     required this.isRequest,
   });
+
+  var friendChatUid;
+
+  Future getUserIdByUserPhoneNumber(String phone)async {
+    CollectionReference user= FirebaseFirestore.instance.collection('users');
+    await user.where('phone_nummber',isEqualTo: phone)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+            if (querySnapshot.docs.isNotEmpty) {
+               querySnapshot.docs.forEach((element) {
+                 setState(() {
+                   friendChatUid = element["uid"];
+                 });
+               });
+            }
+    }
+    ).catchError((error){});
+
+  }
+
+  void callChatDetailScreen(BuildContext context, String name, String uid){
+    Navigator.push(context,
+        CupertinoPageRoute(builder: (context) => ChatDetail(
+            friendName: name, friendUid: uid)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,8 +179,13 @@ class _FriendsList extends State<FriendsList> {
                         ),
                         backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
                         onPressed: () async {
-                          print("message");
-                        },
+                    print(userData.phonenumber);
+
+                          // chuyen qua man hinh tin nhan voi so dien thoai
+                          await getUserIdByUserPhoneNumber(userData.phonenumber);
+                          callChatDetailScreen(
+                              context, userData.username, friendChatUid);
+                        }
                       ),
                 SizedBox(width: 3.0),
                 isRequest
