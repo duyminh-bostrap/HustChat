@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart ' ;
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Message/chat_detail.dart';
 
@@ -56,6 +55,12 @@ class _MessageScreenState extends State<MessageScreen> {
           .where('uid',isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+        if(snapshot == null){
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+
         if(snapshot.hasError){
           return Center(
             child: Text("Some thing went wrong"),

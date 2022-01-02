@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   inputController: phoneController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập số điện thoại";
-                    if (value.length < 1 ||
+                    if (value.length < 2 ||
                         !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value) ||
                         isIncorrect) {
                       return "Số điện thoại không chính xác";
@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     rounded_button(
                         onPressed: () async {
+                          print('a');
                           if (formKey.currentState!.validate()) {
                             Map<String, String> data = {
                               "phonenumber": phoneController.text,

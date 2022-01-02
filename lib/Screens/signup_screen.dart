@@ -51,8 +51,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   inputController: nameController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập tên";
-                    if (value.length <= 8) {
-                      return "Tên của bạn tối thiểu 8 kí tự";
+                    if (value.length <= 2) {
+                      return "Tên của bạn tối thiểu 2 kí tự";
                     }
                     return null;
                   },
@@ -63,8 +63,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   inputController: phoneController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập số điện thoại";
-                    if (value.length < 8 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
-                      return "Số điện thoại tối thiểu 8 kí tự";
+                    if (value.length < 2 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
+                      return "Số điện thoại tối thiểu 2 kí tự";
                     }
                     return null;
                   },
@@ -75,8 +75,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     passwordController: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) return "Bạn chưa nhập mật khẩu";
-                      if (value.length < 6) {
-                        return "Mật khẩu tối thiểu 6 kí tự";
+                      if (value.length < 2) {
+                        return "Mật khẩu tối thiểu 2 kí tự";
                       }
                       if (passwordController.text != passwordController2.text) {
                         return "Mật khẩu không khớp";
@@ -90,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   passwordController: passwordController2,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập lại mật khẩu";
-                    if (value.length < 6 || passwordController.text != passwordController2.text) {
+                    if (value.length < 2 || passwordController.text != passwordController2.text) {
                       return "Mật khẩu không khớp";
                     }
                     return null;

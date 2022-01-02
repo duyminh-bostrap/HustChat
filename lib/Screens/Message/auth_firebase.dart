@@ -46,4 +46,14 @@ class AuthMethods{
       print(e.toString());
     }
   }
+
+  Future<String?> getCurrentUid() async{
+    try{
+      String uid = await FirebaseAuth.instance.currentUser!.uid;
+      return uid;
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
 }

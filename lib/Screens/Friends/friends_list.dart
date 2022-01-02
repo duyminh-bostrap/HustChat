@@ -1,20 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
+import 'package:hust_chat/Screens/Message/chat_detail.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:hust_chat/Screens/Message/database_firebase.dart';
 
 import '../../network_handler.dart';
 import '../bad_connection.dart';
 
-String link =dotenv.env['link']??"";
-String link2 =dotenv.env['link2']??"";
+String link = "http://localhost:8000/files/avatar_2.png";
+String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -44,6 +46,32 @@ class _FriendsList extends State<FriendsList> {
     required this.isRequest,
   });
 
+  var friendChatUid;
+
+  Future getUserIdByUserPhoneNumber(String phone)async {
+    CollectionReference user= FirebaseFirestore.instance.collection('users');
+    await user.where('phone_nummber',isEqualTo: phone)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.forEach((element) {
+          setState(() {
+            friendChatUid = element["uid"];
+          });
+        });
+      }
+    }
+    ).catchError((error){});
+
+  }
+
+  void callChatDetailScreen(BuildContext context, String name, String uid){
+    Navigator.push(context,
+        CupertinoPageRoute(builder: (context) => ChatDetail(
+            friendName: name, friendUid: uid)));
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -57,11 +85,11 @@ class _FriendsList extends State<FriendsList> {
             onTap: () => showProfile(userData, context),
             child: link != null
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: CachedNetworkImage(imageUrl: link2),
-                    ))
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: CachedNetworkImage(imageUrl: link2),
+                ))
                 : const SizedBox.shrink(),
           ),
           Container(
@@ -89,8 +117,8 @@ class _FriendsList extends State<FriendsList> {
                       GestureDetector(
                         onTap: () => showProfile(userData, context),
                         child:
-                            // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
-                            Text(
+                        // showName(color: Colors.white, size: 15, fontWeight: FontWeight.w600,)
+                        Text(
                           userData.username,
                           style: const TextStyle(
                             color: Colors.white,
@@ -116,76 +144,85 @@ class _FriendsList extends State<FriendsList> {
                 ),
                 isRequest
                     ? FloatingActionButton(
-                        mini: true,
-                        child: Icon(
-                          Icons.done,
-                          color: Color.fromRGBO(78, 212, 63, 1.0),
-                          size: 28.0,
-                        ),
-                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                        onPressed: () async {
-                          String? token = await storage.read(key: "token");
+                  heroTag: '1',
+                  mini: true,
+                  child: Icon(
+                    Icons.done,
+                    color: Color.fromRGBO(78, 212, 63, 1.0),
+                    size: 28.0,
+                  ),
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                  onPressed: () async {
+                    String? token = await storage.read(key: "token");
 
-                          if (token != null) {
-                            Map<String, String> data = {
-                              "user_id": userData.id,
-                              "is_accept": "1"
-                            };
-                            var response = await networkHandler.postAuth(
-                                "/friends/set-accept", data, token);
-                            debugPrint(response.body);
-                          };
-                          setState(() {
-                            Fluttertoast.showToast(msg: "Kết bạn thành công", fontSize: 18);
-                          });
-                        },
-                      )
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": userData.id,
+                        "is_accept": "1"
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-accept", data, token);
+                      debugPrint(response.body);
+                    };
+                    setState(() {
+                      Fluttertoast.showToast(msg: "Kết bạn thành công", fontSize: 18);
+                    });
+                  },
+                )
                     : FloatingActionButton(
-                        mini: true,
-                        child: Icon(
-                          MdiIcons.facebookMessenger,
-                          color: blueColor,
-                          size: 26.0,
-                        ),
-                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                        onPressed: () async {
-                          print("message");
-                        },
-                      ),
+                    heroTag: '2',
+                    mini: true,
+                    child: Icon(
+                      MdiIcons.facebookMessenger,
+                      color: blueColor,
+                      size: 26.0,
+                    ),
+                    backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                    onPressed: () async {
+                      print(userData.phonenumber);
+
+                      // chuyen qua man hinh tin nhan voi so dien thoai
+                      await getUserIdByUserPhoneNumber(userData.phonenumber);
+                      callChatDetailScreen(
+                          context, userData.username, friendChatUid);
+                    }
+                ),
                 SizedBox(width: 3.0),
                 isRequest
                     ? FloatingActionButton(
-                        mini: true,
-                        child: Icon(Icons.close, color: Colors.red, size: 26.0),
-                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                        onPressed: () async {
-                          String? token = await storage.read(key: "token");
+                  heroTag: '3',
+                  mini: true,
+                  child: Icon(Icons.close, color: Colors.red, size: 26.0),
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                  onPressed: () async {
+                    String? token = await storage.read(key: "token");
 
-                          if (token != null) {
-                            Map<String, String> data = {
-                              "user_id": userData.id,
-                              "is_accept": "2"
-                            };
-                            var response = await networkHandler.postAuth(
-                                "/friends/set-accept", data, token);
-                            debugPrint(response.body);
-                            // friends.removeWhere((element) => element.id == friends.id);
-                          }
-                          ;
-                        },
-                      )
+                    if (token != null) {
+                      Map<String, String> data = {
+                        "user_id": userData.id,
+                        "is_accept": "2"
+                      };
+                      var response = await networkHandler.postAuth(
+                          "/friends/set-accept", data, token);
+                      debugPrint(response.body);
+                      // friends.removeWhere((element) => element.id == friends.id);
+                    }
+                    ;
+                  },
+                )
                     : FloatingActionButton(
-                        mini: true,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 3.0),
-                          child: Icon(Icons.person_remove,   // Icons.no_accounts,
-                              color: pinkColor, size: 26.0),
-                        ),
-                        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-                        onPressed: ()  {
-                          RemoveFriend();
-                        },
-                      ),
+                  heroTag: '4',
+                  mini: true,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 3.0),
+                    child: Icon(Icons.person_remove,   // Icons.no_accounts,
+                        color: pinkColor, size: 26.0),
+                  ),
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+                  onPressed: ()  {
+                    RemoveFriend();
+                  },
+                ),
               ],
             ),
           ),
@@ -196,100 +233,100 @@ class _FriendsList extends State<FriendsList> {
   Future RemoveFriend() async {
     Size size = MediaQuery.of(context).size;
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.transparent,
-          content: Container(
-            height: 130,
-            width: size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black87,),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: size.width*0.6,
-                  height: 50,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: Text(
-                    'Bạn có chắc chắn muốn xoá bạn bè?',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          height: 130,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black87,),
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: size.width*0.6,
+                height: 50,
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text(
+                  'Bạn có chắc chắn muốn xoá bạn bè?',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
 
-                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        String? token = await storage.read(key: "token");
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      String? token = await storage.read(key: "token");
 
-                        if (token != null) {
-                          Map<String, String> data = {
-                            "user_id": userData.id,
-                          };
-                          var response = await networkHandler.postAuth(
-                              "/friends/set-remove", data, token);
-                          debugPrint(response.body);
+                      if (token != null) {
+                        Map<String, String> data = {
+                          "user_id": userData.id,
                         };
-                      },
-                      child: Container(
-                        height: 40,
-                        width: size.width*0.3,
-                        margin: EdgeInsets.fromLTRB(9, 5, 4, 5),
-                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: pinkColor,
-                          // border: Border.all(color: Colors.black87,),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Text(
-                          'Huỷ kết bạn',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
+                        var response = await networkHandler.postAuth(
+                            "/friends/set-remove", data, token);
+                        debugPrint(response.body);
+                      };
+                    },
+                    child: Container(
+                      height: 40,
+                      width: size.width*0.3,
+                      margin: EdgeInsets.fromLTRB(9, 5, 4, 5),
+                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: pinkColor,
+                        // border: Border.all(color: Colors.black87,),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Text(
+                        'Huỷ kết bạn',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
 
-                          ),
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: size.width*0.3,
-                        margin: EdgeInsets.fromLTRB(4, 5, 9, 5),
-                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black87,),
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: Text(
-                          'Trở lại',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 40,
+                      width: size.width*0.3,
+                      margin: EdgeInsets.fromLTRB(4, 5, 9, 5),
+                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black87,),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Text(
+                        'Trở lại',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
 
-                          ),
                         ),
                       ),
                     ),
-                  ],
-                )
-              ],
-            ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
+      ),
     );
   }
 }

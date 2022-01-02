@@ -18,10 +18,14 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
 
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
+  CollectionReference chatList = FirebaseFirestore.instance.collection('chat_list');
   final String friendUid;
   final String friendName;
-  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  var chatListId;
+  var chatListIdFriend;
   var chatDocId;
+  var currentName;
   var _textController = new TextEditingController();
   _ChatDetailState(this.friendUid, this.friendName);
   //Kiem tra xem co chat truoc do khong
@@ -29,24 +33,112 @@ class _ChatDetailState extends State<ChatDetail> {
   @override
   void initState() {
     super.initState();
+
+    // tao chatbox voi 2id la 2 nguoi dung
     chats.where('users',isEqualTo: {friendUid:null, currentUserId: null})
-    .limit(1)
-    .get()
-    .then((QuerySnapshot querySnapshot){
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
       if (querySnapshot.docs.isNotEmpty){
-        chatDocId = querySnapshot.docs.single.id;
+        setState(() {
+          chatDocId = querySnapshot.docs.single.id;
+        });
       } else{
         chats.add({
           'users':{
             currentUserId: null,
             friendUid: null,
           }
-        }).then((value) => {
-          chatDocId = value
+        }).then((value) {
+          setState(() {
+            chatDocId = value.id;
+          });
         });
       }
     }
     ).catchError((error){});
+
+    // tao list chat friend nguoi 1.
+    chatList.where('users',isEqualTo: {currentUserId:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        setState(() {
+          chatListId = querySnapshot.docs.single.id;
+        });
+      } else{
+        chatList.add({
+          'users':{
+            currentUserId: null,
+          }
+        }).then((value)   {
+          setState(() {
+            chatListId = value.id;
+          });
+        } );
+      }
+    }
+    ).catchError((error){});
+
+    // tao list chat friend nguoi 2.
+    chatList.where('users',isEqualTo: {friendUid:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        setState(() {
+          chatListIdFriend = querySnapshot.docs.single.id;
+        });
+      } else{
+        chatList.add({
+          'users':{
+            friendUid: null,
+          }
+        }).then((value)   {
+          setState(() {
+            chatListIdFriend = value.id;
+          });
+        } );
+      }
+    }
+    ).catchError((error){});
+  }
+
+  //return chat list id cua nguoi dung hien tai, tao id moi neu chua co
+  void addFriendToChatList(String chatId, String friendId, String friendName, String msg){
+    if (msg == '') return;
+    chatList.doc(chatId).collection('friends')
+        .where('userId', isEqualTo: friendId)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isEmpty){
+        chatList.doc(chatId).collection('friends').add(
+            {
+              'userId':friendId,
+              'userName':friendName
+            }
+        );
+      }
+    });
+  }
+
+  Future getUserCurrentName(String uid)async {
+    CollectionReference user= FirebaseFirestore.instance.collection('users');
+    await user.where('uid',isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.forEach((element) {
+          setState(() {
+            currentName = element["name"];
+          });
+        });
+      }
+    }
+    ).catchError((error){});
+
   }
 
   void sendMassage (String msg){
@@ -97,12 +189,12 @@ class _ChatDetailState extends State<ChatDetail> {
 
             return  CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
-              middle: Text(friendName),
-              trailing: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: (){},
-                child: Icon(CupertinoIcons.phone),
-              ),
+                middle: Text(friendName),
+                trailing: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: (){},
+                  child: Icon(CupertinoIcons.phone),
+                ),
               ),
 
               child: SafeArea(
@@ -114,70 +206,81 @@ class _ChatDetailState extends State<ChatDetail> {
                         children: snapshot.data!.docs.map((DocumentSnapshot document){
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-                           return Padding(
-                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                             child: ChatBubble(
-                               clipper: ChatBubbleClipper6(
-                                 nipSize: 0,
-                                 radius: 0,
-                                 type: BubbleType.receiverBubble,
-                               ),
-                               alignment: getAlignment(data['uid'].toString()),
-                               margin: EdgeInsets.only(top: 20),
-                               backGroundColor: isSender(data['uid'].toString())
-                               ? Color(0xFF08C187)
-                               :Color (0xffE7E7ED),
-                               child: Container(
-                                 constraints: BoxConstraints(
-                                   maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                 ),
-                                 child: Column(
-                                   children: [
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.start,
-                                       children: [
-                                         Text(data['msg'].toString(),style: TextStyle(
-                                           color: isSender(data['uid'].toString())
-                                           ? Colors.white
-                                           :Colors.black,
-                                         fontSize: 14),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                            child: ChatBubble(
+                              clipper: ChatBubbleClipper6(
+                                nipSize: 0,
+                                radius: 0,
+                                type: BubbleType.receiverBubble,
+                              ),
+                              alignment: getAlignment(data['uid'].toString()),
+                              margin: EdgeInsets.only(top: 20),
+                              backGroundColor: isSender(data['uid'].toString())
+                                  ? Color(0xFF08C187)
+                                  :Color (0xffE7E7ED),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text(data['msg'].toString(),style: TextStyle(
+                                            color: isSender(data['uid'].toString())
+                                                ? Colors.white
+                                                :Colors.black,
+                                            fontSize: 14),
 
-                                         maxLines: 100,
-                                           overflow: TextOverflow.clip,)
-                                       ],
-                                     ),
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.end,
-                                       children: [
-                                         Text(
-                                           data['createdOn'] == null ?
-                                               DateTime.now().toString() :
-                                               data['createdOn'] .toDate()
-                                               .toString(),
-                                           style: TextStyle(
-                                             fontSize: 10,
-                                             color: isSender(data['uid'].toString())
-                                               ?Colors.white : Colors.black
-                                           ),
-                                         )
-                                       ],
-                                     )
-                                   ],
-                                 ),
-                               ),
-                             ),
-                           );
+                                          maxLines: 100,
+                                          overflow: TextOverflow.clip,)
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          data['createdOn'] == null ?
+                                          DateTime.now().toString() :
+                                          data['createdOn'] .toDate()
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: isSender(data['uid'].toString())
+                                                  ?Colors.white : Colors.black
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
                         }).toList(),
                       ),
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(child: CupertinoTextField(controller: _textController,)),
-                      CupertinoButton(
-                        child: Icon(Icons.send_sharp),
-                        onPressed: () => sendMassage(_textController.text),
-                      )
-                    ],)
+                      children: [
+                        Expanded(child: CupertinoTextField(controller: _textController,)),
+                        CupertinoButton(
+                            child: Icon(Icons.send_sharp),
+                            onPressed: () async
+                            {
+                              await getUserCurrentName(currentUserId);
+                              //print("current user : " + currentUserId);
+                              //print("friend user :" +friendUid);
+                              //print(chatListId);
+                              addFriendToChatList(chatListId, friendUid, friendName, _textController.text);
+                              //print(chatListIdFriend);
+                              addFriendToChatList(chatListIdFriend, currentUserId, currentName, _textController.text);
+                              sendMassage(_textController.text);
+                            }
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
