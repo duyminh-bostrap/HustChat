@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
+import 'package:hust_chat/Screens/Profile/edit_profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/get_data/get_post.dart';
@@ -161,7 +162,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         IconButton(
                                           icon: Icon(Icons.edit, color: Colors.black),
                                           onPressed: () {
-                                            print("collections");
+                                            showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                context: context,
+                                                builder: (BuildContext context) => EditProfilePage()
+                                            );
                                           },
                                         ),
                                         Text('Chỉnh sửa', style: TextStyle(
@@ -518,6 +523,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(15.0)),
                   ),
                   child: Column(children: [
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) => EditProfilePage()
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: size.width * 0.12,
+                            height: size.height * 0.05,
+                            child: Icon(Icons.edit,
+                                size: 30, color: Colors.black87),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'Chỉnh sửa trang cá nhân',
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 10,
+                      color: Colors.black54,
+                      thickness: 1.2,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/changepass'),
                       child: Row(

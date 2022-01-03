@@ -295,21 +295,14 @@ class _PostView extends State<PostView> {
                                 itemCount: img.length,
                                 itemBuilder: (context, index) {
                                   final image = img[index];
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15.0)),
-                                    ),
-                                    child: image != ''
-                                        ? CachedNetworkImage(
-                                            imageUrl: "$host${image.name}",
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Container(
-                                            height: 10,
-                                          ),
-                                  );
+                                  return image != null
+                                      ? CachedNetworkImage(
+                                          imageUrl: "$host${image.name}",
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(
+                                          height: 10,
+                                        );
                                 },
                                 onPageChanged: (index) => setState(() {
                                   pageIndex = index;

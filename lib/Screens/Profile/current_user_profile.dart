@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
+import 'package:hust_chat/Screens/Profile/edit_profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/get_data/get_post.dart';
@@ -368,6 +369,22 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                   ),
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(225, 250, 0, 0), //top: 210, left: size.width*0.55
+                                child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(35, 35, 35, 0.9),
+                                      borderRadius: BorderRadius.all(Radius.circular(size.width*0.225)),
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(Icons.photo_camera, color: Colors.white, size: 32,),
+                                      onPressed: () => createPost(context),
+                                    )
+                                ),
+                              ),
                               Column(
                                 children: [
                                   SizedBox(height: 310,),
@@ -416,7 +433,11 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                             IconButton(
                                               icon: Icon(Icons.edit, color: Colors.black),
                                               onPressed: () {
-                                                print("collections");
+                                                showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (BuildContext context) => EditProfilePage()
+                                                );
                                               },
                                             ),
                                             Text('Chỉnh sửa', style: TextStyle(

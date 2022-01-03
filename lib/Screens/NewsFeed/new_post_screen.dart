@@ -466,8 +466,7 @@ AddNewPost(TextEditingController status, context) async {
   }
 }
 
-_createPost(
-    String described, List<XFile> imageFileList, XFile? video, context) async {
+_createPost(String described, List<XFile> imageFileList, XFile? video, context) async {
   final token = await storage.read(key: "token") ?? "";
 
   List<String> imagesByte = List<String>.empty(growable: true);

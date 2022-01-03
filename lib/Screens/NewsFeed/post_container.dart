@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
+import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/Screens/Profile/current_user_profile.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -107,15 +110,14 @@ class _PostContainer extends State<PostContainer> {
                   onTap: () => _openPost(post, context, pageIndex),
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    ),
                     child: image != ''
-                        ? CachedNetworkImage(
-                            imageUrl: "$host${image.name}",
-                            fit: BoxFit.cover,
-                          )
+                        ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: CachedNetworkImage(
+                              imageUrl: "$host${image.name}",
+                              fit: BoxFit.cover,
+                            ),
+                        )
                         : Container(
                             height: 300,
                           ),
@@ -241,7 +243,7 @@ class _PostHeader extends State<PostHeader> {
                         ),
                         child: Column(children: [
                           GestureDetector(
-                            onTap: () => print(post.userID.toString()),
+                            onTap: () => EditPost(),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -386,6 +388,11 @@ class _PostHeader extends State<PostHeader> {
     );
   }
 
+  Future EditPost() async {
+    Navigator.pop(context);
+    createPost(context);
+  }
+
   Future RemovePost() async {
     Size size = MediaQuery.of(context).size;
     Navigator.pop(context);
@@ -419,7 +426,20 @@ class _PostHeader extends State<PostHeader> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {},
+                    onTap: () async {
+                      String? token = await storage.read(key: "token");
+                      if (token != null) {
+                        String postID = post.id;
+                        String url = "posts/delete/" + postID;
+                        var response =
+                        await networkHandler.getWithAuth(url, token);
+                        Map output = json.decode(response.body);
+
+                        if (response.statusCode < 300) {
+                          Navigator.pop(context);
+                        }
+                      }
+                    },
                     child: Container(
                       height: 40,
                       width: size.width * 0.3,

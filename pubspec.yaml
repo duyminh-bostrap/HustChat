@@ -55,6 +55,7 @@ dependencies:
   flutter_lints: ^1.0.0
   http: ^0.13.4
   flutter_chat_bubble: any
+  animated_theme_switcher: ^2.0.6
 
 dev_dependencies:
   flutter_test:
