@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/Comment/comments_container.dart';
+import 'package:hust_chat/Screens/NewsFeed/edit_post_screen.dart';
 import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
@@ -125,7 +126,14 @@ class _PostView extends State<PostView> {
                             ),
                             child: Column(children: [
                               GestureDetector(
-                                onTap: () => print(post.userID.toString()),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (BuildContext bcx) => EditPostScreen(post: post)
+                                  );
+                                },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -288,7 +296,9 @@ class _PostView extends State<PostView> {
                           padding: const EdgeInsets.symmetric(vertical: 0.0),
                           child: HeroWidget(
                             tag: HeroTag.image(link),
-                            child: Container(
+                            child:
+                            img.length != 0?
+                            Container(
                               height: 300,
                               child: PageView.builder(
                                 controller: pageController,
@@ -309,7 +319,8 @@ class _PostView extends State<PostView> {
                                   print(index);
                                 }),
                               ),
-                            ),
+                            )
+                            : Container(height: 0,),
                           ),
                         )
                       : const SizedBox.shrink(),
