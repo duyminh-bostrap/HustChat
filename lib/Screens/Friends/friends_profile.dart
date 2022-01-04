@@ -348,8 +348,8 @@ class _FriendsProfile extends State<FriendsProfile> {
                                   height: 230,
                                   child: GestureDetector(
                                     onTap: () {print('coverimage');}, //_showProfile(post, context),
-                                    child: link2 != null
-                                        ? CachedNetworkImage(imageUrl: link2, fit: BoxFit.fitWidth,)
+                                    child: user.coverImage != null
+                                        ? CachedNetworkImage(imageUrl: "$host${user.coverImage.fileName}", fit: BoxFit.fitWidth,)
                                         : const SizedBox.shrink(),
                                   ),
                                 ),
@@ -360,7 +360,7 @@ class _FriendsProfile extends State<FriendsProfile> {
                                   child: GestureDetector(
                                     onTap: () {print('avatar');}, //_showProfile(post, context),
                                     child: ProfileAvatar(
-                                      imageUrl: link,
+                                      imageUrl: user.avatar != null? "$host${user.avatar.fileName}" : link,
                                       hasBorder: true,
                                       minSize: 75,
                                       maxSize: 80,
@@ -537,13 +537,13 @@ class _FriendsProfile extends State<FriendsProfile> {
                                                 Expanded(
                                                     child: Card(
                                                       child:
-                                                      Image.network(link2),
+                                                      Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                     )
                                                 ),
                                                 Expanded(
                                                     child: Card(
                                                       child:
-                                                      Image.network(link2),
+                                                      Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                     )
                                                 )
                                               ],),
@@ -551,19 +551,19 @@ class _FriendsProfile extends State<FriendsProfile> {
                                                 Expanded(
                                                     child: Card(
                                                       child:
-                                                      Image.network(link2),
+                                                      Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                     )
                                                 ),
                                                 Expanded(
                                                     child: Card(
                                                       child:
-                                                      Image.network(link2),
+                                                      Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                     )
                                                 ),
                                                 Expanded(
                                                     child: Card(
                                                       child:
-                                                      Image.network(link2),
+                                                      Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                     )
                                                 )
                                               ],)

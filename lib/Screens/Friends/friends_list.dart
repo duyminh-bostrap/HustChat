@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/Message/chat_detail.dart';
+import 'package:hust_chat/Screens/Profile/edit_profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
@@ -83,12 +84,12 @@ class _FriendsList extends State<FriendsList> {
         children: [
           GestureDetector(
             onTap: () => showProfile(userData, context),
-            child: link != null
+            child: userData.coverImage != null
                 ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: link2),
+                  child: CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}"),
                 ))
                 : const SizedBox.shrink(),
           ),
@@ -105,7 +106,7 @@ class _FriendsList extends State<FriendsList> {
                 GestureDetector(
                   onTap: () => showProfile(userData, context),
                   child: ProfileAvatar(
-                    imageUrl: link,
+                    imageUrl: userData.avatar != null? "$host${userData.avatar.fileName}" : link,
                     hasBorder: true,
                   ),
                 ),
