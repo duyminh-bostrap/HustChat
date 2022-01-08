@@ -25,12 +25,13 @@ class FriendsApi {
     }
     return [];
   }
+
   static Future<List<UserData>> getListFriends() async {
     String? token = await storage.read(key: "token");
     // print(token);
     if (token != null) {
-      var response = await networkHandler.postAuthWithoutBody(
-          "/friends/list", token);
+      var response =
+          await networkHandler.postAuthWithoutBody("/friends/list", token);
       // debugPrint(response.body);
       final users = friendRequestsFromJson(response.body);
       // debugPrint(response.body);
@@ -39,6 +40,11 @@ class FriendsApi {
       return user;
     }
     return [];
+  }
+
+  static void blockUser(UserData user) async {
+    String? token = await storage.read(key: "token");
+    
   }
 }
 

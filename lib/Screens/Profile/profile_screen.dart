@@ -121,17 +121,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     SizedBox(width: 10.0,),
-                                    // Text(
-                                    //   user.name,
-                                    //   style: TextStyle(
-                                    //       color: Colors.black,
-                                    //       fontSize: 20,
-                                    //       fontWeight: FontWeight.bold
-                                    //   )
-                                    // ),
-                                    showName(color: Colors.black,
-                                        size: 20,
-                                        fontWeight: FontWeight.bold),
+                                    Text(
+                                      posts![0].username,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold
+                                      )
+                                    ),
+                                    // showName(color: Colors.black,
+                                    //     size: 20,
+                                    //     fontWeight: FontWeight.bold),
                                     SizedBox(width: 10.0,),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5.0),

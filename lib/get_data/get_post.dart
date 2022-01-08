@@ -146,6 +146,20 @@ class PostsApi {
       coverImage: CoverIMG(type: "", id: "", fileName: ""),
     );
   }
+
+  static void reportPost(PostData post,TextEditingController subject, TextEditingController details) async {
+    String? token = await storage.read(key: "token");
+    String postId = post.id;
+    Map<String, String> data = {
+        "subject": subject.text,
+        "details": details.text
+      };
+    if (token != null) {
+      String url = "/postReport/create/" + postId;
+      var response = await networkHandler.postAuth(url,data, token);
+      debugPrint(response.body);
+    }
+  }
 }
 
 class ShowPostInfo extends StatelessWidget {

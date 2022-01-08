@@ -16,7 +16,7 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-String link =dotenv.env['link']??"";
+String link = dotenv.env['link'] ?? "";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -42,7 +42,6 @@ class _EditPostScreen extends State<EditPostScreen> {
   TextEditingController status = TextEditingController();
   bool setAtStart = true;
 
-
   _EditPostScreen({
     Key? key,
     required this.post,
@@ -50,7 +49,7 @@ class _EditPostScreen extends State<EditPostScreen> {
 
   _pickImage() async {
     final pickedFileList =
-    await ImagePicker().pickMultiImage(maxHeight: 120, maxWidth: 120);
+        await ImagePicker().pickMultiImage(maxHeight: 120, maxWidth: 120);
     if (pickedFileList!.isNotEmpty) {
       setState(() {
         _imageFileList = pickedFileList;
@@ -60,7 +59,7 @@ class _EditPostScreen extends State<EditPostScreen> {
 
   _pickVideo() async {
     final pickedVideo =
-    await ImagePicker().pickVideo(source: ImageSource.gallery);
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (pickedVideo != null) {
       setState(() {
         _videoFile = pickedVideo;
@@ -88,7 +87,7 @@ class _EditPostScreen extends State<EditPostScreen> {
     Size size = MediaQuery.of(context).size;
     var isOpenKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
 
-    if (setAtStart){
+    if (setAtStart) {
       status.text = post.content;
       imageOldList.addAll(post.images);
       setAtStart = false;
@@ -146,8 +145,12 @@ class _EditPostScreen extends State<EditPostScreen> {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                                   child: RaisedButton(
-                                    onPressed: () => _editPost(status.text,
-                                        _imageFileList, imageOldList, _videoFile, context),
+                                    onPressed: () => _editPost(
+                                        status.text,
+                                        _imageFileList,
+                                        imageOldList,
+                                        _videoFile,
+                                        context,post),
                                     color: Colors.white,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
@@ -240,74 +243,88 @@ class _EditPostScreen extends State<EditPostScreen> {
                         border: InputBorder.none),
                   ),
                 ),
-                imageOldList != null?
-                Container(
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
-                    height: 480,
-                    child: ListView.builder(
-                      itemCount: _imageFileList != null? _imageFileList.length + imageOldList.length : imageOldList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Stack(
-                          children: [
-                            Column(
-                              children: [
-                                index < _imageFileList.length?
-                                Container(
-                                  width: size.width,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    child: Image.file(
-                                      File(_imageFileList[index].path),
-                                      fit: BoxFit.fitWidth,
-                                    ),
+                imageOldList != null
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                        height: 480,
+                        child: ListView.builder(
+                            itemCount: _imageFileList != null
+                                ? _imageFileList.length + imageOldList.length
+                                : imageOldList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      index < _imageFileList.length
+                                          ? Container(
+                                              width: size.width,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                                child: Image.file(
+                                                  File(_imageFileList[index]
+                                                      .path),
+                                                  fit: BoxFit.fitWidth,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              width: size.width,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "$host${post.images[index - _imageFileList.length].name}",
+                                                  fit: BoxFit.fitWidth,
+                                                ),
+                                              ),
+                                            ),
+                                      SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
                                   ),
-                                )
-                                : Container(
-                                  width: size.width,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: "$host${post.images[index-_imageFileList.length].name}",
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10,)
-                              ],
-                            ),
-                            Positioned(
-                                top: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        print(index-_imageFileList.length);
-                                        index < _imageFileList.length?
-                                        _imageFileList.removeAt(index)
-                                        : imageOldList.removeAt(index-_imageFileList.length);
-                                      });
-                                    },
-                                    child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Color.fromRGBO(0, 0, 0, 0.4),
-                                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                        ),
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 23,
-                                          color: Colors.white,
-                                        )
-                                    )
-                                )
-                            ),
-                          ],
-                        );
-                      }
-                    ),
-                )
-                : Container(height: 0, width: 0,),
+                                  Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              print(index -
+                                                  _imageFileList.length);
+                                              index < _imageFileList.length
+                                                  ? _imageFileList.removeAt(
+                                                      index)
+                                                  : imageOldList.removeAt(
+                                                      index -
+                                                          _imageFileList
+                                                              .length);
+                                            });
+                                          },
+                                          child: Container(
+                                              width: 40,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.4),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15.0)),
+                                              ),
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 23,
+                                                color: Colors.white,
+                                              )))),
+                                ],
+                              );
+                            }),
+                      )
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      ),
                 // Container(
                 //     width: size.width,
                 //     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -341,148 +358,150 @@ class _EditPostScreen extends State<EditPostScreen> {
                   },
                   child: isListIcons
                       ? Container(
-                      width: size.width,
-                      height: 200,
-                      padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(54, 54, 54, 1.0),
-                        borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            ),
+                          width: size.width,
+                          height: 200,
+                          padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(54, 54, 54, 1.0),
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
                           ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => _pickImage(),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.collections,
-                                      size: 28,
-                                      color: Color.fromRGBO(
-                                          74, 198, 104, 1.0)),
-                                  SizedBox(width: 15),
-                                  Text('Chọn ảnh từ thư viện',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            height: 10,
-                            color: Colors.white,
-                            thickness: 1.2,
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => pickImage(ImageSource.camera),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.photo_camera,
-                                      size: 28, color: blueColor),
-                                  SizedBox(width: 15),
-                                  Text('Chụp ảnh / Quay video',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            height: 10,
-                            color: Colors.white,
-                            thickness: 1.2,
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => _pickVideo(),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.videocam,
-                                      size: 28, color: Colors.redAccent),
-                                  SizedBox(width: 15),
-                                  Text('Chọn video từ thư viện',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ))
-                      : Container(
-                      width: size.width,
-                      height: 65,
-                      padding: const EdgeInsets.fromLTRB(5, 8, 5, 5),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(54, 54, 54, 1.0),
-                        borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 5,
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                          ),
-                          Row(
+                          child: Column(
                             children: [
-                              SizedBox(
-                                width: 15,
+                              Container(
+                                width: 50,
+                                height: 5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                ),
                               ),
                               Expanded(
-                                child: Text(
-                                  'Thêm vào bài viết của bạn',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
+                                child: GestureDetector(
+                                  onTap: () => _pickImage(),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.collections,
+                                          size: 28,
+                                          color: Color.fromRGBO(
+                                              74, 198, 104, 1.0)),
+                                      SizedBox(width: 15),
+                                      Text('Chọn ảnh từ thư viện',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w400)),
+                                    ],
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 10,
+                              Divider(
+                                height: 10,
+                                color: Colors.white,
+                                thickness: 1.2,
                               ),
-                              Icon(Icons.collections,
-                                  size: 28,
-                                  color: Color.fromRGBO(74, 198, 104, 1.0)),
-                              SizedBox(
-                                width: 5,
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => pickImage(ImageSource.camera),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.photo_camera,
+                                          size: 28, color: blueColor),
+                                      SizedBox(width: 15),
+                                      Text('Chụp ảnh / Quay video',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w400)),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Icon(Icons.photo_camera,
-                                  size: 28, color: blueColor),
-                              SizedBox(
-                                width: 5,
+                              Divider(
+                                height: 10,
+                                color: Colors.white,
+                                thickness: 1.2,
                               ),
-                              Icon(Icons.videocam,
-                                  size: 28, color: Colors.redAccent),
-                              SizedBox(
-                                width: 15,
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => _pickVideo(),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.videocam,
+                                          size: 28, color: Colors.redAccent),
+                                      SizedBox(width: 15),
+                                      Text('Chọn video từ thư viện',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w400)),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
+                          ))
+                      : Container(
+                          width: size.width,
+                          height: 65,
+                          padding: const EdgeInsets.fromLTRB(5, 8, 5, 5),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(54, 54, 54, 1.0),
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
                           ),
-                        ],
-                      )),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 5,
+                                margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0)),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'Thêm vào bài viết của bạn',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.collections,
+                                      size: 28,
+                                      color: Color.fromRGBO(74, 198, 104, 1.0)),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(Icons.photo_camera,
+                                      size: 28, color: blueColor),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(Icons.videocam,
+                                      size: 28, color: Colors.redAccent),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
                 ))
           ],
         ),
@@ -497,28 +516,35 @@ class _EditPostScreen extends State<EditPostScreen> {
   }
 }
 
-_editPost(String described, List<XFile> imageFileList, List<ImageModel> imageOldList, XFile? videoFile, BuildContext context) async {
+_editPost(
+    String described,
+    List<XFile> imageFileList,
+    List<ImageModel> imageOldList,
+    XFile? videoFile,
+    BuildContext context,
+    PostData post) async {
   final token = await storage.read(key: "token") ?? "";
 
   List<String> imagesByte = List<String>.empty(growable: true);
 
   if (imageFileList.isNotEmpty) {
     List<File> listFile =
-    imageFileList.map((image) => File(image.path)).toList();
-    imagesByte.addAll(listFile.map((e) =>
-    "data:image/jpeg;base64," + base64.encode(e.readAsBytesSync()))
+        imageFileList.map((image) => File(image.path)).toList();
+    imagesByte.addAll(listFile
+        .map((e) =>
+            "data:image/jpeg;base64," + base64.encode(e.readAsBytesSync()))
         .toList());
   }
 
   File videoFile;
-
+  String url = "/posts/edit/" + post.id;
   Map data = {
     "described": described,
     "images": imagesByte.isEmpty ? [] : imagesByte,
     "videos": []
   };
 
-  var response = await networkHandler.postAuth1("/posts/create", data, token);
+  var response = await networkHandler.postAuth1(url, data, token);
   if (response.statusCode < 300) {
     print("success");
     Navigator.pop(context);
