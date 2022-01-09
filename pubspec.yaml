@@ -48,10 +48,10 @@ dependencies:
   intl: ^0.17.0
   # material_design_icons_flutter: ^4.0.5345
   cupertino_list_tile: ^0.2.0
-  firebase_auth: ^3.3.4
-  cloud_firestore: ^3.1.5
-  firebase_core: ^1.10.6
-  cloud_functions: ^1.0.0
+  firebase_auth: any
+  cloud_firestore: any
+  firebase_core: any
+  cloud_functions: any
   flutter_lints: ^1.0.0
   http: ^0.13.4
   flutter_chat_bubble: any

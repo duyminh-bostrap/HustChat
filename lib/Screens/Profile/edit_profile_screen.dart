@@ -193,11 +193,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     child: coverImage != null
                                         ? Image.file(
                                             File(coverImage!.path),
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.fitWidth,
                                           )
                                         : CachedNetworkImage(
-                                            imageUrl:
-                                                "$host${user.coverImage.fileName}"),
+                                            imageUrl: "$host${user.coverImage.fileName}",
+                                            fit: BoxFit.fitWidth,
+                                        ),
                                   ),
                                 ),
                               )
@@ -235,8 +236,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           fit: BoxFit.cover,
                                         )
                                       : CachedNetworkImage(
-                                          imageUrl:
-                                              "$host${user.coverImage.fileName}"),
+                                        imageUrl: "$host${user.coverImage.fileName}",
+                                        fit: BoxFit.fitWidth,
+                                        ),
                                 ),
                               ),
                             );
@@ -765,29 +767,63 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    saveEditProfile(avatarImage, coverImage, selectGender,
-                        Username, context);
-                    print('save');
+                FutureBuilder<UserData>(
+                  future: UsersApi.getCurrentUserData(),
+                  builder: (context, snapshot) {
+                    final user = snapshot.data;
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 60,
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                            decoration: BoxDecoration(
+                              color: greenColor,
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Text(
+                              'Lưu',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        );
+                      default:
+                        if (snapshot.hasError) {
+                          return Center(child: Text('Some error occurred!'));
+                        } else {
+                          return GestureDetector(
+                            onTap: () {
+                              saveEditProfile(user!, avatarImage, coverImage, selectGender,
+                                  Username, context);
+                              print('save');
+                            },
+                            child: Container(
+                              height: 60,
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                              decoration: BoxDecoration(
+                                color: greenColor,
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: Text(
+                                'Lưu',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          );
+                        }
+                    }
                   },
-                  child: Container(
-                    height: 60,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
-                    decoration: BoxDecoration(
-                      color: greenColor,
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: Text(
-                      'Lưu',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
                 ),
+
                 SizedBox(
                   height: 20,
                 )
@@ -1109,6 +1145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 }
 
 saveEditProfile(
+    UserData user,
     XFile? avatar1,
     XFile? coverImage,
     int? selectGender,
