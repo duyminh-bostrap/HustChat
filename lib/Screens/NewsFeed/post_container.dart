@@ -589,6 +589,9 @@ class PostHeader extends StatefulWidget {
 
 class _PostHeader extends State<PostHeader> {
   final PostData post;
+  bool isReport = false;
+  TextEditingController head = TextEditingController();
+  TextEditingController description = TextEditingController();
 
   _PostHeader({
     Key? key,
@@ -606,17 +609,23 @@ class _PostHeader extends State<PostHeader> {
             case ConnectionState.waiting:
               return Row(
                 children: [
-                  ProfileAvatar(imageUrl: link),
+                  GestureDetector(
+                    onTap: () => _showProfile(post, context),
+                    child: ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link),
+                  ),
                   const SizedBox(width: 10.0),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          post.username,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                        GestureDetector(
+                          onTap: () => _showProfile(post, context),
+                          child: Text(
+                            post.username,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                         SizedBox(height: 5.0),
@@ -723,81 +732,131 @@ class _PostHeader extends State<PostHeader> {
                                 ),
                               ]))
                               : Container(
-                              margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
+                              margin: EdgeInsets.fromLTRB(10.0, size.height * 0.09,
                                   10.0, size.height * 0.145),
                               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                               ),
-                              child: Column(children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    String? userID = await storage.read(key: "id");
-                                    print(post.userID.toString() +
-                                        "___" +
-                                        userID.toString());
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
+                              child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(width: 20),
+                                        Container(
+                                          width: 20,
+                                          height: 50,
+                                          child: Icon(Icons.report_gmailerrorred,
+                                              size: 30, color: Colors.black87),
+                                        ),
+                                        SizedBox(width: 25,),
+                                        Expanded(
+                                          child: Text(
+                                            'Báo cáo bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      height: 130,
+                                      margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                                      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.all(Radius.circular(15)),
                                       ),
-                                      Container(
-                                        width: 20,
-                                        height: 50,
-                                        child: Icon(Icons.report_gmailerrorred,
-                                            size: 30, color: Colors.black87),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  controller: head,
+                                                  cursorColor: Colors.black45,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'Tiêu đề',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 17,
+                                                          color: Colors.black87,
+                                                          fontWeight: FontWeight.w300),
+                                                      border: InputBorder.none),
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  print('aaaa');
+                                                },
+                                                child: Icon(
+                                                  MdiIcons.send,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
+                                            height: size.height * 0.01,
+                                            color: Colors.black54,
+                                            thickness: 1,
+                                          ),
+                                          Expanded(
+                                            child: TextFormField(
+                                              maxLines: 2,
+                                              controller: description,
+                                              cursorColor: Colors.black45,
+                                              decoration: InputDecoration(
+                                                  hintText: 'Nội dung báo cáo',
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.black87,
+                                                      fontWeight: FontWeight.w300),
+                                                  border: InputBorder.none),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: 25,
+                                    ),
+                                    Divider(
+                                      height: size.height * 0.01,
+                                      color: Colors.black54,
+                                      thickness: 1.2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => BlockPost(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 50,
+                                            child: Icon(Icons.cancel_presentation,
+                                                size: 30, color: Colors.black87),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Text(
+                                            'Chặn bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'Báo cáo bài viết',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Divider(
-                                  height: size.height * 0.01,
-                                  color: Colors.black54,
-                                  thickness: 1.2,
-                                  indent: 20,
-                                  endIndent: 20,
-                                ),
-                                GestureDetector(
-                                  onTap: () => BlockPost(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        width: 20,
-                                        height: 50,
-                                        child: Icon(Icons.cancel_presentation,
-                                            size: 30, color: Colors.black87),
-                                      ),
-                                      SizedBox(
-                                        width: 25,
-                                      ),
-                                      Text(
-                                        'Chặn bài viết',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ]));
+                                    ),
+                                  ]));
                         },
                       );
                     },
@@ -933,43 +992,93 @@ class _PostHeader extends State<PostHeader> {
                                     ),
                                   ]))
                                   : Container(
-                                  margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
+                                  margin: EdgeInsets.fromLTRB(10.0, size.height * 0.09,
                                       10.0, size.height * 0.145),
                                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.all(Radius.circular(15.0)),
                                   ),
-                                  child: Column(children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        String? userID = await storage.read(key: "id");
-                                        print(post.userID.toString() +
-                                            "___" +
-                                            userID.toString());
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Container(
-                                            width: 20,
-                                            height: 50,
-                                            child: Icon(Icons.report_gmailerrorred,
-                                                size: 30, color: Colors.black87),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          Text(
+                                  child: Column(
+                                      children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(width: 20),
+                                        Container(
+                                          width: 20,
+                                          height: 50,
+                                          child: Icon(Icons.report_gmailerrorred,
+                                              size: 30, color: Colors.black87),
+                                        ),
+                                        SizedBox(width: 25,),
+                                        Expanded(
+                                          child: Text(
                                             'Báo cáo bài viết',
                                             style: TextStyle(
                                                 color: Colors.black87,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500),
-                                          )
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      height: 130,
+                                      margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                                      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  controller: head,
+                                                  cursorColor: Colors.black45,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'Tiêu đề?',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 17,
+                                                          color: Colors.black87,
+                                                          fontWeight: FontWeight.w300),
+                                                      border: InputBorder.none),
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  print('aaaa');
+                                                },
+                                                child: Icon(
+                                                  MdiIcons.send,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
+                                            height: size.height * 0.01,
+                                            color: Colors.black54,
+                                            thickness: 1,
+                                          ),
+                                          Expanded(
+                                            child: TextFormField(
+                                              maxLines: 2,
+                                              controller: description,
+                                              cursorColor: Colors.black45,
+                                              decoration: InputDecoration(
+                                                  hintText: 'Nội dung báo cáo',
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.black87,
+                                                      fontWeight: FontWeight.w300),
+                                                  border: InputBorder.none),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
