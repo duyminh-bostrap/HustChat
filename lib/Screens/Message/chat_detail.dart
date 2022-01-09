@@ -58,7 +58,7 @@ class _ChatDetailState extends State<ChatDetail> {
     }
     ).catchError((error){});
 
-    // tao list chat friend nguoi 1.
+    // lay list chat friend nguoi 1.
     chatList.where('users',isEqualTo: {currentUserId:null})
         .limit(1)
         .get()
@@ -67,21 +67,11 @@ class _ChatDetailState extends State<ChatDetail> {
         setState(() {
           chatListId = querySnapshot.docs.single.id;
         });
-      } else{
-        chatList.add({
-          'users':{
-            currentUserId: null,
-          }
-        }).then((value)   {
-          setState(() {
-            chatListId = value.id;
-          });
-        } );
       }
     }
     ).catchError((error){});
 
-    // tao list chat friend nguoi 2.
+    // lay list chat friend nguoi 2.
     chatList.where('users',isEqualTo: {friendUid:null})
         .limit(1)
         .get()
@@ -90,16 +80,6 @@ class _ChatDetailState extends State<ChatDetail> {
         setState(() {
           chatListIdFriend = querySnapshot.docs.single.id;
         });
-      } else{
-        chatList.add({
-          'users':{
-            friendUid: null,
-          }
-        }).then((value)   {
-          setState(() {
-            chatListIdFriend = value.id;
-          });
-        } );
       }
     }
     ).catchError((error){});

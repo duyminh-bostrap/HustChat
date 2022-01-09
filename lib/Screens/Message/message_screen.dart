@@ -100,7 +100,7 @@ class _MessageScreenState extends State<MessageScreen> {
       'chat_list');
 
   var chatListId = null;
-  var haveMsg = false;
+  var notHaveMsg = false;
 
   @override
   void initState() {
@@ -119,35 +119,11 @@ class _MessageScreenState extends State<MessageScreen> {
     ).catchError((error) {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    if (chatListId == null) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-
-        body: SizedBox(
-          width: size.width,
-          child: BackGround(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Hãy kết bạn để nhắn tin',
-                  style: TextStyle(
-                    color: pinkColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 120,),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return StreamBuilder<QuerySnapshot>(
+      return StreamBuilder<QuerySnapshot>(
         stream:chatList.doc(chatListId).collection('friends').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
           if(snapshot.hasError){
