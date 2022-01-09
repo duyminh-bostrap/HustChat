@@ -14,8 +14,9 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-String link =dotenv.env['link']??"";
-String link2 =dotenv.env['link2']??"";
+String link = dotenv.env['link'] ?? "";
+String link2 = dotenv.env['link2'] ?? "";
+String host = dotenv.env['host'] ?? "";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();

@@ -18,6 +18,7 @@ import '../../network_handler.dart';
 
 String link = dotenv.env['link'] ?? "";
 String link2 = dotenv.env['link2'] ?? "";
+String host = dotenv.env['host'] ?? "";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();

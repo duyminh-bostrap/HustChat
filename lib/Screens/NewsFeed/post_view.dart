@@ -14,6 +14,7 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/comment_list.dart';
 import 'package:hust_chat/models/img_model.dart';
 import 'package:hust_chat/models/models.dart';
@@ -752,7 +753,7 @@ class _PostView extends State<PostView> {
                   padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                   alignment: Alignment.topCenter,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(27, 27, 27, 1.0),
+                    color: Color.fromRGBO(241, 241, 241, 1.0),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20)),
                   ),
@@ -765,7 +766,22 @@ class _PostView extends State<PostView> {
                     ),
                     child: Row(
                       children: [
-                        ProfileAvatar(imageUrl: link, maxSize: 20),
+                        FutureBuilder<UserData>(
+                          future: UsersApi.getCurrentUserData(),
+                          builder: (context, snapshot) {
+                            final user = snapshot.data;
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return ProfileAvatar(imageUrl: link, maxSize: 20);
+                              default:
+                                if (snapshot.hasError) {
+                                  return Center(child: Text('Some error occurred!'));
+                                } else {
+                                  return ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link ,maxSize: 20);
+                                }
+                            }
+                          },
+                        ),
                         SizedBox(
                           width: 10,
                         ),
@@ -802,7 +818,7 @@ class _PostView extends State<PostView> {
                   )))
         ]),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.black87,
+          color: Color.fromRGBO(236, 236, 236, 1.0),
           child: Container(
             height: 0,
           ),

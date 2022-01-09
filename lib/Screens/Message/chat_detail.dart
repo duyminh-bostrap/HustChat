@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
+import 'package:hust_chat/models/models.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+String link = dotenv.env['link'] ?? "";
+String link2 = dotenv.env['link2'] ?? "";
+String host = dotenv.env['host'] ?? "";
 
 class ChatDetail extends StatefulWidget {
   final String friendUid;
@@ -26,7 +35,7 @@ class _ChatDetailState extends State<ChatDetail> {
   var chatListIdFriend;
   var chatDocId;
   var currentName;
-  var _textController = new TextEditingController();
+  var writeMessage = new TextEditingController();
   _ChatDetailState(this.friendUid, this.friendName);
   //Kiem tra xem co chat truoc do khong
 
@@ -128,7 +137,7 @@ class _ChatDetailState extends State<ChatDetail> {
       'uid':currentUserId,
       'msg':msg
     }).then((value){
-      _textController.text = '';
+      writeMessage.text = '';
     });
   }
 
@@ -145,6 +154,8 @@ class _ChatDetailState extends State<ChatDetail> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("chats")
@@ -177,10 +188,13 @@ class _ChatDetailState extends State<ChatDetail> {
                 ),
               ),
 
-              child: SafeArea(
-                child: Column(
+              child: Scaffold(
+                extendBodyBehindAppBar: true,
+                backgroundColor: Colors.white,
+                body: Stack(
                   children: [
-                    Expanded(
+                    Container(
+                      margin: EdgeInsets.only(bottom: 65),
                       child: ListView(
                         reverse: true,
                         children: snapshot.data!.docs.map((DocumentSnapshot document){
@@ -242,26 +256,105 @@ class _ChatDetailState extends State<ChatDetail> {
                         }).toList(),
                       ),
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(child: CupertinoTextField(controller: _textController,)),
-                        CupertinoButton(
-                            child: Icon(Icons.send_sharp),
-                            onPressed: () async
-                            {
-                              await getUserCurrentName(currentUserId);
-                              //print("current user : " + currentUserId);
-                              //print("friend user :" +friendUid);
-                              //print(chatListId);
-                              addFriendToChatList(chatListId, friendUid, friendName, _textController.text);
-                              //print(chatListIdFriend);
-                              addFriendToChatList(chatListIdFriend, currentUserId, currentName, _textController.text);
-                              sendMassage(_textController.text);
-                            }
-                        )
-                      ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child:
+                        Container(
+                            width: size.width,
+                            height: 55,
+                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            alignment: Alignment.topCenter,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(241, 241, 241, 1.0),
+                              borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
+                              alignment: Alignment.topCenter,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                              ),
+                              child: Row(
+                                children: [
+                                  FutureBuilder<UserData>(
+                                    future: UsersApi.getCurrentUserData(),
+                                    builder: (context, snapshot) {
+                                      final user = snapshot.data;
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return ProfileAvatar(imageUrl: link, maxSize: 20);
+                                        default:
+                                          if (snapshot.hasError) {
+                                            return Center(child: Text('Some error occurred!'));
+                                          } else {
+                                            return ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link ,maxSize: 20);
+                                          }
+                                      }
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: writeMessage,
+                                      textAlign: TextAlign.left,
+                                      cursorColor: Colors.black87,
+                                      maxLines: 1,
+                                      decoration: InputDecoration(
+                                          hintText: 'Trả lời...',
+                                          hintStyle: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w300),
+                                          border: InputBorder.none
+
+                                        // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(MdiIcons.send,),
+                                    onPressed: () async {
+                                        await getUserCurrentName(currentUserId);
+                                        //print("current user : " + currentUserId);
+                                        //print("friend user :" +friendUid);
+                                        //print(chatListId);
+                                        addFriendToChatList(chatListId, friendUid, friendName, writeMessage.text);
+                                        //print(chatListIdFriend);
+                                        addFriendToChatList(chatListIdFriend, currentUserId, currentName, writeMessage.text);
+                                        sendMassage(writeMessage.text);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )),
+                        // Expanded(child: CupertinoTextField(controller: _textController,)),
+                        // CupertinoButton(
+                        //     child: Icon(Icons.send_sharp),
+                        //     onPressed: () async
+                        //     {
+                        //       await getUserCurrentName(currentUserId);
+                        //       //print("current user : " + currentUserId);
+                        //       //print("friend user :" +friendUid);
+                        //       //print(chatListId);
+                        //       addFriendToChatList(chatListId, friendUid, friendName, _textController.text);
+                        //       //print(chatListIdFriend);
+                        //       addFriendToChatList(chatListIdFriend, currentUserId, currentName, _textController.text);
+                        //       sendMassage(_textController.text);
+                        //     }
+                        // )
+
                     )
                   ],
+                ),
+                bottomNavigationBar: BottomAppBar(
+                  color: Color.fromRGBO(236, 236, 236, 1.0),
+                  child: Container(
+                    height: 0,
+                  ),
                 ),
               ),
             );
