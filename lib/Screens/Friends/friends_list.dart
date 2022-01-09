@@ -14,7 +14,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:hust_chat/Screens/Message/database_firebase.dart';
 
 import '../../network_handler.dart';
-import '../bad_connection.dart';
 
 String link = "http://localhost:8000/files/avatar_2.png";
 String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
@@ -85,12 +84,15 @@ class _FriendsList extends State<FriendsList> {
           GestureDetector(
             onTap: () => showProfile(userData, context),
             child: userData.coverImage != null
-                ? Padding(
+                ? Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}"),
-                ))
+                child:
+                  CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}", fit: BoxFit.cover)
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(15.0),
+                //   child: CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}", fit: BoxFit.cover),
+                // )
+                )
                 : const SizedBox.shrink(),
           ),
           Container(

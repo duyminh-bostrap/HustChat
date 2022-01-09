@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Friends/friends_list_container.dart';
-import 'package:hust_chat/Screens/Message/message_screen.dart';
 import 'package:hust_chat/Screens/Search/user_search_info.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Profile/profile_screen.dart';
@@ -11,7 +10,7 @@ import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'bad_connection.dart';
-
+import 'package:hust_chat/Screens/Message/message_screen.dart';
 
 class MainPage extends StatefulWidget {
   int current_index;
@@ -29,8 +28,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
 
   final List<Widget> screens = [
-    // MessageScreen(), //Trang tin nhắn
-    BadConnection(),
+    MessageScreen(), //Trang tin nhắn
+    //BadConnection(),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(isProfile: false,), // Trang cá nhân
@@ -68,7 +67,7 @@ class _MainPageState extends State<MainPage> {
                             border: InputBorder.none,
                             hintText: "Tìm kiếm bạn bè",
                             hintStyle:
-                                TextStyle(color: Colors.black54, fontSize: 16.0),
+                            TextStyle(color: Colors.black54, fontSize: 16.0),
                             // focusColor: Colors.red,
                             // icon: Icon(Icons.search, color: Colors.black54),
                           ),

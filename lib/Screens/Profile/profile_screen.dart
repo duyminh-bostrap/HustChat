@@ -8,7 +8,7 @@ import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
 import 'package:hust_chat/Screens/Profile/edit_profile_screen.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
-import 'package:hust_chat/get_data/get_post.dart';
+import 'package:hust_chat/Screens/Message/auth_firebase.dart';
 import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
@@ -36,6 +36,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isProfile = false;
+  AuthMethods authMethods = new AuthMethods();
 
   _ProfileScreenState({
     Key? key,

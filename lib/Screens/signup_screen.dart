@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hust_chat/Screens/Message/database_firebase.dart';
 import 'package:hust_chat/Screens/Widget/background.dart';
 import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'dart:convert';
+import 'Message/auth_firebase.dart';
 import 'Widget/rounded_password_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -14,6 +18,8 @@ class SignUpScreen extends StatefulWidget {
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
+
+
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -21,6 +27,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController2 = TextEditingController();
   NetworkHandler networkHandler = NetworkHandler();
   final formKey = GlobalKey<FormState>();
+
+  // for signup firebase
+  AuthMethods authMethods = new AuthMethods();
+
+  // for update data firebase
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  void createUserInFirestore(){
+    authMethods.signUpWithPhoneNumberAndPassword(phoneController.text+"@gmail.com",
+        passwordController.text).then((value) {
+      // dang ky thong tin tren firebase
+      users.where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .limit(1)
+          .get()
+          .then(
+              (QuerySnapshot querySnapshot){
+            if (querySnapshot.docs.isEmpty){
+              users.add({
+                'name': nameController.text,
+                'phone_nummber':phoneController.text,
+                'uid': FirebaseAuth.instance.currentUser!.uid
+              });
+            }
+          }
+      );
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +85,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   inputController: nameController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập tên";
-                    if (value.length <= 2) {
-                      return "Tên của bạn tối thiểu 2 kí tự";
+                    if (value.length <= 8) {
+                      return "Tên của bạn tối thiểu 8 kí tự";
                     }
                     return null;
                   },
@@ -63,26 +97,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   inputController: phoneController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập số điện thoại";
-                    if (value.length < 2 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
-                      return "Số điện thoại tối thiểu 2 kí tự";
+                    if (value.length < 8 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
+                      return "Số điện thoại tối thiểu 8 kí tự";
                     }
                     return null;
                   },
                 ),
                 rounded_password_field(
-                    size: size,
-                    text: "Mật khẩu",
-                    passwordController: passwordController,
-                    validator: (value) {
-                      if (value!.isEmpty) return "Bạn chưa nhập mật khẩu";
-                      if (value.length < 2) {
-                        return "Mật khẩu tối thiểu 2 kí tự";
-                      }
-                      if (passwordController.text != passwordController2.text) {
-                        return "Mật khẩu không khớp";
-                      }
-                      return null;
-                    },
+                  size: size,
+                  text: "Mật khẩu",
+                  passwordController: passwordController,
+                  validator: (value) {
+                    if (value!.isEmpty) return "Bạn chưa nhập mật khẩu";
+                    if (value.length < 6) {
+                      return "Mật khẩu tối thiểu 6 kí tự";
+                    }
+                    if (passwordController.text != passwordController2.text) {
+                      return "Mật khẩu không khớp";
+                    }
+                    return null;
+                  },
                 ),
                 rounded_password_field(
                   size: size,
@@ -90,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   passwordController: passwordController2,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập lại mật khẩu";
-                    if (value.length < 2 || passwordController.text != passwordController2.text) {
+                    if (value.length < 6 || passwordController.text != passwordController2.text) {
                       return "Mật khẩu không khớp";
                     }
                     return null;
@@ -112,6 +146,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               "phonenumber": phoneController.text,
                               "password": passwordController.text
                             };
+
+                            createUserInFirestore();
+
                             // print(data);
 
                             var response =
@@ -119,11 +156,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Map output = json.decode(response.body);
                             if (response.statusCode < 300) {
                               setState(() {
-                                Fluttertoast.showToast(msg: "Đăng kí thành công", fontSize: 18);
+                                Fluttertoast.showToast(
+                                    msg: "Đăng kí thành công", fontSize: 18);
                               });
+
+
                               Navigator.pushNamed(context, '/login');
                             }
                           }
+
                         },
 
                         text: "Đăng ký"),
