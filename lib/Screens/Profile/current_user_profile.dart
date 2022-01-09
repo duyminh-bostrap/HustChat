@@ -15,6 +15,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 String link =dotenv.env['link']??"";
 String link2 =dotenv.env['link2']??"";
+String host = dotenv.env['host'] ?? "";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -350,8 +351,8 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                 height: 230,
                                 child: GestureDetector(
                                   onTap: () {print('coverimage');}, //_showProfile(post, context),
-                                  child: link2 != null
-                                      ? CachedNetworkImage(imageUrl: link2, fit: BoxFit.fitWidth,)
+                                  child: user != null
+                                      ? CachedNetworkImage(imageUrl: "$host${user.coverImage.fileName}", fit: BoxFit.fitWidth,)
                                       : const SizedBox.shrink(),
                                 ),
                               ),
@@ -362,7 +363,7 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                 child: GestureDetector(
                                   onTap: () {print('avatar');}, //_showProfile(post, context),
                                   child: ProfileAvatar(
-                                    imageUrl: link,
+                                    imageUrl: user != null? "$host${user.avatar.fileName}" : link,
                                     hasBorder: true,
                                     minSize: 75,
                                     maxSize: 80,
@@ -591,13 +592,13 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link2),
+                                                    Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link2),
+                                                    Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                   )
                                               )
                                             ],),
@@ -605,19 +606,19 @@ class _CurrentUserProfile extends State<CurrentUserProfile> {
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link2),
+                                                    Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link2),
+                                                    Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                   )
                                               ),
                                               Expanded(
                                                   child: Card(
                                                     child:
-                                                    Image.network(link2),
+                                                    Image.network(user.coverImage != null? "$host${user.coverImage.fileName}" : link2),
                                                   )
                                               )
                                             ],)

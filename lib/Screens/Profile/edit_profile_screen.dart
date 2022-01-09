@@ -445,37 +445,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    margin: EdgeInsets.fromLTRB(
-                                        20.0, 00.0, 20.0, 5.0),
-                                    child: Text(
-                                      'Số điện thoại hiện tại: ${user.phonenumber}',
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(
-                                        10.0, 0.0, 10.0, 0.0),
-                                    child: rounded_input_field(
-                                      size: size * 1.2,
-                                      text: "Số điện thoại",
-                                      inputController: phone,
-                                      validator: (value) {
-                                        if (value!.isEmpty)
-                                          return user.phonenumber;
-                                        if (value.length < 2 ||
-                                            !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
-                                                .hasMatch(value)) {
-                                          return "Số điện thoại tối thiểu 2 kí tự";
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   margin: EdgeInsets.fromLTRB(
+                                  //       20.0, 00.0, 20.0, 5.0),
+                                  //   child: Text(
+                                  //     'Số điện thoại hiện tại: ${user.phonenumber}',
+                                  //     style: TextStyle(
+                                  //         fontSize: 17,
+                                  //         fontWeight: FontWeight.w500),
+                                  //   ),
+                                  // ),
+                                  // Container(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   padding: EdgeInsets.fromLTRB(
+                                  //       10.0, 0.0, 10.0, 0.0),
+                                  //   child: rounded_input_field(
+                                  //     size: size * 1.2,
+                                  //     text: "Số điện thoại",
+                                  //     inputController: phone,
+                                  //     validator: (value) {
+                                  //       if (value!.isEmpty)
+                                  //         return user.phonenumber;
+                                  //       if (value.length < 2 ||
+                                  //           !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
+                                  //               .hasMatch(value)) {
+                                  //         return "Số điện thoại tối thiểu 2 kí tự";
+                                  //       }
+                                  //       return null;
+                                  //     },
+                                  //   ),
+                                  // ),
                                 ],
                               )
                             : Column(
@@ -512,36 +512,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    margin: EdgeInsets.fromLTRB(
-                                        20.0, 00.0, 20.0, 5.0),
-                                    child: Text(
-                                      'Số điện thoại hiện tại: ',
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(
-                                        10.0, 0.0, 10.0, 0.0),
-                                    child: rounded_input_field(
-                                      size: size * 1.2,
-                                      text: "Số điện thoại",
-                                      inputController: phone,
-                                      validator: (value) {
-                                        if (value!.isEmpty) return '';
-                                        if (value.length < 2 ||
-                                            !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
-                                                .hasMatch(value)) {
-                                          return "Số điện thoại tối thiểu 2 kí tự";
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   margin: EdgeInsets.fromLTRB(
+                                  //       20.0, 00.0, 20.0, 5.0),
+                                  //   child: Text(
+                                  //     'Số điện thoại hiện tại: ',
+                                  //     style: TextStyle(
+                                  //         fontSize: 17,
+                                  //         fontWeight: FontWeight.w500),
+                                  //   ),
+                                  // ),
+                                  // Container(
+                                  //   alignment: Alignment.centerLeft,
+                                  //   padding: EdgeInsets.fromLTRB(
+                                  //       10.0, 0.0, 10.0, 0.0),
+                                  //   child: rounded_input_field(
+                                  //     size: size * 1.2,
+                                  //     text: "Số điện thoại",
+                                  //     inputController: phone,
+                                  //     validator: (value) {
+                                  //       if (value!.isEmpty) return '';
+                                  //       if (value.length < 2 ||
+                                  //           !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
+                                  //               .hasMatch(value)) {
+                                  //         return "Số điện thoại tối thiểu 2 kí tự";
+                                  //       }
+                                  //       return null;
+                                  //     },
+                                  //   ),
+                                  // ),
                                 ],
                               );
                       default:
@@ -584,37 +584,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         },
                                       ),
                                     ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      margin: EdgeInsets.fromLTRB(
-                                          20.0, 00.0, 20.0, 5.0),
-                                      child: Text(
-                                        'Số điện thoại hiện tại: ${user.phonenumber}',
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.fromLTRB(
-                                          10.0, 0.0, 10.0, 0.0),
-                                      child: rounded_input_field(
-                                        size: size * 1.2,
-                                        text: "Số điện thoại",
-                                        inputController: phone,
-                                        validator: (value) {
-                                          if (value!.isEmpty)
-                                            return user.phonenumber;
-                                          if (value.length < 2 ||
-                                              !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
-                                                  .hasMatch(value)) {
-                                            return "Số điện thoại tối thiểu 2 kí tự";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
+                                    // Container(
+                                    //   alignment: Alignment.centerLeft,
+                                    //   margin: EdgeInsets.fromLTRB(
+                                    //       20.0, 00.0, 20.0, 5.0),
+                                    //   child: Text(
+                                    //     'Số điện thoại hiện tại: ${user.phonenumber}',
+                                    //     style: TextStyle(
+                                    //         fontSize: 17,
+                                    //         fontWeight: FontWeight.w500),
+                                    //   ),
+                                    // ),
+                                    // Container(
+                                    //   alignment: Alignment.centerLeft,
+                                    //   padding: EdgeInsets.fromLTRB(
+                                    //       10.0, 0.0, 10.0, 0.0),
+                                    //   child: rounded_input_field(
+                                    //     size: size * 1.2,
+                                    //     text: "Số điện thoại",
+                                    //     inputController: phone,
+                                    //     validator: (value) {
+                                    //       if (value!.isEmpty)
+                                    //         return user.phonenumber;
+                                    //       if (value.length < 2 ||
+                                    //           !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
+                                    //               .hasMatch(value)) {
+                                    //         return "Số điện thoại tối thiểu 2 kí tự";
+                                    //       }
+                                    //       return null;
+                                    //     },
+                                    //   ),
+                                    // ),
                                   ],
                                 )
                               : Column(
@@ -651,36 +651,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         },
                                       ),
                                     ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      margin: EdgeInsets.fromLTRB(
-                                          20.0, 00.0, 20.0, 5.0),
-                                      child: Text(
-                                        'Số điện thoại hiện tại: ',
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.fromLTRB(
-                                          10.0, 0.0, 10.0, 0.0),
-                                      child: rounded_input_field(
-                                        size: size * 1.2,
-                                        text: "Số điện thoại",
-                                        inputController: phone,
-                                        validator: (value) {
-                                          if (value!.isEmpty) return '';
-                                          if (value.length < 2 ||
-                                              !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
-                                                  .hasMatch(value)) {
-                                            return "Số điện thoại tối thiểu 2 kí tự";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
+                                    // Container(
+                                    //   alignment: Alignment.centerLeft,
+                                    //   margin: EdgeInsets.fromLTRB(
+                                    //       20.0, 00.0, 20.0, 5.0),
+                                    //   child: Text(
+                                    //     'Số điện thoại hiện tại: ',
+                                    //     style: TextStyle(
+                                    //         fontSize: 17,
+                                    //         fontWeight: FontWeight.w500),
+                                    //   ),
+                                    // ),
+                                    // Container(
+                                    //   alignment: Alignment.centerLeft,
+                                    //   padding: EdgeInsets.fromLTRB(
+                                    //       10.0, 0.0, 10.0, 0.0),
+                                    //   child: rounded_input_field(
+                                    //     size: size * 1.2,
+                                    //     text: "Số điện thoại",
+                                    //     inputController: phone,
+                                    //     validator: (value) {
+                                    //       if (value!.isEmpty) return '';
+                                    //       if (value.length < 2 ||
+                                    //           !RegExp(r'^[+]*[(]{0,1}[0-9]+$')
+                                    //               .hasMatch(value)) {
+                                    //         return "Số điện thoại tối thiểu 2 kí tự";
+                                    //       }
+                                    //       return null;
+                                    //     },
+                                    //   ),
+                                    // ),
                                   ],
                                 );
                         }

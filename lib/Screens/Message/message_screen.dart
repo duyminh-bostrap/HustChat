@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/Screens/Message/chat_detail.dart';
-import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/Screens/Widget/background.dart';
-import 'package:hust_chat/Screens/Widget/color.dart';
-//import 'package:hust_chat/Screens/Message/database_firebase.dart';
+import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
 // chat use Firbase
+String link = dotenv.env['link'] ?? "";
+
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);
 
@@ -48,44 +48,42 @@ class ListUserTile extends StatelessWidget  {
     return GestureDetector(
 
       onTap: () => callChatDetailScreen(context,name, uid),
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 15,
-          ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: pinkColor,
-                  blurRadius: 1.0,
-                  offset: Offset(0.0,1.0),
-                )
-              ]
-          ),
-          child: Row(
-            children: [
-              Container(
-
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundImage: AssetImage('assets/default-avater.jpg'),
-                ),
-              ),
-              SizedBox(width: 10,),
-              Row(
-                children: [
-                  Text(name,style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),),
-                ],
+      child: Container(
+        margin: EdgeInsets.fromLTRB(15, 10, 15, 10),
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                blurRadius: 1.0,
+                offset: Offset(0.0,1.0),
               )
-            ],
-          ),
+            ]
+        ),
+        child: Row(
+          children: [
+            Container(
+
+              child: ProfileAvatar(
+                imageUrl: link,
+                hasBorder: true,
+              ),
+            ),
+            SizedBox(width: 10,),
+            Row(
+              children: [
+                Text(name,style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),),
+              ],
+            )
+          ],
         ),
       ),
     );
@@ -139,12 +137,15 @@ class _MessageScreenState extends State<MessageScreen> {
 
           if (snapshot.hasData){
             return  SafeArea(
-              child: ListView(
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                  Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                  return ListUserTile(data['userId'].toString(),
-                      data['userName'.toString()]);
-                }).toList(),
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: ListView(
+                  children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                    return ListUserTile(data['userId'].toString(),
+                        data['userName'.toString()]);
+                  }).toList(),
+                ),
               ),
             );
           }

@@ -1,18 +1,34 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
+String link = dotenv.env['link'] ?? "";
+String link2 = dotenv.env['link2'] ?? "";
+String host = dotenv.env['host'] ?? "";
 
-class SearchUsers extends StatelessWidget {
+class SearchUsers extends StatefulWidget {
   final UserData userData;
 
-  const SearchUsers({
+  SearchUsers({
     Key? key,
     required this.userData,
   }) : super(key: key);
+
+  @override
+  _SearchUsers createState() => _SearchUsers(userData: userData);
+}
+class _SearchUsers extends State<SearchUsers> {
+  final UserData userData;
+  bool isAdd = false;
+
+  _SearchUsers({
+    Key? key,
+    required this.userData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +39,12 @@ class SearchUsers extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => {}, //_showProfile(post, context),
-            child: link != null
+            child: userData != null
                 ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: CachedNetworkImage(imageUrl: link),
+                  child: CachedNetworkImage(imageUrl:"$host${userData.coverImage.fileName}"),
                 ))
                 : const SizedBox.shrink(),
           ),
@@ -45,7 +61,7 @@ class SearchUsers extends StatelessWidget {
                 GestureDetector(
                   onTap: () => {}, //_showProfile(post, context),
                   child: ProfileAvatar(
-                    imageUrl: link,
+                    imageUrl: userData!=null? "$host${userData.avatar.fileName}": link,
                     hasBorder: true,
                   ),
                 ),
@@ -87,7 +103,14 @@ class SearchUsers extends StatelessWidget {
                   mini: true,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 3),
-                    child: Icon(
+                    child:
+                    isAdd?
+                    Icon(
+                      Icons.how_to_reg,
+                      color: blueColor,
+                      size: 26.0,
+                    )
+                    : Icon(
                       Icons.person_add_alt_1,
                       color: Color.fromRGBO(78, 212, 63, 1.0),
                       size: 26.0,
@@ -104,8 +127,10 @@ class SearchUsers extends StatelessWidget {
                       var response = await networkHandler.postAuth(
                           "/friends/set-request-friend", data, token);
                       debugPrint(response.body);
-                    }
-                    ;
+                    };
+                    setState(() {
+                      isAdd = true;
+                    });
                   },
                 ),
                 SizedBox(width: 3.0),

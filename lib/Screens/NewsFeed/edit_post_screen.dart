@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
 import 'package:hust_chat/get_data/get_info.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/img_model.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +17,8 @@ import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
-String link = dotenv.env['link'] ?? "";
+String link =dotenv.env['link']??"";
+String host = dotenv.env['host'] ?? "";
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
 
@@ -179,8 +181,25 @@ class _EditPostScreen extends State<EditPostScreen> {
                         onTap: () {
                           Navigator.pushNamed(context, '/mytimeline');
                         },
-                        child: ProfileAvatar(
-                          imageUrl: link,
+                        child: FutureBuilder<UserData>(
+                          future: UsersApi.getCurrentUserData(),
+                          builder: (context, snapshot) {
+                            final user = snapshot.data;
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return ProfileAvatar(
+                                  imageUrl: link,
+                                );
+                              default:
+                                if (snapshot.hasError) {
+                                  return Center(child: Text('Some error occurred!'));
+                                } else {
+                                  return ProfileAvatar(
+                                    imageUrl: user != null? "$host${user.avatar.fileName}" :link,
+                                  );
+                                }
+                            }
+                          },
                         ),
                       ),
                       SizedBox(

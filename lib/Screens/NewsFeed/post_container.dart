@@ -13,7 +13,9 @@ import 'package:hust_chat/Screens/Widget/color.dart';
 import 'package:hust_chat/Screens/main_page.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/img_model.dart';
+import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/models/post_model.dart';
 import 'package:hust_chat/models/profile_model.dart';
 import 'package:hust_chat/network_handler.dart';
@@ -595,212 +597,427 @@ class _PostHeader extends State<PostHeader> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () => _showProfile(post, context),
-          child: ProfileAvatar(imageUrl: link),
-        ),
-        const SizedBox(width: 10.0),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () => _showProfile(post, context),
-                child: Text(
-                  post.username,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5.0),
-              Row(
+    return
+      FutureBuilder<UserData>(
+        future: UsersApi.getUserData(post.userID),
+        builder: (context, snapshot) {
+          final user = snapshot.data;
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Row(
                 children: [
-                  Text(
-                    '${post.createAt} • ',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12.0,
+                  ProfileAvatar(imageUrl: link),
+                  const SizedBox(width: 10.0),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          post.username,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Row(
+                          children: [
+                            Text(
+                              '${post.createAt} • ',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12.0,
+                              ),
+                            ),
+                            Icon(
+                              Icons.public,
+                              color: Colors.grey[600],
+                              size: 15.0,
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  Icon(
-                    Icons.public,
-                    color: Colors.grey[600],
-                    size: 15.0,
-                  )
+                  IconButton(
+                    icon: const Icon(Icons.more_horiz),
+                    onPressed: () async {
+                      String? userID = await storage.read(key: "id");
+                      print(post.userID.toString());
+                      showModalBottomSheet(
+                        isScrollControlled: false,
+                        backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
+                        context: context,
+                        builder: (BuildContext bcx) {
+                          Size size = MediaQuery.of(context).size;
+                          return post.userID.toString() == userID.toString()
+                              ? Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  10.0, size.height * 0.5 - 195, 10.0, 115),
+                              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                              ),
+                              child: Column(children: [
+                                GestureDetector(
+                                  onTap: () => EditPost(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 50,
+                                        child: Icon(Icons.edit,
+                                            size: 30, color: Colors.black87),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Text(
+                                        'Chỉnh sửa bài viết',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  height: size.height * 0.01,
+                                  color: Colors.black54,
+                                  thickness: 1.2,
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                                GestureDetector(
+                                  onTap: () => RemovePost(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 50,
+                                        child: Icon(Icons.delete,
+                                            size: 30, color: Colors.black87),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Text(
+                                        'Xoá bài viết',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]))
+                              : Container(
+                              margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
+                                  10.0, size.height * 0.145),
+                              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                              ),
+                              child: Column(children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    String? userID = await storage.read(key: "id");
+                                    print(post.userID.toString() +
+                                        "___" +
+                                        userID.toString());
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 50,
+                                        child: Icon(Icons.report_gmailerrorred,
+                                            size: 30, color: Colors.black87),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Text(
+                                        'Báo cáo bài viết',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  height: size.height * 0.01,
+                                  color: Colors.black54,
+                                  thickness: 1.2,
+                                  indent: 20,
+                                  endIndent: 20,
+                                ),
+                                GestureDetector(
+                                  onTap: () => BlockPost(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 20,
+                                        height: 50,
+                                        child: Icon(Icons.cancel_presentation,
+                                            size: 30, color: Colors.black87),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Text(
+                                        'Chặn bài viết',
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]));
+                        },
+                      );
+                    },
+                  ),
                 ],
-              ),
-            ],
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.more_horiz),
-          onPressed: () async {
-            String? userID = await storage.read(key: "id");
-            print(post.userID.toString());
-            showModalBottomSheet(
-              isScrollControlled: false,
-              backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
-              context: context,
-              builder: (BuildContext bcx) {
-                Size size = MediaQuery.of(context).size;
-                return post.userID.toString() == userID.toString()
-                    ? Container(
-                        margin: EdgeInsets.fromLTRB(
-                            10.0, size.height * 0.5 - 195, 10.0, 115),
-                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Column(children: [
-                          GestureDetector(
-                            onTap: () => EditPost(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+              );
+            default:
+              if (snapshot.hasError) {
+                return Center(child: Text('Some error occurred!'));
+              } else {
+                return Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => _showProfile(post, context),
+                        child: ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link),
+                      ),
+                      const SizedBox(width: 10.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _showProfile(post, context),
+                              child: Text(
+                                post.username,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Row(
                               children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Container(
-                                  width: 20,
-                                  height: 50,
-                                  child: Icon(Icons.edit,
-                                      size: 30, color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
                                 Text(
-                                  'Chỉnh sửa bài viết',
+                                  '${post.createAt} • ',
                                   style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
+                                    color: Colors.grey[600],
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.public,
+                                  color: Colors.grey[600],
+                                  size: 15.0,
                                 )
                               ],
                             ),
-                          ),
-                          Divider(
-                            height: size.height * 0.01,
-                            color: Colors.black54,
-                            thickness: 1.2,
-                            indent: 20,
-                            endIndent: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () => RemovePost(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Container(
-                                  width: 20,
-                                  height: 50,
-                                  child: Icon(Icons.delete,
-                                      size: 30, color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Text(
-                                  'Xoá bài viết',
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              ],
-                            ),
-                          ),
-                        ]))
-                    : Container(
-                        margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
-                            10.0, size.height * 0.145),
-                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          ],
                         ),
-                        child: Column(children: [
-                          GestureDetector(
-                            onTap: () async {
-                              String? userID = await storage.read(key: "id");
-                              print(post.userID.toString() +
-                                  "___" +
-                                  userID.toString());
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.more_horiz),
+                        onPressed: () async {
+                          String? userID = await storage.read(key: "id");
+                          print(post.userID.toString());
+                          showModalBottomSheet(
+                            isScrollControlled: false,
+                            backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
+                            context: context,
+                            builder: (BuildContext bcx) {
+                              Size size = MediaQuery.of(context).size;
+                              return post.userID.toString() == userID.toString()
+                                  ? Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      10.0, size.height * 0.5 - 195, 10.0, 115),
+                                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  child: Column(children: [
+                                    GestureDetector(
+                                      onTap: () => EditPost(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 50,
+                                            child: Icon(Icons.edit,
+                                                size: 30, color: Colors.black87),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Text(
+                                            'Chỉnh sửa bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      height: size.height * 0.01,
+                                      color: Colors.black54,
+                                      thickness: 1.2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => RemovePost(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 50,
+                                            child: Icon(Icons.delete,
+                                                size: 30, color: Colors.black87),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Text(
+                                            'Xoá bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ]))
+                                  : Container(
+                                  margin: EdgeInsets.fromLTRB(10.0, size.height * 0.255,
+                                      10.0, size.height * 0.145),
+                                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  child: Column(children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        String? userID = await storage.read(key: "id");
+                                        print(post.userID.toString() +
+                                            "___" +
+                                            userID.toString());
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 50,
+                                            child: Icon(Icons.report_gmailerrorred,
+                                                size: 30, color: Colors.black87),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Text(
+                                            'Báo cáo bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      height: size.height * 0.01,
+                                      color: Colors.black54,
+                                      thickness: 1.2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => BlockPost(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 50,
+                                            child: Icon(Icons.cancel_presentation,
+                                                size: 30, color: Colors.black87),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Text(
+                                            'Chặn bài viết',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ]));
                             },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Container(
-                                  width: 20,
-                                  height: 50,
-                                  child: Icon(Icons.report_gmailerrorred,
-                                      size: 30, color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Text(
-                                  'Báo cáo bài viết',
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            height: size.height * 0.01,
-                            color: Colors.black54,
-                            thickness: 1.2,
-                            indent: 20,
-                            endIndent: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () => BlockPost(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Container(
-                                  width: 20,
-                                  height: 50,
-                                  child: Icon(Icons.cancel_presentation,
-                                      size: 30, color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Text(
-                                  'Chặn bài viết',
-                                  style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              ],
-                            ),
-                          ),
-                        ]));
-              },
-            );
-          },
-        ),
-      ],
-    );
+                          );
+                        },
+                      ),
+                    ],
+                  );
+              }
+          }
+        },
+      );
   }
 
   Future EditPost() async {

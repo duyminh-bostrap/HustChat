@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
@@ -15,8 +16,8 @@ import 'package:hust_chat/Screens/Message/database_firebase.dart';
 
 import '../../network_handler.dart';
 
-String link = "http://localhost:8000/files/avatar_2.png";
-String link2 = "http://localhost:8000/files/defaul_cover_image.jpg";
+String link = dotenv.env['link'] ?? "";
+String link2 = dotenv.env['link2'] ?? "";
 
 NetworkHandler networkHandler = NetworkHandler();
 final storage = new FlutterSecureStorage();
@@ -85,13 +86,14 @@ class _FriendsList extends State<FriendsList> {
             onTap: () => showProfile(userData, context),
             child: userData.coverImage != null
                 ? Container(
+                height: 220,
+                width: size.width,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child:
-                  CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}", fit: BoxFit.cover)
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(15.0),
-                //   child: CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}", fit: BoxFit.cover),
-                // )
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: CachedNetworkImage(imageUrl: "$host${userData.coverImage.fileName}", fit: BoxFit.fitWidth),
+                  )
                 )
                 : const SizedBox.shrink(),
           ),

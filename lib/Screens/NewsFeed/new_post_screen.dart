@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/get_data/get_info.dart';
+import 'package:hust_chat/get_data/get_user_info.dart';
+import 'package:hust_chat/models/models.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
@@ -12,6 +14,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/network_handler.dart';
 
 String link =dotenv.env['link']??"";
+String host = dotenv.env['host'] ?? "";
+NetworkHandler networkHandler = NetworkHandler();
+final storage = new FlutterSecureStorage();
 
 class ImagePostElement extends StatelessWidget {
   const ImagePostElement(
@@ -181,8 +186,26 @@ class _CreatePost extends State<CreatePost> {
                         onTap: () {
                           Navigator.pushNamed(context, '/mytimeline');
                         },
-                        child: ProfileAvatar(
-                          imageUrl: link,
+                        child:
+                        FutureBuilder<UserData>(
+                          future: UsersApi.getCurrentUserData(),
+                          builder: (context, snapshot) {
+                            final user = snapshot.data;
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return ProfileAvatar(
+                                  imageUrl: link,
+                                );
+                              default:
+                                if (snapshot.hasError) {
+                                  return Center(child: Text('Some error occurred!'));
+                                } else {
+                                  return ProfileAvatar(
+                                    imageUrl: user != null? "$host${user.avatar.fileName}" :link,
+                                  );
+                                }
+                            }
+                          },
                         ),
                       ),
                       SizedBox(
@@ -199,18 +222,35 @@ class _CreatePost extends State<CreatePost> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  showName(
-                                    color: Colors.black87,
-                                    size: 16,
-                                    fontWeight: FontWeight.w600,
+                                  FutureBuilder<UserData>(
+                                    future: UsersApi.getCurrentUserData(),
+                                    builder: (context, snapshot) {
+                                      final user = snapshot.data;
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return showName(
+                                            color: Colors.black87,
+                                            size: 16,
+                                            fontWeight: FontWeight.w600,
+                                          );
+                                        default:
+                                          if (snapshot.hasError) {
+                                            return Center(child: Text('Some error occurred!'));
+                                          } else {
+                                            return Text(
+                                              user!.username,
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600),
+                                            );
+                                          }
+                                      }
+                                    },
                                   ),
-                                  // Text(
-                                  //   currentUser.name,
-                                  //   style: TextStyle(
-                                  //       color: Colors.black87,
-                                  //       fontSize: 16,
-                                  //       fontWeight: FontWeight.w600),
-                                  // ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
                                   Row(
                                     children: [
                                       Text(
