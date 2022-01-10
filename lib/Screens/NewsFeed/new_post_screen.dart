@@ -228,7 +228,8 @@ class _CreatePost extends State<CreatePost> {
                                       final user = snapshot.data;
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.waiting:
-                                          return showName(
+                                          return
+                                          showName(
                                             color: Colors.black87,
                                             size: 16,
                                             fontWeight: FontWeight.w600,

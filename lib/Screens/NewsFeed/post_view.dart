@@ -80,10 +80,21 @@ class _PostView extends State<PostView> {
           ),
           title: Row(
             children: [
-              ProfileAvatar(
-                imageUrl: link,
-                minSize: 20,
-                maxSize: 22,
+              FutureBuilder<UserData>(
+                future: UsersApi.getCurrentUserData(),
+                builder: (context, snapshot) {
+                  final user = snapshot.data;
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return ProfileAvatar(imageUrl: link, maxSize: 20);
+                    default:
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Some error occurred!'));
+                      } else {
+                        return ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link ,maxSize: 20);
+                      }
+                  }
+                },
               ),
               SizedBox(
                 width: 15,
