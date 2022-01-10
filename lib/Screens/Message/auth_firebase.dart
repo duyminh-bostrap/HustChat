@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 class AuthMethods{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   CollectionReference chatList = FirebaseFirestore.instance.collection('chat_list');
+  CollectionReference banList = FirebaseFirestore.instance.collection('ban_list');
 
   AppUser? _userFromFireBaseUser(User user){
     return user != null ? AppUser(userId: user.uid):null;
@@ -41,6 +42,21 @@ class AuthMethods{
           .then((QuerySnapshot querySnapshot){
         if (querySnapshot.docs.isEmpty){
           chatList.add({
+            'users':{
+              currentUserId: null,
+            }
+          });
+        }
+      }
+      ).catchError((error){});
+
+      //tao Ban_list
+      banList.where('users',isEqualTo: {currentUserId:null})
+          .limit(1)
+          .get()
+          .then((QuerySnapshot querySnapshot){
+        if (querySnapshot.docs.isEmpty){
+          banList.add({
             'users':{
               currentUserId: null,
             }

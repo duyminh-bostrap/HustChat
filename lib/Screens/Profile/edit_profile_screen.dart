@@ -53,7 +53,7 @@ final storage = new FlutterSecureStorage();
 //                 ),
 //                 const SizedBox(height: 8),
 //                 TextField(
-//                   controller: gender,
+//                   get_data: gender,
 //                   decoration: InputDecoration(
 //                     border: OutlineInputBorder(
 //                       borderRadius: BorderRadius.circular(12),

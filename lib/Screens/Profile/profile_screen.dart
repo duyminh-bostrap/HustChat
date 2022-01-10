@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hust_chat/Screens/Block/block_list.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_container.dart';
@@ -14,6 +16,8 @@ import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:hust_chat/Screens/Message/auth_firebase.dart';
+
 
 import '../../get_data/get_info.dart';
 
@@ -966,7 +970,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       endIndent: 20,
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/post'),
+                      onTap: () => Navigator.pushNamed(context, '/block'),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -1001,6 +1005,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         endIndent: 20),
                     GestureDetector(
                       onTap: () async {
+
+                        // logout Firebase
+                        authMethods.signOut();
+
                         Navigator.pushNamed(context, '/');
                         await storage.deleteAll();
                       },

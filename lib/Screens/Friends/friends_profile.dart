@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hust_chat/Screens/Message/chat_detail.dart';
@@ -37,7 +38,6 @@ class FriendsProfile extends StatefulWidget {
 class _FriendsProfile extends State<FriendsProfile> {
   final String userId;
   final String userName;
-  var friendChatUid;
 
   _FriendsProfile({
     Key? key,
@@ -45,7 +45,24 @@ class _FriendsProfile extends State<FriendsProfile> {
     required this.userName,
   });
 
+  var banListId;
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
+  @override
+  void initState() {
+    super.initState();
+    banList.where('users',isEqualTo: {currentUserId:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        setState(() {
+          banListId = querySnapshot.docs.single.id;
+        });
+      }
+    }
+    ).catchError((error){});
+  }
 
   @override
   Widget build(BuildContext cx) {
@@ -521,6 +538,44 @@ class _FriendsProfile extends State<FriendsProfile> {
     );
   }
 
+  // -- banList firebase function--
+  CollectionReference banList = FirebaseFirestore.instance.collection('ban_list');
+  var friendChatUid;
+  var friendNumber;
+  Future getUserIdByUserName(String name)async {
+    CollectionReference user = FirebaseFirestore.instance.collection('users');
+    await user.where('name', isEqualTo: name)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.forEach((element) {
+          setState(() {
+            friendChatUid = element["uid"];
+            friendNumber = element["phone_nummber"];
+          });
+        });
+      }
+    }
+    ).catchError((error) {});
+  }
+  void addUserToBanList(String chatId, String friendId, String friendName) {
+    banList.doc(chatId).collection('users')
+        .where('userId', isEqualTo: friendId)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isEmpty) {
+        banList.doc(chatId).collection('users').add(
+            {
+              'userId': friendId,
+              'userName': friendName,
+              'userPhoneNumber':friendNumber
+            }
+        );
+      }
+    });
+  }
+  // -- end banList --
   Future BlockFriend() async {
     Size size = MediaQuery.of(context).size;
     showDialog(
@@ -556,8 +611,11 @@ class _FriendsProfile extends State<FriendsProfile> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      String? token = await storage.read(key: "token");
 
+                      // chặn => hủy kết bạn => thêm vào danh sách chặn
+
+                      // -- hủy kết bạn --
+                      String? token = await storage.read(key: "token");
                       if (token != null) {
                         Map<String, String> data = {
                           "user_id": userId,
@@ -566,6 +624,11 @@ class _FriendsProfile extends State<FriendsProfile> {
                             "/friends/set-remove", data, token);
                         debugPrint(response.body);
                       };
+
+                      // -- thêm vào danh sách chặn
+                      await getUserIdByUserName(userName);
+                      print(friendChatUid);
+                      addUserToBanList(banListId, friendChatUid, userName);
                       Navigator.pop(context);
                     },
                     child: Container(

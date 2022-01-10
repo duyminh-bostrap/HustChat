@@ -9,6 +9,7 @@ import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'dart:convert';
 import 'Message/auth_firebase.dart';
+import 'Message/database_firebase.dart';
 import 'Widget/rounded_password_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -150,6 +151,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             createUserInFirestore();
 
                             // print(data);
+
+                            createUserInFirestore();
 
                             var response =
                             await networkHandler.post("/users/register", data);
