@@ -144,7 +144,7 @@ class _ChatDetailState extends State<ChatDetail> {
   void addFriendToChatList(String chatId, String friendId, String friendName, String msg){
     if (msg == '') return;
     chatList.doc(chatId).collection('friends')
-        .where('userId', isEqualTo: friendUid)
+        .where('userId', isEqualTo: friendId)
         .get()
         .then((QuerySnapshot querySnapshot){
       if (querySnapshot.docs.isEmpty){
