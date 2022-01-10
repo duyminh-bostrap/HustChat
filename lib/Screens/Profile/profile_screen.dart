@@ -15,7 +15,7 @@ import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-// import '../../get_data/get_info.dart';
+import '../../get_data/get_info.dart';
 
 String link =dotenv.env['link']??"";
 String link2 =dotenv.env['link2']??"";
