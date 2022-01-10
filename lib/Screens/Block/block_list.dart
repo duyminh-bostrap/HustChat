@@ -231,9 +231,7 @@ class _BlockScreenState extends State<BlockScreen> {
           }
 
           if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: Text("Loading"),
-            );
+            return Center();
           }
 
           if (snapshot.hasData){
