@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Widget/background.dart';
@@ -5,6 +7,8 @@ import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
 import 'package:hust_chat/network_handler.dart';
 import 'dart:convert';
+import 'Message/auth_firebase.dart';
+import 'Message/database_firebase.dart';
 import 'Widget/rounded_password_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -21,6 +25,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController2 = TextEditingController();
   NetworkHandler networkHandler = NetworkHandler();
   final formKey = GlobalKey<FormState>();
+
+  // for signup firebase
+  AuthMethods authMethods = new AuthMethods();
+
+  // for update data firebase
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  void createUserInFirestore(){
+    authMethods.signUpWithPhoneNumberAndPassword(phoneController.text+"@gmail.com",
+        passwordController.text).then((value) {
+      // dang ky thong tin tren firebase
+      users.where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .limit(1)
+          .get()
+          .then(
+              (QuerySnapshot querySnapshot){
+            if (querySnapshot.docs.isEmpty){
+              users.add({
+                'name': nameController.text,
+                'phone_nummber':phoneController.text,
+                'uid': FirebaseAuth.instance.currentUser!.uid
+              });
+            }
+          }
+      );
+    },);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +145,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               "password": passwordController.text
                             };
                             // print(data);
+
+                            createUserInFirestore();
 
                             var response =
                             await networkHandler.post("/users/register", data);

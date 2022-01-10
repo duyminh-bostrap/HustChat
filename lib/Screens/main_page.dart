@@ -29,8 +29,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
 
   final List<Widget> screens = [
-    // MessageScreen(), //Trang tin nhắn
-    BadConnection(),
+     MessageScreen(), //Trang tin nhắn
+    //BadConnection(),
     FriendListContainer(), // Trang bạn bè
     NewsFeed(), // Trang chủ
     ProfileScreen(isProfile: false,), // Trang cá nhân

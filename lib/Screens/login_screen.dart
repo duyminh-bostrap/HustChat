@@ -4,6 +4,8 @@ import 'package:hust_chat/Screens/Widget/background.dart';
 import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_input_field.dart';
 import 'package:hust_chat/network_handler.dart';
+import 'Message/auth_firebase.dart';
+import 'Message/database_firebase.dart';
 import 'Widget/rounded_password_field.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -21,6 +23,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final storage = new FlutterSecureStorage();
   final formKey = GlobalKey<FormState>();
   bool isIncorrect = false;
+
+  // for Firebase login
+  AuthMethods authMethods = new AuthMethods();
+  DatabaseMethods databaseMethods = new DatabaseMethods();
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +92,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () async {
                           print('a');
                           if (formKey.currentState!.validate()) {
+
+                            // ------firebase --------//
+                            /*
+                            * Data User có dạng Map {
+                            * "username":something
+                            * "email": somthing@gmail.com
+                            * }
+                            * */
+                            Map<String, String> userInforMap = {
+                              "name": phoneController.text,
+                              "email":passwordController.text
+                            };
+                            authMethods.signInWithPhoneNumberAndPassword(phoneController.text+"@gmail.com",
+                                passwordController.text).then((value) {
+                            });
+                            // --- end Firebase -- //
+
                             Map<String, String> data = {
                               "phonenumber": phoneController.text,
                               "password": passwordController.text

@@ -19,6 +19,9 @@ class _ChatDetailState extends State<ChatDetail> {
 
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   CollectionReference chatList = FirebaseFirestore.instance.collection('chat_list');
+  CollectionReference banList = FirebaseFirestore.instance.collection('ban_list');
+
+
   final String friendUid;
   final String friendName;
   final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
@@ -27,6 +30,10 @@ class _ChatDetailState extends State<ChatDetail> {
   var chatDocId;
   var currentName;
   var _textController = new TextEditingController();
+  var blockFriend;
+  var beBlockByFriend;
+  var banListId;
+  var banListIdFriend;
   _ChatDetailState(this.friendUid, this.friendName);
   //Kiem tra xem co chat truoc do khong
 
@@ -83,13 +90,61 @@ class _ChatDetailState extends State<ChatDetail> {
       }
     }
     ).catchError((error){});
+
+
+    // lay ban list cua toi
+    banList.where('users',isEqualTo: {currentUserId:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        banList.doc(querySnapshot.docs.single.id).collection('users')
+            .where('userId', isEqualTo: friendUid)
+            .get()
+            .then((QuerySnapshot querySnapshot){
+          if (querySnapshot.docs.isNotEmpty){
+            setState(() {
+              blockFriend = true;
+            });
+          };
+        });
+        setState(() {
+          banListId = querySnapshot.docs.single.id;
+        });
+      }
+    }
+    ).catchError((error){});
+
+        // lay ban list cua Friend
+    banList.where('users',isEqualTo: {friendUid:null})
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot){
+      if (querySnapshot.docs.isNotEmpty){
+        banList.doc(querySnapshot.docs.single.id).collection('users')
+            .where('userId', isEqualTo: currentUserId)
+            .get()
+            .then((QuerySnapshot querySnapshot){
+          if (querySnapshot.docs.isNotEmpty){
+            setState(() {
+              beBlockByFriend = true;
+            });
+          };
+        });
+        setState(() {
+          banListIdFriend = querySnapshot.docs.single.id;
+        });
+      }
+    }
+    ).catchError((error){});
+
   }
 
   //return chat list id cua nguoi dung hien tai, tao id moi neu chua co
   void addFriendToChatList(String chatId, String friendId, String friendName, String msg){
     if (msg == '') return;
     chatList.doc(chatId).collection('friends')
-        .where('userId', isEqualTo: friendId)
+        .where('userId', isEqualTo: friendUid)
         .get()
         .then((QuerySnapshot querySnapshot){
       if (querySnapshot.docs.isEmpty){
@@ -102,6 +157,20 @@ class _ChatDetailState extends State<ChatDetail> {
       }
     });
   }
+  // xem co block nguoi do khong
+  // Future<bool> checkBlockFriend() async {
+  //   await banList.doc(banListId).collection('users')
+  //       .where('userId', isEqualTo: friendUid)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot){
+  //     if (querySnapshot.docs.isNotEmpty){
+  //       return true;
+  //   };
+  // });
+  //   return false;
+  // }
+
+
 
   Future getUserCurrentName(String uid)async {
     CollectionReference user= FirebaseFirestore.instance.collection('users');
@@ -166,7 +235,192 @@ class _ChatDetailState extends State<ChatDetail> {
           // }
 
           if (snapshot.hasData){
+            if(blockFriend == true){
+              return  CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
+                  middle: Text(friendName),
+                  trailing: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: (){},
+                    child: Icon(CupertinoIcons.phone),
+                  ),
+                ),
 
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          reverse: true,
+                          children: snapshot.data!.docs.map((DocumentSnapshot document){
+                            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                              child: ChatBubble(
+                                clipper: ChatBubbleClipper6(
+                                  nipSize: 0,
+                                  radius: 0,
+                                  type: BubbleType.receiverBubble,
+                                ),
+                                alignment: getAlignment(data['uid'].toString()),
+                                margin: EdgeInsets.only(top: 20),
+                                backGroundColor: isSender(data['uid'].toString())
+                                    ? Color(0xFF08C187)
+                                    :Color (0xffE7E7ED),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(data['msg'].toString(),style: TextStyle(
+                                              color: isSender(data['uid'].toString())
+                                                  ? Colors.white
+                                                  :Colors.black,
+                                              fontSize: 14),
+
+                                            maxLines: 100,
+                                            overflow: TextOverflow.clip,)
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            data['createdOn'] == null ?
+                                            DateTime.now().toString() :
+                                            data['createdOn'] .toDate()
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: isSender(data['uid'].toString())
+                                                    ?Colors.white : Colors.black
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Bạn đã chặn người này nên không thể nhắn tin',
+                            style:TextStyle(
+                              fontSize: 14,
+
+                            ) , ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+              );
+
+            };
+            if(beBlockByFriend == true){
+              return  CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
+                  middle: Text(friendName),
+                  trailing: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: (){},
+                    child: Icon(CupertinoIcons.phone),
+                  ),
+                ),
+
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          reverse: true,
+                          children: snapshot.data!.docs.map((DocumentSnapshot document){
+                            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                              child: ChatBubble(
+                                clipper: ChatBubbleClipper6(
+                                  nipSize: 0,
+                                  radius: 0,
+                                  type: BubbleType.receiverBubble,
+                                ),
+                                alignment: getAlignment(data['uid'].toString()),
+                                margin: EdgeInsets.only(top: 20),
+                                backGroundColor: isSender(data['uid'].toString())
+                                    ? Color(0xFF08C187)
+                                    :Color (0xffE7E7ED),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(data['msg'].toString(),style: TextStyle(
+                                              color: isSender(data['uid'].toString())
+                                                  ? Colors.white
+                                                  :Colors.black,
+                                              fontSize: 14),
+
+                                            maxLines: 100,
+                                            overflow: TextOverflow.clip,)
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            data['createdOn'] == null ?
+                                            DateTime.now().toString() :
+                                            data['createdOn'] .toDate()
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: isSender(data['uid'].toString())
+                                                    ?Colors.white : Colors.black
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Bạn đã bị chặn',
+                            style:TextStyle(
+                              fontSize: 14,
+
+                            ) , ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+              );
+
+            };
             return  CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
                 middle: Text(friendName),
@@ -242,6 +496,7 @@ class _ChatDetailState extends State<ChatDetail> {
                         }).toList(),
                       ),
                     ),
+
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(child: CupertinoTextField(controller: _textController,)),
