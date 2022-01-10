@@ -246,192 +246,6 @@ class _ChatDetailState extends State<ChatDetail> {
           // }
 
           if (snapshot.hasData){
-            if(blockFriend == true){
-              return  CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
-                  middle: Text(friendName),
-                  trailing: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: (){},
-                    child: Icon(CupertinoIcons.phone),
-                  ),
-                ),
-
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          reverse: true,
-                          children: snapshot.data!.docs.map((DocumentSnapshot document){
-                            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                              child: ChatBubble(
-                                clipper: ChatBubbleClipper6(
-                                  nipSize: 0,
-                                  radius: 0,
-                                  type: BubbleType.receiverBubble,
-                                ),
-                                alignment: getAlignment(data['uid'].toString()),
-                                margin: EdgeInsets.only(top: 20),
-                                backGroundColor: isSender(data['uid'].toString())
-                                    ? Color(0xFF08C187)
-                                    :Color (0xffE7E7ED),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(data['msg'].toString(),style: TextStyle(
-                                              color: isSender(data['uid'].toString())
-                                                  ? Colors.white
-                                                  :Colors.black,
-                                              fontSize: 14),
-
-                                            maxLines: 100,
-                                            overflow: TextOverflow.clip,)
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            data['createdOn'] == null ?
-                                            DateTime.now().toString() :
-                                            data['createdOn'] .toDate()
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: isSender(data['uid'].toString())
-                                                    ?Colors.white : Colors.black
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      Container(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text('Bạn đã chặn người này nên không thể nhắn tin',
-                            style:TextStyle(
-                              fontSize: 14,
-
-                            ) , ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),
-              );
-
-            };
-            if(beBlockByFriend == true){
-              return  CupertinoPageScaffold(
-                navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
-                  middle: Text(friendName),
-                  trailing: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: (){},
-                    child: Icon(CupertinoIcons.phone),
-                  ),
-                ),
-
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          reverse: true,
-                          children: snapshot.data!.docs.map((DocumentSnapshot document){
-                            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                              child: ChatBubble(
-                                clipper: ChatBubbleClipper6(
-                                  nipSize: 0,
-                                  radius: 0,
-                                  type: BubbleType.receiverBubble,
-                                ),
-                                alignment: getAlignment(data['uid'].toString()),
-                                margin: EdgeInsets.only(top: 20),
-                                backGroundColor: isSender(data['uid'].toString())
-                                    ? Color(0xFF08C187)
-                                    :Color (0xffE7E7ED),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(data['msg'].toString(),style: TextStyle(
-                                              color: isSender(data['uid'].toString())
-                                                  ? Colors.white
-                                                  :Colors.black,
-                                              fontSize: 14),
-
-                                            maxLines: 100,
-                                            overflow: TextOverflow.clip,)
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            data['createdOn'] == null ?
-                                            DateTime.now().toString() :
-                                            data['createdOn'] .toDate()
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: isSender(data['uid'].toString())
-                                                    ?Colors.white : Colors.black
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      Container(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text('Bạn đã bị chặn',
-                            style:TextStyle(
-                              fontSize: 14,
-
-                            ) , ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),
-              );
-
-            };
             return  CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(previousPageTitle: "Back",
                 middle: Text(friendName),
@@ -530,46 +344,65 @@ class _ChatDetailState extends State<ChatDetail> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
                               ),
-                              child: Row(
-                                children: [
-                                  FutureBuilder<UserData>(
-                                    future: UsersApi.getCurrentUserData(),
-                                    builder: (context, snapshot) {
-                                      final user = snapshot.data;
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return ProfileAvatar(imageUrl: link, maxSize: 20);
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Center(child: Text('Some error occurred!'));
-                                          } else {
-                                            return ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link ,maxSize: 20);
-                                          }
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      controller: writeMessage,
-                                      textAlign: TextAlign.left,
-                                      cursorColor: Colors.black87,
-                                      maxLines: 1,
-                                      decoration: InputDecoration(
-                                          hintText: 'Trả lời...',
-                                          hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.w300),
-                                          border: InputBorder.none
+                              child:
+                                blockFriend == true ?
+                                  Center(
+                                    child: Text('Bạn đã chặn người này',
+                                      style:TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                      ) , ),
+                                  )
+                                    : beBlockByFriend == true?
+                                      Center(
+                                        child: Text('Bạn đã bị chặn',
+                                          style:TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.red,
+                                          ) , ),
+                                      )
+                                    : Row(
+                                          children: [
+                                            FutureBuilder<UserData>(
+                                              future: UsersApi.getCurrentUserData(),
+                                              builder: (context, snapshot) {
+                                                final user = snapshot.data;
+                                                switch (snapshot.connectionState) {
+                                                  case ConnectionState.waiting:
+                                                    return ProfileAvatar(imageUrl: link, maxSize: 20);
+                                                  default:
+                                                    if (snapshot.hasError) {
+                                                      return Center(child: Text('Some error occurred!'));
+                                                    } else {
+                                                      return ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link ,maxSize: 20);
+                                                    }
+                                                }
+                                              },
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: TextFormField(
+                                                controller: writeMessage,
+                                                textAlign: TextAlign.left,
+                                                cursorColor: Colors.black87,
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Trả lời...',
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black87,
+                                                        fontWeight: FontWeight.w300),
+                                                    border: InputBorder.none
 
-                                        // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
+                                                  // contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5)
+                                                ),
+                                              ),
+                                            ),
+                                            IconButton(
                                     icon: Icon(MdiIcons.send,),
                                     onPressed: () async {
                                         await getUserCurrentName(currentUserId);
@@ -586,21 +419,6 @@ class _ChatDetailState extends State<ChatDetail> {
                                 ],
                               ),
                             )),
-                        // Expanded(child: CupertinoTextField(controller: _textController,)),
-                        // CupertinoButton(
-                        //     child: Icon(Icons.send_sharp),
-                        //     onPressed: () async
-                        //     {
-                        //       await getUserCurrentName(currentUserId);
-                        //       //print("current user : " + currentUserId);
-                        //       //print("friend user :" +friendUid);
-                        //       //print(chatListId);
-                        //       addFriendToChatList(chatListId, friendUid, friendName, _textController.text);
-                        //       //print(chatListIdFriend);
-                        //       addFriendToChatList(chatListIdFriend, currentUserId, currentName, _textController.text);
-                        //       sendMassage(_textController.text);
-                        //     }
-                        // )
 
                     )
                   ],
