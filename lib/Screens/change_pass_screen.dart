@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Widget/background.dart';
 import 'package:hust_chat/Screens/Widget/rounded_button.dart';
 import 'package:hust_chat/Screens/Widget/rounded_password_field.dart';
@@ -50,8 +51,8 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   passwordController: passwordController,
                   validator: (value) {
                     if (value!.isEmpty) return "Password cannot be empty";
-                    if (value.length <= 8) {
-                      return "Password length must have >=8";
+                    if (value.length <= 5) {
+                      return "Độ dài mật khẩu phải lớn hơn hoặc bằng 6 kí tự";
                     }
                     return null;
                   },
@@ -62,21 +63,20 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   passwordController: passwordController2,
                   validator: (value) {
                     if (value!.isEmpty) return "Password cannot be empty";
-                    if (value.length <= 8) {
-                      return "Password length must have >=8";
+                    if (value.length <= 5) {
+                      return "Độ dài mật khẩu phải lớn hơn hoặc bằng 6 kí tự";
                     }
                     return null;
                   },
                 ),
-
                 rounded_password_field(
                   size: size,
                   text: "Nhập lại mật khẩu",
                   passwordController: passwordController3,
                   validator: (value) {
                     if (value!.isEmpty) return "Password cannot be empty";
-                    if (value.length <= 8) {
-                      return "Password length must have >=8";
+                    if (value.length <= 5) {
+                      return "Độ dài mật khẩu phải lớn hơn hoặc bằng 6 kí tự";
                     }
                     return null;
                   },
@@ -102,7 +102,21 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                                   "/users/change-password", data, token);
                               Map output = json.decode(response.body);
                               print(output);
-                              if (response.statusCode < 300) {
+                              if (output['code'] ==
+                                  "CURRENT_PASSWORD_INCORRECT") {
+                                setState(() {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Mật khẩu cũ không đúng hoặc xác nhận mật khẩu không khớp",
+                                      fontSize: 18);
+                                });
+                                // Navigator.pop(context);
+                              } else {
+                                setState(() {
+                                  Fluttertoast.showToast(
+                                      msg: "Đổi mật khẩu thành công",
+                                      fontSize: 18);
+                                });
                                 Navigator.pop(context);
                               }
                             }

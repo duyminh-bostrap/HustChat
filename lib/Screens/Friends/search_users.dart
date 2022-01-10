@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/get_data/get_info.dart';
+// import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/models/models.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
+
+import 'friends_list.dart';
 
 String link = dotenv.env['link'] ?? "";
 String link2 = dotenv.env['link2'] ?? "";

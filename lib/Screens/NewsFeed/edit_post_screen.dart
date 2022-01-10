@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hust_chat/Screens/NewsFeed/new_post_screen.dart';
 import 'package:hust_chat/Screens/NewsFeed/post_view.dart';
-import 'package:hust_chat/get_data/get_info.dart';
+// import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/img_model.dart';
 import 'package:hust_chat/models/models.dart';

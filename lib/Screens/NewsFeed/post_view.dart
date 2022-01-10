@@ -12,7 +12,7 @@ import 'package:hust_chat/Screens/Widget/hero_tag.dart';
 import 'package:hust_chat/Screens/Widget/hero_widget.dart';
 import 'package:hust_chat/Screens/Widget/profile_avatar.dart';
 import 'package:hust_chat/Screens/Widget/color.dart';
-import 'package:hust_chat/get_data/get_info.dart';
+// import 'package:hust_chat/get_data/get_info.dart';
 import 'package:hust_chat/get_data/get_post.dart';
 import 'package:hust_chat/get_data/get_user_info.dart';
 import 'package:hust_chat/models/comment_list.dart';
