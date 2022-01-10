@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hust_chat/Screens/Friends/friends_profile.dart';
 import 'package:hust_chat/Screens/NewsFeed/create_post_container.dart';
 import 'package:hust_chat/Screens/NewsFeed/edit_post_screen.dart';
@@ -114,12 +115,12 @@ class _PostContainer extends State<PostContainer> {
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: image != ''
                         ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: CachedNetworkImage(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: CachedNetworkImage(
                               imageUrl: "$host${image.name}",
                               fit: BoxFit.cover,
                             ),
-                        )
+                          )
                         : Container(
                             height: 300,
                           ),
@@ -156,410 +157,428 @@ class _PostContainer extends State<PostContainer> {
                   case ConnectionState.waiting:
                     return onlyPost != null
                         ? Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  color: Color.fromRGBO(246, 81, 82, 1.0),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.favorite,
-                                  size: 10.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(width: 4.0),
-                              GestureDetector(
-                                onTap: () =>
-                                    _openPost(onlyPost, context, pageIndex),
-                                child: Text(
-                                  '${onlyPost.like.length} lượt thích',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: onlyPost.images.length > 1
-                                    ? Center(
-                                  child: AnimatedSmoothIndicator(
-                                    count: onlyPost.images.length,
-                                    activeIndex: pageIndex,
-                                    effect: ExpandingDotsEffect(
-                                      dotHeight: 8,
-                                      dotWidth: 8,
-                                      expansionFactor: 2.3,
-                                      activeDotColor: pinkColor,
-                                      dotColor: Colors.black26,
-                                    ),
-                                  ),
-                                )
-                                    : Container(),
-                              ),
-                              SizedBox(width: 20.0),
-                              GestureDetector(
-                                onTap: () =>
-                                    _openPost(onlyPost, context, pageIndex),
-                                child: Text(
-                                  '${onlyPost.countComments} bình luận',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    onlyPost.isLike =
-                                    onlyPost.isLike ? false : true;
-                                    PostsApi.likePost(post);
-                                  });
-                                },
-                                child: Container(
-                                  height: 25.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      onlyPost.isLike
-                                          ? Icon(
-                                        Icons.favorite,
-                                        color: pinkColor,
-                                        size: 20.0,
-                                      )
-                                          : Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.grey[600],
-                                        size: 20.0,
-                                      ),
-                                      const SizedBox(width: 4.0),
-                                      Text('Thích'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => _openPost(post, context, pageIndex),
-                                child: Container(
-                                  height: 25.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        MdiIcons.commentOutline,
-                                        color: Colors.grey[600],
-                                        size: 20.0,
-                                      ),
-                                      const SizedBox(width: 4.0),
-                                      Text('Bình luận'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  height: 25.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.bookmark_border,
-                                        color: Colors.grey[600],
-                                        size: 25.0,
-                                      ),
-                                      const SizedBox(width: 4.0),
-                                      Text('Lưu trữ'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                        : Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  color: Color.fromRGBO(246, 81, 82, 1.0),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.favorite,
-                                  size: 10.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(width: 4.0),
-                              Text(
-                                '0 lượt thích',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              Expanded(
-                                child:Center(
-                                  child: AnimatedSmoothIndicator(
-                                    count: 0,
-                                    activeIndex: pageIndex,
-                                    effect: ExpandingDotsEffect(
-                                      dotHeight: 8,
-                                      dotWidth: 8,
-                                      expansionFactor: 2.3,
-                                      activeDotColor: pinkColor,
-                                      dotColor: Colors.black26,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20.0),
-                              Text(
-                                '0 bình luận',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 25.0,
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      Icons.favorite_border,
-                                      color: Colors.grey[600],
-                                      size: 20.0,
+                                    Container(
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(246, 81, 82, 1.0),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.favorite,
+                                        size: 10.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                    const SizedBox(width: 4.0),
-                                    Text('Thích'),
+                                    SizedBox(width: 4.0),
+                                    GestureDetector(
+                                      onTap: () => _openPost(
+                                          onlyPost, context, pageIndex),
+                                      child: Text(
+                                        '${onlyPost.like.length} lượt thích',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: onlyPost.images.length > 1
+                                          ? Center(
+                                              child: AnimatedSmoothIndicator(
+                                                count: onlyPost.images.length,
+                                                activeIndex: pageIndex,
+                                                effect: ExpandingDotsEffect(
+                                                  dotHeight: 8,
+                                                  dotWidth: 8,
+                                                  expansionFactor: 2.3,
+                                                  activeDotColor: pinkColor,
+                                                  dotColor: Colors.black26,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ),
+                                    SizedBox(width: 20.0),
+                                    GestureDetector(
+                                      onTap: () => _openPost(
+                                          onlyPost, context, pageIndex),
+                                      child: Text(
+                                        '${onlyPost.countComments} bình luận',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => _openPost(post, context, pageIndex),
-                                child: Container(
-                                  height: 25.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        MdiIcons.commentOutline,
-                                        color: Colors.grey[600],
-                                        size: 20.0,
+                              Divider(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          onlyPost.isLike =
+                                              onlyPost.isLike ? false : true;
+                                          PostsApi.likePost(post);
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 25.0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            onlyPost.isLike
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: pinkColor,
+                                                    size: 20.0,
+                                                  )
+                                                : Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.grey[600],
+                                                    size: 20.0,
+                                                  ),
+                                            const SizedBox(width: 4.0),
+                                            Text('Thích'),
+                                          ],
+                                        ),
                                       ),
-                                      const SizedBox(width: 4.0),
-                                      Text('Bình luận'),
-                                    ],
+                                    ),
                                   ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () =>
+                                          _openPost(post, context, pageIndex),
+                                      child: Container(
+                                        height: 25.0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              MdiIcons.commentOutline,
+                                              color: Colors.grey[600],
+                                              size: 20.0,
+                                            ),
+                                            const SizedBox(width: 4.0),
+                                            Text('Bình luận'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: 25.0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.bookmark_border,
+                                              color: Colors.grey[600],
+                                              size: 25.0,
+                                            ),
+                                            const SizedBox(width: 4.0),
+                                            Text('Lưu trữ'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(246, 81, 82, 1.0),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.favorite,
+                                        size: 10.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4.0),
+                                    Text(
+                                      '0 lượt thích',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: AnimatedSmoothIndicator(
+                                          count: 0,
+                                          activeIndex: pageIndex,
+                                          effect: ExpandingDotsEffect(
+                                            dotHeight: 8,
+                                            dotWidth: 8,
+                                            expansionFactor: 2.3,
+                                            activeDotColor: pinkColor,
+                                            dotColor: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.0),
+                                    Text(
+                                      '0 bình luận',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  height: 25.0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.bookmark_border,
-                                        color: Colors.grey[600],
-                                        size: 25.0,
+                              Divider(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 25.0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.grey[600],
+                                            size: 20.0,
+                                          ),
+                                          const SizedBox(width: 4.0),
+                                          Text('Thích'),
+                                        ],
                                       ),
-                                      const SizedBox(width: 4.0),
-                                      Text('Lưu trữ'),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () =>
+                                          _openPost(post, context, pageIndex),
+                                      child: Container(
+                                        height: 25.0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              MdiIcons.commentOutline,
+                                              color: Colors.grey[600],
+                                              size: 20.0,
+                                            ),
+                                            const SizedBox(width: 4.0),
+                                            Text('Bình luận'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: 25.0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.bookmark_border,
+                                              color: Colors.grey[600],
+                                              size: 25.0,
+                                            ),
+                                            const SizedBox(width: 4.0),
+                                            Text('Lưu trữ'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
+                            ],
+                          );
                   default:
                     if (snapshot.hasError) {
                       return Center(child: Text('Some error occurred!'));
                     } else {
                       return onlyPost != null
                           ? Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Row(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(5.0),
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(246, 81, 82, 1.0),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.favorite,
-                                    size: 10.0,
-                                    color: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(246, 81, 82, 1.0),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.favorite,
+                                          size: 10.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.0),
+                                      GestureDetector(
+                                        onTap: () => _openPost(
+                                            onlyPost, context, pageIndex),
+                                        child: Text(
+                                          '${onlyPost.like.length} lượt thích',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: onlyPost.images.length > 1
+                                            ? Center(
+                                                child: AnimatedSmoothIndicator(
+                                                  count: onlyPost.images.length,
+                                                  activeIndex: pageIndex,
+                                                  effect: ExpandingDotsEffect(
+                                                    dotHeight: 8,
+                                                    dotWidth: 8,
+                                                    expansionFactor: 2.3,
+                                                    activeDotColor: pinkColor,
+                                                    dotColor: Colors.black26,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                      ),
+                                      SizedBox(width: 20.0),
+                                      GestureDetector(
+                                        onTap: () => _openPost(
+                                            onlyPost, context, pageIndex),
+                                        child: Text(
+                                          '${onlyPost.countComments} bình luận',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: 4.0),
-                                GestureDetector(
-                                  onTap: () =>
-                                      _openPost(onlyPost, context, pageIndex),
-                                  child: Text(
-                                    '${onlyPost.like.length} lượt thích',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: onlyPost.images.length > 1
-                                      ? Center(
-                                    child: AnimatedSmoothIndicator(
-                                      count: onlyPost.images.length,
-                                      activeIndex: pageIndex,
-                                      effect: ExpandingDotsEffect(
-                                        dotHeight: 8,
-                                        dotWidth: 8,
-                                        expansionFactor: 2.3,
-                                        activeDotColor: pinkColor,
-                                        dotColor: Colors.black26,
+                                Divider(),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            onlyPost.isLike =
+                                                onlyPost.isLike ? false : true;
+                                          });
+                                          String? token =
+                                              await storage.read(key: "token");
+                                          String postId = post.id;
+                                          if (token != null) {
+                                            String url =
+                                                "/postLike/action/" + postId;
+                                            var response = await networkHandler
+                                                .postAuthWithoutBody(
+                                                    url, token);
+                                          }
+                                          ;
+                                        },
+                                        child: Container(
+                                          height: 25.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              onlyPost.isLike
+                                                  ? Icon(
+                                                      Icons.favorite,
+                                                      color: pinkColor,
+                                                      size: 20.0,
+                                                    )
+                                                  : Icon(
+                                                      Icons.favorite_border,
+                                                      color: Colors.grey[600],
+                                                      size: 20.0,
+                                                    ),
+                                              const SizedBox(width: 4.0),
+                                              Text('Thích'),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  )
-                                      : Container(),
-                                ),
-                                SizedBox(width: 20.0),
-                                GestureDetector(
-                                  onTap: () =>
-                                      _openPost(onlyPost, context, pageIndex),
-                                  child: Text(
-                                    '${onlyPost.countComments} bình luận',
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () =>
+                                            _openPost(post, context, pageIndex),
+                                        child: Container(
+                                          height: 25.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                MdiIcons.commentOutline,
+                                                color: Colors.grey[600],
+                                                size: 20.0,
+                                              ),
+                                              const SizedBox(width: 4.0),
+                                              Text('Bình luận'),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          height: 25.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.bookmark_border,
+                                                color: Colors.grey[600],
+                                                size: 25.0,
+                                              ),
+                                              const SizedBox(width: 4.0),
+                                              Text('Lưu trữ'),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ),
-                          Divider(),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () async {
-                                    setState(()  {
-                                      onlyPost.isLike = onlyPost.isLike ? false : true;
-                                    });
-                                    String? token = await storage.read(key: "token");
-                                    String postId = post.id;
-                                    if (token != null) {
-                                      String url = "/postLike/action/" + postId;
-                                      var response = await networkHandler.postAuthWithoutBody(url, token);
-                                    };
-                                  },
-                                  child: Container(
-                                    height: 25.0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        onlyPost.isLike
-                                            ? Icon(
-                                          Icons.favorite,
-                                          color: pinkColor,
-                                          size: 20.0,
-                                        )
-                                            : Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.grey[600],
-                                          size: 20.0,
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        Text('Thích'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () =>
-                                      _openPost(post, context, pageIndex),
-                                  child: Container(
-                                    height: 25.0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          MdiIcons.commentOutline,
-                                          color: Colors.grey[600],
-                                          size: 20.0,
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        Text('Bình luận'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: 25.0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.bookmark_border,
-                                          color: Colors.grey[600],
-                                          size: 25.0,
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        Text('Lưu trữ'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
+                            )
                           : Container(
-                        height: 10,
-                      );
+                              height: 10,
+                            );
                     }
                 }
               },
@@ -600,18 +619,304 @@ class _PostHeader extends State<PostHeader> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      FutureBuilder<UserData>(
-        future: UsersApi.getUserData(post.userID),
-        builder: (context, snapshot) {
-          final user = snapshot.data;
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
+    return FutureBuilder<UserData>(
+      future: UsersApi.getUserData(post.userID),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Row(
+              children: [
+                GestureDetector(
+                  onTap: () => _showProfile(post, context),
+                  child: ProfileAvatar(
+                      imageUrl:
+                          user != null ? "$host${user.avatar.fileName}" : link),
+                ),
+                const SizedBox(width: 10.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () => _showProfile(post, context),
+                        child: Text(
+                          post.username,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.0),
+                      Row(
+                        children: [
+                          Text(
+                            '${post.createAt} • ',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          Icon(
+                            Icons.public,
+                            color: Colors.grey[600],
+                            size: 15.0,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  onPressed: () async {
+                    String? userID = await storage.read(key: "id");
+                    print(post.userID.toString());
+                    showModalBottomSheet(
+                      isScrollControlled: false,
+                      backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
+                      context: context,
+                      builder: (BuildContext bcx) {
+                        Size size = MediaQuery.of(context).size;
+                        return post.userID.toString() == userID.toString()
+                            ? Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    10.0, size.height * 0.5 - 195, 10.0, 115),
+                                padding:
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15.0)),
+                                ),
+                                child: Column(children: [
+                                  GestureDetector(
+                                    onTap: () => EditPost(),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Container(
+                                          width: 20,
+                                          height: 50,
+                                          child: Icon(Icons.edit,
+                                              size: 30, color: Colors.black87),
+                                        ),
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        Text(
+                                          'Chỉnh sửa bài viết',
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: size.height * 0.01,
+                                    color: Colors.black54,
+                                    thickness: 1.2,
+                                    indent: 20,
+                                    endIndent: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => RemovePost(),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Container(
+                                          width: 20,
+                                          height: 50,
+                                          child: Icon(Icons.delete,
+                                              size: 30, color: Colors.black87),
+                                        ),
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        Text(
+                                          'Xoá bài viết',
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ]))
+                            : Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    10.0,
+                                    size.height * 0.09,
+                                    10.0,
+                                    size.height * 0.145),
+                                padding:
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15.0)),
+                                ),
+                                child: Column(children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: 20),
+                                      Container(
+                                        width: 20,
+                                        height: 50,
+                                        child: Icon(Icons.report_gmailerrorred,
+                                            size: 30, color: Colors.black87),
+                                      ),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'Báo cáo bài viết',
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height: 130,
+                                    margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: TextFormField(
+                                                controller: head,
+                                                cursorColor: Colors.black45,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Tiêu đề',
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 17,
+                                                        color: Colors.black87,
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                    border: InputBorder.none),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                PostsApi.reportPost(
+                                                    post, head, description);
+                                                Navigator.pop(context);
+                                                setState(() {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          "Báo cáo bài viết thành công",
+                                                      fontSize: 18);
+                                                });
+                                              },
+                                              child: Icon(
+                                                MdiIcons.send,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          height: size.height * 0.01,
+                                          color: Colors.black54,
+                                          thickness: 1,
+                                        ),
+                                        Expanded(
+                                          child: TextFormField(
+                                            maxLines: 2,
+                                            controller: description,
+                                            cursorColor: Colors.black45,
+                                            decoration: InputDecoration(
+                                                hintText: 'Nội dung báo cáo',
+                                                hintStyle: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black87,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                                border: InputBorder.none),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: size.height * 0.01,
+                                    color: Colors.black54,
+                                    thickness: 1.2,
+                                    indent: 20,
+                                    endIndent: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => BlockPost(),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Container(
+                                          width: 20,
+                                          height: 50,
+                                          child: Icon(Icons.cancel_presentation,
+                                              size: 30, color: Colors.black87),
+                                        ),
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        Text(
+                                          'Chặn bài viết',
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ]));
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          default:
+            if (snapshot.hasError) {
+              return Center(child: Text('Some error occurred!'));
+            } else {
               return Row(
                 children: [
                   GestureDetector(
                     onTap: () => _showProfile(post, context),
-                    child: ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link),
+                    child: ProfileAvatar(
+                        imageUrl: user != null
+                            ? "$host${user.avatar.fileName}"
+                            : link),
                   ),
                   const SizedBox(width: 10.0),
                   Expanded(
@@ -661,278 +966,21 @@ class _PostHeader extends State<PostHeader> {
                           Size size = MediaQuery.of(context).size;
                           return post.userID.toString() == userID.toString()
                               ? Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  10.0, size.height * 0.5 - 195, 10.0, 115),
-                              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                              ),
-                              child: Column(children: [
-                                GestureDetector(
-                                  onTap: () => EditPost(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        width: 20,
-                                        height: 50,
-                                        child: Icon(Icons.edit,
-                                            size: 30, color: Colors.black87),
-                                      ),
-                                      SizedBox(
-                                        width: 25,
-                                      ),
-                                      Text(
-                                        'Chỉnh sửa bài viết',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Divider(
-                                  height: size.height * 0.01,
-                                  color: Colors.black54,
-                                  thickness: 1.2,
-                                  indent: 20,
-                                  endIndent: 20,
-                                ),
-                                GestureDetector(
-                                  onTap: () => RemovePost(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        width: 20,
-                                        height: 50,
-                                        child: Icon(Icons.delete,
-                                            size: 30, color: Colors.black87),
-                                      ),
-                                      SizedBox(
-                                        width: 25,
-                                      ),
-                                      Text(
-                                        'Xoá bài viết',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ]))
-                              : Container(
-                              margin: EdgeInsets.fromLTRB(10.0, size.height * 0.09,
-                                  10.0, size.height * 0.145),
-                              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                              ),
-                              child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(width: 20),
-                                        Container(
-                                          width: 20,
-                                          height: 50,
-                                          child: Icon(Icons.report_gmailerrorred,
-                                              size: 30, color: Colors.black87),
-                                        ),
-                                        SizedBox(width: 25,),
-                                        Expanded(
-                                          child: Text(
-                                            'Báo cáo bài viết',
-                                            style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      height: 130,
-                                      margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                                      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black12,
-                                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: TextFormField(
-                                                  controller: head,
-                                                  cursorColor: Colors.black45,
-                                                  decoration: InputDecoration(
-                                                      hintText: 'Tiêu đề',
-                                                      hintStyle: TextStyle(
-                                                          fontSize: 17,
-                                                          color: Colors.black87,
-                                                          fontWeight: FontWeight.w300),
-                                                      border: InputBorder.none),
-                                                ),
-                                              ),
-                                              SizedBox(width: 10),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  print('aaaa');
-                                                },
-                                                child: Icon(
-                                                  MdiIcons.send,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            height: size.height * 0.01,
-                                            color: Colors.black54,
-                                            thickness: 1,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 2,
-                                              controller: description,
-                                              cursorColor: Colors.black45,
-                                              decoration: InputDecoration(
-                                                  hintText: 'Nội dung báo cáo',
-                                                  hintStyle: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.black87,
-                                                      fontWeight: FontWeight.w300),
-                                                  border: InputBorder.none),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      height: size.height * 0.01,
-                                      color: Colors.black54,
-                                      thickness: 1.2,
-                                      indent: 20,
-                                      endIndent: 20,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () => BlockPost(),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Container(
-                                            width: 20,
-                                            height: 50,
-                                            child: Icon(Icons.cancel_presentation,
-                                                size: 30, color: Colors.black87),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          Text(
-                                            'Chặn bài viết',
-                                            style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ]));
-                        },
-                      );
-                    },
-                  ),
-                ],
-              );
-            default:
-              if (snapshot.hasError) {
-                return Center(child: Text('Some error occurred!'));
-              } else {
-                return Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _showProfile(post, context),
-                        child: ProfileAvatar(imageUrl: user != null? "$host${user.avatar.fileName}" :link),
-                      ),
-                      const SizedBox(width: 10.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () => _showProfile(post, context),
-                              child: Text(
-                                post.username,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 5.0),
-                            Row(
-                              children: [
-                                Text(
-                                  '${post.createAt} • ',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.public,
-                                  color: Colors.grey[600],
-                                  size: 15.0,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.more_horiz),
-                        onPressed: () async {
-                          String? userID = await storage.read(key: "id");
-                          print(post.userID.toString());
-                          showModalBottomSheet(
-                            isScrollControlled: false,
-                            backgroundColor: Color.fromRGBO(0, 0, 0, 0.0),
-                            context: context,
-                            builder: (BuildContext bcx) {
-                              Size size = MediaQuery.of(context).size;
-                              return post.userID.toString() == userID.toString()
-                                  ? Container(
                                   margin: EdgeInsets.fromLTRB(
                                       10.0, size.height * 0.5 - 195, 10.0, 115),
-                                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      10.0, 10.0, 10.0, 10.0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15.0)),
                                   ),
                                   child: Column(children: [
                                     GestureDetector(
                                       onTap: () => EditPost(),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: 20,
@@ -941,7 +989,8 @@ class _PostHeader extends State<PostHeader> {
                                             width: 20,
                                             height: 50,
                                             child: Icon(Icons.edit,
-                                                size: 30, color: Colors.black87),
+                                                size: 30,
+                                                color: Colors.black87),
                                           ),
                                           SizedBox(
                                             width: 25,
@@ -966,7 +1015,8 @@ class _PostHeader extends State<PostHeader> {
                                     GestureDetector(
                                       onTap: () => RemovePost(),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: 20,
@@ -975,7 +1025,8 @@ class _PostHeader extends State<PostHeader> {
                                             width: 20,
                                             height: 50,
                                             child: Icon(Icons.delete,
-                                                size: 30, color: Colors.black87),
+                                                size: 30,
+                                                color: Colors.black87),
                                           ),
                                           SizedBox(
                                             width: 25,
@@ -991,27 +1042,36 @@ class _PostHeader extends State<PostHeader> {
                                       ),
                                     ),
                                   ]))
-                                  : Container(
-                                  margin: EdgeInsets.fromLTRB(10.0, size.height * 0.09,
-                                      10.0, size.height * 0.145),
-                                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                              : Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      10.0,
+                                      size.height * 0.09,
+                                      10.0,
+                                      size.height * 0.145),
+                                  padding: EdgeInsets.fromLTRB(
+                                      10.0, 10.0, 10.0, 10.0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15.0)),
                                   ),
-                                  child: Column(
-                                      children: [
+                                  child: Column(children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         SizedBox(width: 20),
                                         Container(
                                           width: 20,
                                           height: 50,
-                                          child: Icon(Icons.report_gmailerrorred,
-                                              size: 30, color: Colors.black87),
+                                          child: Icon(
+                                              Icons.report_gmailerrorred,
+                                              size: 30,
+                                              color: Colors.black87),
                                         ),
-                                        SizedBox(width: 25,),
+                                        SizedBox(
+                                          width: 25,
+                                        ),
                                         Expanded(
                                           child: Text(
                                             'Báo cáo bài viết',
@@ -1025,11 +1085,14 @@ class _PostHeader extends State<PostHeader> {
                                     ),
                                     Container(
                                       height: 130,
-                                      margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                                      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                      margin:
+                                          EdgeInsets.fromLTRB(20, 0, 20, 10),
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 5, 15, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.black12,
-                                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
                                       ),
                                       child: Column(
                                         children: [
@@ -1044,14 +1107,23 @@ class _PostHeader extends State<PostHeader> {
                                                       hintStyle: TextStyle(
                                                           fontSize: 17,
                                                           color: Colors.black87,
-                                                          fontWeight: FontWeight.w300),
+                                                          fontWeight:
+                                                              FontWeight.w300),
                                                       border: InputBorder.none),
                                                 ),
                                               ),
                                               SizedBox(width: 10),
                                               GestureDetector(
                                                 onTap: () async {
-                                                  print('aaaa');
+                                                  PostsApi.reportPost(
+                                                      post, head, description);
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Báo cáo bài viết thành công",
+                                                        fontSize: 18);
+                                                  });
                                                 },
                                                 child: Icon(
                                                   MdiIcons.send,
@@ -1075,7 +1147,8 @@ class _PostHeader extends State<PostHeader> {
                                                   hintStyle: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.black87,
-                                                      fontWeight: FontWeight.w300),
+                                                      fontWeight:
+                                                          FontWeight.w300),
                                                   border: InputBorder.none),
                                             ),
                                           ),
@@ -1092,7 +1165,8 @@ class _PostHeader extends State<PostHeader> {
                                     GestureDetector(
                                       onTap: () => BlockPost(),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: 20,
@@ -1100,8 +1174,10 @@ class _PostHeader extends State<PostHeader> {
                                           Container(
                                             width: 20,
                                             height: 50,
-                                            child: Icon(Icons.cancel_presentation,
-                                                size: 30, color: Colors.black87),
+                                            child: Icon(
+                                                Icons.cancel_presentation,
+                                                size: 30,
+                                                color: Colors.black87),
                                           ),
                                           SizedBox(
                                             width: 25,
@@ -1117,16 +1193,16 @@ class _PostHeader extends State<PostHeader> {
                                       ),
                                     ),
                                   ]));
-                            },
-                          );
                         },
-                      ),
-                    ],
-                  );
-              }
-          }
-        },
-      );
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
+        }
+      },
+    );
   }
 
   Future EditPost() async {
@@ -1134,8 +1210,7 @@ class _PostHeader extends State<PostHeader> {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
-        builder: (BuildContext bcx) => EditPostScreen(post: post)
-    );
+        builder: (BuildContext bcx) => EditPostScreen(post: post));
   }
 
   Future RemovePost() async {
@@ -1177,7 +1252,7 @@ class _PostHeader extends State<PostHeader> {
                         String postID = post.id;
                         String url = "posts/delete/" + postID;
                         var response =
-                        await networkHandler.getWithAuth(url, token);
+                            await networkHandler.getWithAuth(url, token);
                         Map output = json.decode(response.body);
 
                         if (response.statusCode < 300) {
