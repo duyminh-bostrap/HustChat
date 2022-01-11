@@ -281,6 +281,7 @@ class _FriendsList extends State<FriendsList> {
                             "/friends/set-remove", data, token);
                         debugPrint(response.body);
                       };
+                      Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,

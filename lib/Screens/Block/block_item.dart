@@ -76,20 +76,10 @@ class _BlockItemState extends State<BlockItem> {
               ),
             ),
             SizedBox(width: 15,),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(name,style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),),
-
-                Text(phone,style: TextStyle(
-                  fontSize: 15,
-                  //fontWeight: FontWeight.bold,
-                ),),
-              ],
-            )
+            Text(name,style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),)
           ],
         ),
       ),

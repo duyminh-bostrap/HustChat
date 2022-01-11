@@ -1346,7 +1346,7 @@ class _PostHeader extends State<PostHeader> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {},
+                    onTap: () async { Navigator.pop(context);},
                     child: Container(
                       height: 40,
                       width: size.width * 0.3,

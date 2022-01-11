@@ -98,8 +98,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   inputController: phoneController,
                   validator: (value) {
                     if (value!.isEmpty) return "Bạn chưa nhập số điện thoại";
-                    if (value.length < 8 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
-                      return "Số điện thoại tối thiểu 8 kí tự";
+                    if (value.length < 9 || !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value)) {
+                      return "Số điện thoại tối thiểu 10 kí tự";
                     }
                     return null;
                   },

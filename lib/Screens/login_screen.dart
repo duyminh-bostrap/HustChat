@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value.length < 10 ||
                         !RegExp(r'^[+]*[(]{0,1}[0-9]+$').hasMatch(value) ||
                         isIncorrect) {
-                      return "Số điện thoại phải có độ dài lớn hơn 9 kí tự";
+                      return "Số điện thoại phải có độ dài tối thiểu 10 kí tự";
                     }
                     return null;
                   },
